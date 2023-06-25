@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+#dll files
+*.dll
+
+#history files
+/.history/*
+
+#src files
+/src/*
+
+#vscode files
+/.vscode/*
+
+#Makefile
+Makefile
