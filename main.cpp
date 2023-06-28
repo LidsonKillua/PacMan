@@ -32,9 +32,9 @@ char mapa[11][21] =   // Mapa do jogo
     "10101101100110110101",
     "10000001000010000001",
     "10101101111110110101",
-    "10100000000000000101",
+    "10100000002000000101",
     "10110101111110101101",
-    "10000100022200100001",
+    "10000100222200100001",
     "11111111111111111111"
 };
 
@@ -48,6 +48,7 @@ dir :
     posy : 7
 };
 
+const int qtdPilulas = 20; // Alterar a Quantidade de Pílulas
 int pontos = 0;
 
 bool canMove(Direction dir, int posy, int posx)
@@ -226,6 +227,9 @@ int main()
                 mapa[pacman.posy][pacman.posx] = '0';
                 pontos++;
                 cout << "PONTOS: " << pontos << endl;
+
+                if(pontos == qtdPilulas)
+                    cout << "Voce Venceu!" << endl;
             }
 
             clock.restart(); // recomeça contagem do tempo
