@@ -1,8 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <queue>
+#include "menu/menu.hpp"
 using namespace std;
 
+#define TAMX 1000      // Tamanho da Janela
+#define TAMY 550       // Tamanho da Janela
 #define SIZE 50        // Tamanho de cada c�lula do mapa
 #define numFantasmas 1 // Alterar a Quantidade de Fantasmas
 #define qtdPilulas 20  // Alterar a Quantidade de Pilulas
@@ -151,8 +154,15 @@ Direction getMinPathToPacman(int posx, int posy)
 
 int main()
 {
+    /*Menu * menu = new Menu();
+    menu->run_menu();
+    delete menu;*/
+    //menu = nullptr;
+
+
+
     // cria a janela
-    sf::RenderWindow window(sf::VideoMode(1000, 550), "Pac-Man");
+    sf::RenderWindow window(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
     // shape da parede
     sf::RectangleShape rectangle(sf::Vector2f(SIZE, SIZE));
@@ -195,14 +205,15 @@ int main()
             // evento "fechar" acionado: fecha a janela
             if (event.type == sf::Event::Closed)
                 window.close();
-            // tecla pressionada
 
+            // tecla pressionada
             else if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::Escape)
+                if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)
                 {
-                    window.close();
-                    break;
+                    Menu * menu = new Menu(&window);
+                    menu->run_menu();
+                    delete menu;
                 }
                 if (event.key.code == sf::Keyboard::Left)
                 {
