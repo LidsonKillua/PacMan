@@ -1,6 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <queue>
 using namespace std;
+
+#define SIZE 50        // Tamanho de cada c�lula do mapa
+#define numFantasmas 1 // Alterar a Quantidade de Fantasmas
+#define qtdPilulas 20  // Alterar a Quantidade de Pilulas
+int pontos = 0;
 
 // Dire��o do Pacman ou Fantasmas
 enum Direction
@@ -12,19 +18,22 @@ enum Direction
     Idle
 };
 
-// Struct do Pacman
-typedef struct
+struct Position
+{
+    int x;
+    int y;
+};
+
+// Struct de Entity (seja Pacman ou fantasma)
+struct Entity
 {
 
     sf::Sprite sprite;
     map<Direction, sf::Texture> textures;
     Direction intent;
     Direction dir;
-    int posx;
-    int posy;
-} Pacman;
-
-const int SIZE = 50; // Tamanho de cada c�lula do mapa
+    Position pos;
+};
 
 char mapa[11][21] = // Mapa do jogo
     {
@@ -40,31 +49,29 @@ char mapa[11][21] = // Mapa do jogo
         "10000100222200100001",
         "11111111111111111111"};
 
-Pacman pacman;
+Entity pacman;
+Entity fantasmas[numFantasmas];
 
-const int qtdPilulas = 20; // Alterar a Quantidade de P�lulas
-int pontos = 0;
-
-bool canMove(Direction dir, int posy, int posx)
+bool canMove(Entity e)
 {
-    if (dir == Up)
+    if (e.dir == Up)
     {
-        if (mapa[posy - 1][posx] != '1')
+        if (mapa[e.pos.y - 1][e.pos.x] != '1')
             return true;
     }
-    else if (dir == Down)
+    else if (e.dir == Down)
     {
-        if (mapa[posy + 1][posx] != '1')
+        if (mapa[e.pos.y + 1][e.pos.x] != '1')
             return true;
     }
-    else if (dir == Left)
+    else if (e.dir == Left)
     {
-        if (mapa[posy][posx - 1] != '1')
+        if (mapa[e.pos.y][e.pos.x - 1] != '1')
             return true;
     }
-    else if (dir == Right)
+    else if (e.dir == Right)
     {
-        if (mapa[posy][posx + 1] != '1')
+        if (mapa[e.pos.y][e.pos.x + 1] != '1')
             return true;
     }
     return false;
@@ -86,13 +93,13 @@ void updateAnimation(float defTempo, float frameRate, int &frameAtual, int total
     }
 }
 
-// Configs do PacMan
+// Inicializa o PacMan
 bool initializePacman()
 {
     pacman.dir = Idle;
     pacman.intent = Idle;
-    pacman.posx = 9;
-    pacman.posy = 7;
+    pacman.pos.x = 9;
+    pacman.pos.y = 7;
     if (!pacman.textures[Right].loadFromFile("img/pac.png")) // ler imagem direita
     {
         std::cout << "Erro lendo imagem pac.png\n";
@@ -121,6 +128,30 @@ bool initializePacman()
     return true;
 }
 
+// Inicializa os Fantasmas
+bool initializeFantasmas()
+{
+    for (int i = 0; i < numFantasmas; i++)
+    {
+        fantasmas[i].dir = Idle;
+        fantasmas[i].intent = Idle;
+        fantasmas[i].pos.x = 1;
+        fantasmas[i].pos.y = 1;
+        if (!fantasmas[i].textures[Right].loadFromFile("img/ghost.png")) // ler imagem direita
+        {
+            std::cout << "Erro lendo imagem ghost.png\n";
+            return false;
+        }
+        fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
+    }
+    return true;
+}
+
+Direction getMinPathToPacman(int posx, int posy)
+{
+    queue<Position> q;
+}
+
 int main()
 {
     // cria a janela
@@ -140,6 +171,10 @@ int main()
 
     // Inicializa o Pacman
     if (!initializePacman())
+        return 0;
+
+    // Inicializa os Fantasmas
+    if (!initializeFantasmas())
         return 0;
     //*************************************************************************************************
     // cria um relogio para medir o tempo do PacMan
@@ -196,41 +231,41 @@ int main()
         if (clock.getElapsedTime() > sf::seconds(0.2))
         {
             // tempo desde �ltimo restart > 0.2s?
-            if (canMove(pacman.intent, pacman.posy, pacman.posx))
+            if (canMove(pacman))
                 pacman.dir = pacman.intent;
-            if (canMove(pacman.dir, pacman.posy, pacman.posx))
+            if (canMove(pacman))
             {
                 if (pacman.dir == Left)
                 {
                     pacman.sprite.setTexture(pacman.textures[Left]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posx--;
+                    pacman.pos.x--;
                 }
                 else if (pacman.dir == Right)
                 {
                     pacman.sprite.setTexture(pacman.textures[Right]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posx++;
+                    pacman.pos.x++;
                 }
                 else if (pacman.dir == Up)
                 {
                     pacman.sprite.setTexture(pacman.textures[Up]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posy--;
+                    pacman.pos.y--;
                 }
                 else if (pacman.dir == Down)
                 {
                     pacman.sprite.setTexture(pacman.textures[Down]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posy++;
+                    pacman.pos.y++;
                 }
             }
 
             ///////////////
 
-            if (mapa[pacman.posy][pacman.posx] == '2')
+            if (mapa[pacman.pos.y][pacman.pos.x] == '2')
             {
-                mapa[pacman.posy][pacman.posx] = '0';
+                mapa[pacman.pos.y][pacman.pos.x] = '0';
                 pontos++;
                 cout << "PONTOS: " << pontos << endl;
 
@@ -267,8 +302,15 @@ int main()
         int frameHeight = pacman.textures[Right].getSize().y;
         sf::IntRect frameRect(frameAtual * frameWidth, 0, frameWidth, frameHeight);
         pacman.sprite.setTextureRect(frameRect);
-        pacman.sprite.setPosition(pacman.posx * SIZE, pacman.posy * SIZE);
+        pacman.sprite.setPosition(pacman.pos.x * SIZE, pacman.pos.y * SIZE);
         window.draw(pacman.sprite);
+
+        // desenha Fantasmas
+        for (int i = 0; i < numFantasmas; i++)
+        {
+            fantasmas[i].sprite.setPosition(fantasmas[i].pos.x * SIZE, fantasmas[i].pos.y * SIZE);
+            window.draw(fantasmas[i].sprite);
+        }
 
         // termina e desenha o frame corrente
         window.display();
