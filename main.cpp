@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-// Direção do Pacman ou Fantasmas
+// Direï¿½ï¿½o do Pacman ou Fantasmas
 enum Direction
 {
     Left,
@@ -15,40 +15,34 @@ enum Direction
 // Struct do Pacman
 typedef struct
 {
+
+    sf::Sprite sprite;
+    map<Direction, sf::Texture> textures;
     Direction intent;
     Direction dir;
     int posx;
     int posy;
 } Pacman;
 
-const int SIZE = 50; // Tamanho de cada célula do mapa
+const int SIZE = 50; // Tamanho de cada cï¿½lula do mapa
 
-char mapa[11][21] =   // Mapa do jogo
-{
-    "11111111111111111111",
-    "10000100222220100001",
-    "10110101111110101101",
-    "10100222222222200101",
-    "10101101100110110101",
-    "10000001000010000001",
-    "10101101111110110101",
-    "10100000002000000101",
-    "10110101111110101101",
-    "10000100222200100001",
-    "11111111111111111111"
-};
+char mapa[11][21] = // Mapa do jogo
+    {
+        "11111111111111111111",
+        "10000100222220100001",
+        "10110101111110101101",
+        "10100222222222200101",
+        "10101101100110110101",
+        "10000001000010000001",
+        "10101101111110110101",
+        "10100000002000000101",
+        "10110101111110101101",
+        "10000100222200100001",
+        "11111111111111111111"};
 
-Pacman pacman =
-{
-intent :
-    Idle,
-dir :
-    Idle,
-    posx : 9,
-    posy : 7
-};
+Pacman pacman;
 
-const int qtdPilulas = 20; // Alterar a Quantidade de Pílulas
+const int qtdPilulas = 20; // Alterar a Quantidade de Pï¿½lulas
 int pontos = 0;
 
 bool canMove(Direction dir, int posy, int posx)
@@ -76,20 +70,55 @@ bool canMove(Direction dir, int posy, int posx)
     return false;
 }
 
-void updateAnimation(float defTempo, float frameRate, int& frameAtual, int totalFrames, float& tempAcumul) //animação
+void updateAnimation(float defTempo, float frameRate, int &frameAtual, int totalFrames, float &tempAcumul) // animaï¿½ï¿½o
 {
     // Acumula o tempo decorrido
     tempAcumul += defTempo;
 
-    // Atualiza a animação se o tempo acumulado for maior ou igual à taxa de atualização
+    // Atualiza a animaï¿½ï¿½o se o tempo acumulado for maior ou igual ï¿½ taxa de atualizaï¿½ï¿½o
     if (tempAcumul >= frameRate)
     {
-        // Passa para o próximo frame
+        // Passa para o prï¿½ximo frame
         frameAtual = (frameAtual + 1) % totalFrames;
 
         // Redefine o tempo acumulado
         tempAcumul = 0.0f;
     }
+}
+
+// Configs do PacMan
+bool initializePacman()
+{
+    pacman.dir = Idle;
+    pacman.intent = Idle;
+    pacman.posx = 9;
+    pacman.posy = 7;
+    if (!pacman.textures[Right].loadFromFile("img/pac.png")) // ler imagem direita
+    {
+        std::cout << "Erro lendo imagem pac.png\n";
+        return false;
+    }
+    pacman.sprite.setTexture(pacman.textures[Right]);
+    pacman.sprite.setScale(sf::Vector2f(3.f, 3.f));
+
+    if (!pacman.textures[Left].loadFromFile("img/pacesq.png")) // ler imagem esquerda
+    {
+        std::cout << "Erro lendo imagem pacesq.png\n";
+        return false;
+    }
+
+    if (!pacman.textures[Down].loadFromFile("img/pacdown.png")) // ler imagem esquerda
+    {
+        std::cout << "Erro lendo imagem pacdown.png\n";
+        return false;
+    }
+
+    if (!pacman.textures[Up].loadFromFile("img/pacup.png")) // ler imagem esquerda
+    {
+        std::cout << "Erro lendo imagem pacup.png\n";
+        return false;
+    }
+    return true;
 }
 
 int main()
@@ -109,52 +138,25 @@ int main()
     pilula.setOutlineThickness(-1);
     pilula.setOutlineColor(sf::Color(255, 255, 255));
 
-    // sprite do PacMan**********************************************************************************
-    sf::Texture dir;
-    if (!dir.loadFromFile("img/pac.png")) // ler imagem direita
-    {
-        std::cout << "Erro lendo imagem pac.png\n";
+    // Inicializa o Pacman
+    if (!initializePacman())
         return 0;
-    }
-    sf::Sprite sprite;
-    sprite.setTexture(dir);
-    sprite.setScale(sf::Vector2f(3.f, 3.f));
-
-    sf::Texture esq;
-    if (!esq.loadFromFile("img/pacesq.png")) // ler imagem esquerda
-    {
-        std::cout << "Erro lendo imagem pacesq.png\n";
-        return 0;
-    }
-
-    sf::Texture down;
-    if (!down.loadFromFile("img/pacdown.png")) // ler imagem esquerda
-    {
-        std::cout << "Erro lendo imagem pacdown.png\n";
-        return 0;
-    }
-    sf::Texture up;
-    if (!up.loadFromFile("img/pacup.png")) // ler imagem esquerda
-    {
-        std::cout << "Erro lendo imagem pacup.png\n";
-        return 0;
-    }
     //*************************************************************************************************
     // cria um relogio para medir o tempo do PacMan
     sf::Clock clock;
 
     // Animation Variables
     int frameAtual = 0;
-    int totalFrames = 8; // Número total de frames na animação
-    float frameRate = 0.01f; // Taxa de atualização da animação
+    int totalFrames = 8;     // Nï¿½mero total de frames na animaï¿½ï¿½o
+    float frameRate = 0.01f; // Taxa de atualizaï¿½ï¿½o da animaï¿½ï¿½o
     float tempAcumul = 0.0f;
     float defTempo = 1.0f;
 
-    // executa o programa enquanto a janela está aberta
+    // executa o programa enquanto a janela estï¿½ aberta
     while (window.isOpen())
     {
 
-        // verifica todos os eventos que foram acionados na janela desde a última iteração do loop
+        // verifica todos os eventos que foram acionados na janela desde a ï¿½ltima iteraï¿½ï¿½o do loop
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -163,7 +165,13 @@ int main()
                 window.close();
             // tecla pressionada
 
+            else if (event.type == sf::Event::KeyPressed)
             {
+                if (event.key.code == sf::Keyboard::Escape)
+                {
+                    window.close();
+                    break;
+                }
                 if (event.key.code == sf::Keyboard::Left)
                 {
                     pacman.intent = Left;
@@ -184,36 +192,35 @@ int main()
         }
 
         //***********************************************************
-        // Muda a posição do PacMan a cada 0.2 segundos
+        // Muda a posiï¿½ï¿½o do PacMan a cada 0.2 segundos
         if (clock.getElapsedTime() > sf::seconds(0.2))
         {
-            // tempo desde último restart > 0.2s?
+            // tempo desde ï¿½ltimo restart > 0.2s?
             if (canMove(pacman.intent, pacman.posy, pacman.posx))
                 pacman.dir = pacman.intent;
             if (canMove(pacman.dir, pacman.posy, pacman.posx))
             {
                 if (pacman.dir == Left)
                 {
-                    sprite.setTexture(esq);
+                    pacman.sprite.setTexture(pacman.textures[Left]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
                     pacman.posx--;
                 }
                 else if (pacman.dir == Right)
                 {
-                    sprite.setTexture(dir);
+                    pacman.sprite.setTexture(pacman.textures[Right]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
                     pacman.posx++;
                 }
                 else if (pacman.dir == Up)
                 {
-                    sprite.setTexture(up);
+                    pacman.sprite.setTexture(pacman.textures[Up]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
                     pacman.posy--;
-
                 }
                 else if (pacman.dir == Down)
                 {
-                    sprite.setTexture(down);
+                    pacman.sprite.setTexture(pacman.textures[Down]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
                     pacman.posy++;
                 }
@@ -221,20 +228,18 @@ int main()
 
             ///////////////
 
-
             if (mapa[pacman.posy][pacman.posx] == '2')
             {
                 mapa[pacman.posy][pacman.posx] = '0';
                 pontos++;
                 cout << "PONTOS: " << pontos << endl;
 
-                if(pontos == qtdPilulas)
+                if (pontos == qtdPilulas)
                     cout << "Voce Venceu!" << endl;
             }
 
-            clock.restart(); // recomeça contagem do tempo
+            clock.restart(); // recomeï¿½a contagem do tempo
         }
-
 
         // limpa a janela com a cor preta
         window.clear(sf::Color::Black);
@@ -258,12 +263,12 @@ int main()
             }
 
         // desenha PacMan
-        int frameWidth = dir.getSize().x / totalFrames;
-        int frameHeight = dir.getSize().y;
+        int frameWidth = pacman.textures[Right].getSize().x / totalFrames;
+        int frameHeight = pacman.textures[Right].getSize().y;
         sf::IntRect frameRect(frameAtual * frameWidth, 0, frameWidth, frameHeight);
-        sprite.setTextureRect(frameRect);
-        sprite.setPosition(pacman.posx * SIZE, pacman.posy * SIZE);
-        window.draw(sprite);
+        pacman.sprite.setTextureRect(frameRect);
+        pacman.sprite.setPosition(pacman.posx * SIZE, pacman.posy * SIZE);
+        window.draw(pacman.sprite);
 
         // termina e desenha o frame corrente
         window.display();
