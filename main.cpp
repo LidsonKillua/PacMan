@@ -18,12 +18,6 @@ enum Direction
     Idle
 };
 
-struct Position
-{
-    int x;
-    int y;
-};
-
 // Struct de Entity (seja Pacman ou fantasma)
 struct Entity
 {
@@ -32,7 +26,8 @@ struct Entity
     map<Direction, sf::Texture> textures;
     Direction intent;
     Direction dir;
-    Position pos;
+    int posy;
+    int posx;
 };
 
 char mapa[11][21] = // Mapa do jogo
@@ -52,26 +47,26 @@ char mapa[11][21] = // Mapa do jogo
 Entity pacman;
 Entity fantasmas[numFantasmas];
 
-bool canMove(Entity e)
+bool canMove(int posx, int posy, Direction dir)
 {
-    if (e.dir == Up)
+    if (dir == Up)
     {
-        if (mapa[e.pos.y - 1][e.pos.x] != '1')
+        if (mapa[posy - 1][posx] != '1')
             return true;
     }
-    else if (e.dir == Down)
+    else if (dir == Down)
     {
-        if (mapa[e.pos.y + 1][e.pos.x] != '1')
+        if (mapa[posy + 1][posx] != '1')
             return true;
     }
-    else if (e.dir == Left)
+    else if (dir == Left)
     {
-        if (mapa[e.pos.y][e.pos.x - 1] != '1')
+        if (mapa[posy][posx - 1] != '1')
             return true;
     }
-    else if (e.dir == Right)
+    else if (dir == Right)
     {
-        if (mapa[e.pos.y][e.pos.x + 1] != '1')
+        if (mapa[posy][posx + 1] != '1')
             return true;
     }
     return false;
@@ -98,8 +93,8 @@ bool initializePacman()
 {
     pacman.dir = Idle;
     pacman.intent = Idle;
-    pacman.pos.x = 9;
-    pacman.pos.y = 7;
+    pacman.posx = 9;
+    pacman.posy = 7;
     if (!pacman.textures[Right].loadFromFile("img/pac.png")) // ler imagem direita
     {
         std::cout << "Erro lendo imagem pac.png\n";
@@ -135,8 +130,8 @@ bool initializeFantasmas()
     {
         fantasmas[i].dir = Idle;
         fantasmas[i].intent = Idle;
-        fantasmas[i].pos.x = 1;
-        fantasmas[i].pos.y = 1;
+        fantasmas[i].posx = 1;
+        fantasmas[i].posy = 1;
         if (!fantasmas[i].textures[Right].loadFromFile("img/ghost.png")) // ler imagem direita
         {
             std::cout << "Erro lendo imagem ghost.png\n";
@@ -147,9 +142,11 @@ bool initializeFantasmas()
     return true;
 }
 
+// Função para obter direção para o fantasma perseguidor
 Direction getMinPathToPacman(int posx, int posy)
 {
-    queue<Position> q;
+    // queue<Position> q;
+    return Idle;
 }
 
 int main()
@@ -231,41 +228,41 @@ int main()
         if (clock.getElapsedTime() > sf::seconds(0.2))
         {
             // tempo desde �ltimo restart > 0.2s?
-            if (canMove(pacman))
+            if (canMove(pacman.posx, pacman.posy, pacman.intent))
                 pacman.dir = pacman.intent;
-            if (canMove(pacman))
+            if (canMove(pacman.posx, pacman.posy, pacman.dir))
             {
                 if (pacman.dir == Left)
                 {
                     pacman.sprite.setTexture(pacman.textures[Left]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.pos.x--;
+                    pacman.posx--;
                 }
                 else if (pacman.dir == Right)
                 {
                     pacman.sprite.setTexture(pacman.textures[Right]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.pos.x++;
+                    pacman.posx++;
                 }
                 else if (pacman.dir == Up)
                 {
                     pacman.sprite.setTexture(pacman.textures[Up]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.pos.y--;
+                    pacman.posy--;
                 }
                 else if (pacman.dir == Down)
                 {
                     pacman.sprite.setTexture(pacman.textures[Down]);
                     updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.pos.y++;
+                    pacman.posy++;
                 }
             }
 
             ///////////////
 
-            if (mapa[pacman.pos.y][pacman.pos.x] == '2')
+            if (mapa[pacman.posy][pacman.posx] == '2')
             {
-                mapa[pacman.pos.y][pacman.pos.x] = '0';
+                mapa[pacman.posy][pacman.posx] = '0';
                 pontos++;
                 cout << "PONTOS: " << pontos << endl;
 
@@ -302,13 +299,13 @@ int main()
         int frameHeight = pacman.textures[Right].getSize().y;
         sf::IntRect frameRect(frameAtual * frameWidth, 0, frameWidth, frameHeight);
         pacman.sprite.setTextureRect(frameRect);
-        pacman.sprite.setPosition(pacman.pos.x * SIZE, pacman.pos.y * SIZE);
+        pacman.sprite.setPosition(pacman.posx * SIZE, pacman.posy * SIZE);
         window.draw(pacman.sprite);
 
         // desenha Fantasmas
         for (int i = 0; i < numFantasmas; i++)
         {
-            fantasmas[i].sprite.setPosition(fantasmas[i].pos.x * SIZE, fantasmas[i].pos.y * SIZE);
+            fantasmas[i].sprite.setPosition(fantasmas[i].posx * SIZE, fantasmas[i].posy * SIZE);
             window.draw(fantasmas[i].sprite);
         }
 
