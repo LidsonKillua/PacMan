@@ -14,18 +14,6 @@ const int TAMX = 1000; // Tamanho da Janela
 const int TAMY = 550;  // Tamanho da Janela
 int pontos = 0;
 
-// Struct de Test (seja Pacman ou fantasma)
-struct Test
-{
-
-    sf::Sprite sprite;
-    map<Direction, sf::Texture> textures;
-    Direction intent;
-    Direction dir;
-    int posy;
-    int posx;
-};
-
 char mapa[ROWS][COLS] = // Mapa do jogo
     {
         "11111111111111111111",
