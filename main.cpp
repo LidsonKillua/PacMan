@@ -4,11 +4,12 @@
 #include "menu/menu.hpp"
 using namespace std;
 
-#define TAMX 1000      // Tamanho da Janela
-#define TAMY 550       // Tamanho da Janela
-#define SIZE 50        // Tamanho de cada c�lula do mapa
-#define numFantasmas 1 // Alterar a Quantidade de Fantasmas
-#define qtdPilulas 20  // Alterar a Quantidade de Pilulas
+
+#define SIZE 50         // Tamanho de cada c�lula do mapa
+#define numFantasmas 1  // Alterar a Quantidade de Fantasmas
+#define qtdPilulas 20   // Alterar a Quantidade de Pilulas
+const int TAMX = 1000;  // Tamanho da Janela
+const int TAMY = 550;   // Tamanho da Janela
 int pontos = 0;
 
 // Dire��o do Pacman ou Fantasmas
