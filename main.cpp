@@ -2,28 +2,20 @@
 #include <iostream>
 #include <queue>
 #include "menu/menu.hpp"
+#include "globals/globals.hpp"
+#include "entity/pacman.hpp"
+#include "entity/fantasma.hpp"
 using namespace std;
 
-
-#define SIZE 50         // Tamanho de cada c�lula do mapa
-#define numFantasmas 1  // Alterar a Quantidade de Fantasmas
-#define qtdPilulas 20   // Alterar a Quantidade de Pilulas
-const int TAMX = 1000;  // Tamanho da Janela
-const int TAMY = 550;   // Tamanho da Janela
+#define SIZE 50        // Tamanho de cada c�lula do mapa
+#define numFantasmas 1 // Alterar a Quantidade de Fantasmas
+#define qtdPilulas 20  // Alterar a Quantidade de Pilulas
+const int TAMX = 1000; // Tamanho da Janela
+const int TAMY = 550;  // Tamanho da Janela
 int pontos = 0;
 
-// Dire��o do Pacman ou Fantasmas
-enum Direction
-{
-    Left,
-    Right,
-    Up,
-    Down,
-    Idle
-};
-
-// Struct de Entity (seja Pacman ou fantasma)
-struct Entity
+// Struct de Test (seja Pacman ou fantasma)
+struct Test
 {
 
     sf::Sprite sprite;
@@ -34,7 +26,7 @@ struct Entity
     int posx;
 };
 
-char mapa[11][21] = // Mapa do jogo
+char mapa[ROWS][COLS] = // Mapa do jogo
     {
         "11111111111111111111",
         "10000100222220100001",
@@ -48,33 +40,8 @@ char mapa[11][21] = // Mapa do jogo
         "10000100222200100001",
         "11111111111111111111"};
 
-Entity pacman;
-Entity fantasmas[numFantasmas];
-
-bool canMove(int posx, int posy, Direction dir)
-{
-    if (dir == Up)
-    {
-        if (mapa[posy - 1][posx] != '1')
-            return true;
-    }
-    else if (dir == Down)
-    {
-        if (mapa[posy + 1][posx] != '1')
-            return true;
-    }
-    else if (dir == Left)
-    {
-        if (mapa[posy][posx - 1] != '1')
-            return true;
-    }
-    else if (dir == Right)
-    {
-        if (mapa[posy][posx + 1] != '1')
-            return true;
-    }
-    return false;
-}
+Pacman pacman;
+Fantasma fantasmas[numFantasmas];
 
 void updateAnimation(float defTempo, float frameRate, int &frameAtual, int totalFrames, float &tempAcumul) // anima��o
 {
@@ -133,9 +100,6 @@ bool initializeFantasmas()
     for (int i = 0; i < numFantasmas; i++)
     {
         fantasmas[i].dir = Idle;
-        fantasmas[i].intent = Idle;
-        fantasmas[i].posx = 1;
-        fantasmas[i].posy = 1;
         if (!fantasmas[i].textures[Right].loadFromFile("img/ghost.png")) // ler imagem direita
         {
             std::cout << "Erro lendo imagem ghost.png\n";
@@ -143,14 +107,9 @@ bool initializeFantasmas()
         }
         fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     }
+    fantasmas[0].posx = 1;
+    fantasmas[0].posy = 1;
     return true;
-}
-
-// Função para obter direção para o fantasma perseguidor
-Direction getMinPathToPacman(int posx, int posy)
-{
-    // queue<Position> q;
-    return Idle;
 }
 
 int main()
@@ -158,9 +117,7 @@ int main()
     /*Menu * menu = new Menu();
     menu->run_menu();
     delete menu;*/
-    //menu = nullptr;
-
-
+    // menu = nullptr;
 
     // cria a janela
     sf::RenderWindow window(sf::VideoMode(TAMX, TAMY), "Pac-Man");
@@ -212,7 +169,7 @@ int main()
             {
                 if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)
                 {
-                    Menu * menu = new Menu(&window);
+                    Menu *menu = new Menu(&window);
                     menu->run_menu();
                     delete menu;
                 }
@@ -240,34 +197,18 @@ int main()
         if (clock.getElapsedTime() > sf::seconds(0.2))
         {
             // tempo desde �ltimo restart > 0.2s?
-            if (canMove(pacman.posx, pacman.posy, pacman.intent))
-                pacman.dir = pacman.intent;
-            if (canMove(pacman.posx, pacman.posy, pacman.dir))
+
+            // MOVE FANTASMAS
+            for (int i = 0; i < numFantasmas; i++)
             {
-                if (pacman.dir == Left)
-                {
-                    pacman.sprite.setTexture(pacman.textures[Left]);
-                    updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posx--;
-                }
-                else if (pacman.dir == Right)
-                {
-                    pacman.sprite.setTexture(pacman.textures[Right]);
-                    updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posx++;
-                }
-                else if (pacman.dir == Up)
-                {
-                    pacman.sprite.setTexture(pacman.textures[Up]);
-                    updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posy--;
-                }
-                else if (pacman.dir == Down)
-                {
-                    pacman.sprite.setTexture(pacman.textures[Down]);
-                    updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
-                    pacman.posy++;
-                }
+                fantasmas[i].move(mapa, pacman);
+            }
+
+            // MOVE PACMAN
+            pacman.move(mapa);
+            if (pacman.canMove(pacman.dir, mapa))
+            {
+                updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
             }
 
             ///////////////
@@ -291,8 +232,8 @@ int main()
         // desenhar tudo aqui...
 
         // desenha paredes
-        for (int i = 0; i < 11; i++)
-            for (int j = 0; j < 21; j++)
+        for (int i = 0; i < ROWS; i++)
+            for (int j = 0; j < COLS; j++)
             {
                 if (mapa[i][j] == '1')
                 {
