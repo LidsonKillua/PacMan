@@ -1,2 +1,29 @@
 Se quiserem dar ideia de musicas 8bits legais pra colocar no jogo 
 sintam-se livres :)
+
+
+// code remind 
+
+// base code 
+
+sf::Music music;
+if (!music.openFromFile("music.ogg"))
+    return -1; // error
+music.play();
+
+// exemple of other functions 
+
+// start playback
+sound.play();
+
+// advance to 2 seconds
+sound.setPlayingOffset(sf::seconds(2.f));
+
+// pause playback
+sound.pause();
+
+// resume playback
+sound.play();
+
+// stop playback and rewind
+sound.stop();
