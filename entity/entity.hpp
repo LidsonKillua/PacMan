@@ -12,10 +12,9 @@ public:
   sf::Sprite sprite;
   map<Direction, sf::Texture> textures;
   Direction dir;
-  int posx;
-  int posy;
+  Position pos;
 
   Entity();
-  bool canMove(Direction dir, char mapa[ROWS][COLS]);
-  bool canMove(Direction d, int posx, int posy, char mapa[ROWS][COLS]);
+  bool canMove(Direction d, Position pos, char mapa[ROWS][COLS]);
+  Position getMovement(Direction d, Position pos, char mapa[ROWS][COLS]);
 };

@@ -4,12 +4,14 @@
 #include <queue>
 using namespace std;
 
+// Definição dos tipos de fantasma: aleatório ou perseguidor
 enum TipoFantasma
 {
   Aleatorio,
   Perseguidor
 };
 
+// Definição da classe Fantasma
 class Fantasma : public Entity
 {
 public:
@@ -18,7 +20,7 @@ public:
   void move(char mapa[ROWS][COLS], Pacman pacman);
 
 private:
-  int posToNumber(int posx, int posy);
-  pair<int, int> numberToPos(int number);
-  Direction getMinPathToPacman(char mapa[ROWS][COLS], int posx, int posy, Pacman pacman);
+  int posToNumber(Position pos);
+  Position numberToPos(int number);
+  Position getBestDirection(char mapa[ROWS][COLS], Position pos, Pacman pacman);
 };

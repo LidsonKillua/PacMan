@@ -57,8 +57,8 @@ bool initializePacman()
 {
     pacman.dir = Idle;
     pacman.intent = Idle;
-    pacman.posx = 12;
-    pacman.posy = 8;
+    pacman.pos.x = 12;
+    pacman.pos.y = 8;
     if (!pacman.textures[Right].loadFromFile("img/pac.png")) // ler imagem direita
     {
         std::cout << "Erro lendo imagem pac.png\n";
@@ -100,8 +100,8 @@ bool initializeFantasmas()
         }
         fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     }
-    fantasmas[0].posx = 1;
-    fantasmas[0].posy = 1;
+    fantasmas[0].pos.x = 1;
+    fantasmas[0].pos.y = 1;
     return true;
 }
 
@@ -115,14 +115,15 @@ int main()
     // cria a janela
     sf::RenderWindow window(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
-    //backgroud
+    // background
     sf::RectangleShape backgd(sf::Vector2f(TAMX, TAMY));
     sf::Texture fd;
-    if (!fd.loadFromFile("img/map.png")){
-       cout << "Fatal Error"<< endl;
-       return 0;
+    if (!fd.loadFromFile("img/map.png"))
+    {
+        cout << "Fatal Error" << endl;
+        return 0;
     }
-    sf::Sprite backgroud(fd);
+    sf::Sprite background(fd);
 
     // shape da parede
     sf::RectangleShape rectangle(sf::Vector2f(SIZE, SIZE));
@@ -208,16 +209,16 @@ int main()
 
             // MOVE PACMAN
             pacman.move(mapa);
-            if (pacman.canMove(pacman.dir, mapa))
+            if (pacman.canMove(pacman.dir, pacman.pos, mapa))
             {
                 updateAnimation(defTempo, frameRate, frameAtual, totalFrames, tempAcumul);
             }
 
             ///////////////
 
-            if (mapa[pacman.posy][pacman.posx] == '2')
+            if (mapa[pacman.pos.y][pacman.pos.x] == '2')
             {
-                mapa[pacman.posy][pacman.posx] = '0';
+                mapa[pacman.pos.y][pacman.pos.x] = '0';
                 pontos++;
                 cout << "PONTOS: " << pontos << endl;
 
@@ -235,7 +236,7 @@ int main()
 
         // desenha paredes
 
-        window.draw(backgroud); // desenha o mapa no fundo da tela
+        window.draw(background); // desenha o mapa no fundo da tela
 
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLS; j++)
@@ -257,13 +258,13 @@ int main()
         int frameHeight = pacman.textures[Right].getSize().y;
         sf::IntRect frameRect(frameAtual * frameWidth, 0, frameWidth, frameHeight);
         pacman.sprite.setTextureRect(frameRect);
-        pacman.sprite.setPosition(pacman.posx * SIZE, pacman.posy * SIZE);
+        pacman.sprite.setPosition(pacman.pos.x * SIZE, pacman.pos.y * SIZE);
         window.draw(pacman.sprite);
 
         // desenha Fantasmas
         for (int i = 0; i < numFantasmas; i++)
         {
-            fantasmas[i].sprite.setPosition(fantasmas[i].posx * SIZE, fantasmas[i].posy * SIZE);
+            fantasmas[i].sprite.setPosition(fantasmas[i].pos.x * SIZE, fantasmas[i].pos.y * SIZE);
             window.draw(fantasmas[i].sprite);
         }
 

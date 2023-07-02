@@ -11,3 +11,11 @@ enum Direction
   Down,
   Idle
 };
+
+struct Position
+{
+  int x;
+  int y;
+};
+
+bool operator==(const Position &lhs, const Position &rhs);

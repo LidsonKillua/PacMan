@@ -2,6 +2,7 @@
 
 #include "entity.hpp"
 
+// Definição da classe Pacman, herdando de Entity
 class Pacman : public Entity
 {
 public:
