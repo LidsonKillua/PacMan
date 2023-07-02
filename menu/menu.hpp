@@ -8,10 +8,14 @@ class Menu {
     bool pressed, theselect, sair;
 
     sf::RenderWindow * window;
-    sf::RectangleShape * winclose;
     sf::Font * font;
     sf::Texture * image;
     sf::Sprite * bg;
+
+    sf::RectangleShape * btnContinuar;
+    sf::RectangleShape * btnReiniciar;
+    sf::RectangleShape * btnSobre;
+    sf::RectangleShape * btnSair;
 
     sf::Vector2i pos_mouse;
     sf::Vector2f mouse_coord;
