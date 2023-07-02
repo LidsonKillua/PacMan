@@ -7,26 +7,31 @@
 #include "entity/fantasma.hpp"
 using namespace std;
 
-#define SIZE 50        // Tamanho de cada c�lula do mapa
+#define SIZE 48        // Tamanho de cada c�lula do mapa
 #define numFantasmas 1 // Alterar a Quantidade de Fantasmas
-#define qtdPilulas 20  // Alterar a Quantidade de Pilulas
-const int TAMX = 1000; // Tamanho da Janela
-const int TAMY = 550;  // Tamanho da Janela
+#define qtdPilulas 30  // Alterar a Quantidade de Pilulas
+const int TAMX = 1200; // Tamanho da Janela
+const int TAMY = 768;  // Tamanho da Janela
 int pontos = 0;
 
 char mapa[ROWS][COLS] = // Mapa do jogo
     {
-        "11111111111111111111",
-        "10000100222220100001",
-        "10110101111110101101",
-        "10100222222222200101",
-        "10101101100110110101",
-        "10000001000010000001",
-        "10101101111110110101",
-        "10100000002000000101",
-        "10110101111110101101",
-        "10000100222200100001",
-        "11111111111111111111"};
+        "1111111111110111111111111",
+        "1000000000000000000000001",
+        "1011011111110111111101101",
+        "1011011111110111111101101",
+        "1000000000000000000000001",
+        "1011111110111110111111101",
+        "0002222222222222222222000",
+        "1011101111110111111011101",
+        "1000001000000000001000001",
+        "1011101111110111111011101",
+        "1000100222222222220010001",
+        "1110111010111110101110111",
+        "1000000010000000100000001",
+        "1011111111110111111111101",
+        "1000000000000000000000001",
+        "1111111111110111111111111"};
 
 Pacman pacman;
 Fantasma fantasmas[numFantasmas];
@@ -52,8 +57,8 @@ bool initializePacman()
 {
     pacman.dir = Idle;
     pacman.intent = Idle;
-    pacman.posx = 9;
-    pacman.posy = 7;
+    pacman.posx = 12;
+    pacman.posy = 8;
     if (!pacman.textures[Right].loadFromFile("img/pac.png")) // ler imagem direita
     {
         std::cout << "Erro lendo imagem pac.png\n";
@@ -110,11 +115,20 @@ int main()
     // cria a janela
     sf::RenderWindow window(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
+    //backgroud
+    sf::RectangleShape backgd(sf::Vector2f(TAMX, TAMY));
+    sf::Texture fd;
+    if (!fd.loadFromFile("img/map.png")){
+       cout << "Fatal Error"<< endl;
+       return 0;
+    }
+    sf::Sprite backgroud(fd);
+
     // shape da parede
     sf::RectangleShape rectangle(sf::Vector2f(SIZE, SIZE));
-    rectangle.setFillColor(sf::Color(0, 255, 255));
+    rectangle.setFillColor(sf::Color(255, 255, 255, 256)); // rectangle transparente
     rectangle.setOutlineThickness(-5);
-    rectangle.setOutlineColor(sf::Color(50, 50, 50));
+    rectangle.setOutlineColor(sf::Color(255, 255, 255, 256)); // rectangle border transparente
 
     // shape das pilulas
     sf::CircleShape pilula(5);
@@ -220,6 +234,9 @@ int main()
         // desenhar tudo aqui...
 
         // desenha paredes
+
+        window.draw(backgroud); // desenha o mapa no fundo da tela
+
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLS; j++)
             {
