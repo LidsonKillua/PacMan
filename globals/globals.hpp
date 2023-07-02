@@ -1,7 +1,7 @@
 #pragma once
 
-#define ROWS 11
-#define COLS 21
+#define ROWS 16
+#define COLS 26
 
 enum Direction
 {
