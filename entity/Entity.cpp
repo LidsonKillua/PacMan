@@ -3,8 +3,12 @@
 // Definição da classe Entity
 Entity::Entity(){};
 
+// Função que verifica se é possível se mover na direção desejada, a partir da posição pos
 bool Entity::canMove(Direction d, Position pos, char mapa[ROWS][COLS])
 {
+  /*
+  Para cada direção, se a tentativa de movimento for para fora do mapa, é possível mover (pois há um portal naquela posição). Caso contrário, verifica se não há uma parede na direção desejada.
+  */
   if (d == Up)
   {
     if (pos.y == 0)
@@ -36,8 +40,12 @@ bool Entity::canMove(Direction d, Position pos, char mapa[ROWS][COLS])
   return false;
 }
 
+// Função que retorna a posição que será obtida com uma unidade de movimento na direção desejada, a partir de pos.
 Position Entity::getMovement(Direction d, Position pos, char mapa[ROWS][COLS])
 {
+  /*
+  Para cada direção, caso a tentativa de movimento fosse levar para fora do mapa, realiza o transporte para o outro extremo (portal). Caso contrário, apenas anda uma unidade na direção correspondente.
+  */
   if (d == Up)
   {
     if (pos.y == 0)

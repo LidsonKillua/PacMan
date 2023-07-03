@@ -10,7 +10,6 @@ class Entity
 {
 public:
   sf::Sprite sprite;
-  map<Direction, sf::Texture> textures;
   Direction dir;
   Position pos;
 

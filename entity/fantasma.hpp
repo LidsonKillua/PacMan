@@ -16,8 +16,11 @@ class Fantasma : public Entity
 {
 public:
   TipoFantasma tipo;
+  sf::Texture texture;
   using Entity::Entity;
   void move(char mapa[ROWS][COLS], Pacman pacman);
+  void draw(sf::RenderWindow *window);
+  static bool initializeFantasmas(Fantasma fantasmas[]);
 
 private:
   int posToNumber(Position pos);

@@ -1,5 +1,22 @@
 #include "fantasma.hpp"
 
+bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
+{
+  for (int i = 0; i < numFantasmas; i++)
+  {
+    fantasmas[i].dir = Idle;
+    fantasmas[i].pos.x = 1;
+    fantasmas[i].pos.y = 1;
+    if (!fantasmas[i].texture.loadFromFile("img/ghost.png")) // ler imagem direita
+    {
+      std::cout << "Erro lendo imagem ghost.png\n";
+      return false;
+    }
+    fantasmas[i].sprite.setTexture(fantasmas[i].texture);
+  }
+  return true;
+}
+
 // Função pra mover o fantasma, herdando de Entity
 void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
 {
@@ -98,4 +115,10 @@ Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacm
   // Traduz o número do vértice em posição no mapa, para saber pra qual posição o fantasma deve ir em seu primeiro movimento.
   pos = numberToPos(u);
   return pos;
+}
+
+void Fantasma::draw(sf::RenderWindow *window)
+{
+  sprite.setPosition(pos.x * SIZE, pos.y * SIZE);
+  window->draw(sprite);
 }
