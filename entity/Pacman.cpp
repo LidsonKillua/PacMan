@@ -16,29 +16,29 @@ bool Pacman::initialize()
   pos.y = 8;
   frameAtual = 0;
   tempAcumul = 0.0f;
-  if (!textures[Right].loadFromFile("img/pac.png")) // ler imagem direita
+  if (!textures[Right].loadFromFile("img/carrodir.png")) // ler imagem direita
   {
-    std::cout << "Erro lendo imagem pac.png\n";
+    std::cout << "Erro lendo imagem carrodir.png\n";
     return false;
   }
   sprite.setTexture(textures[Right]);
-  sprite.setScale(sf::Vector2f(3.f, 3.f));
+  sprite.setScale(sf::Vector2f(1.1f, 1.1f));
 
-  if (!textures[Left].loadFromFile("img/pacesq.png")) // ler imagem esquerda
+  if (!textures[Left].loadFromFile("img/carroesq.png")) // ler imagem esquerda
   {
-    std::cout << "Erro lendo imagem pacesq.png\n";
+    std::cout << "Erro lendo imagem carroesq.png\n";
     return false;
   }
 
-  if (!textures[Down].loadFromFile("img/pacdown.png")) // ler imagem esquerda
+  if (!textures[Down].loadFromFile("img/carrodwn.png")) // ler imagem esquerda
   {
-    std::cout << "Erro lendo imagem pacdown.png\n";
+    std::cout << "Erro lendo imagem carrodwn.png\n";
     return false;
   }
 
-  if (!textures[Up].loadFromFile("img/pacup.png")) // ler imagem esquerda
+  if (!textures[Up].loadFromFile("img/carroup.png")) // ler imagem esquerda
   {
-    std::cout << "Erro lendo imagem pacup.png\n";
+    std::cout << "Erro lendo imagem carroup.png\n";
     return false;
   }
   return true;

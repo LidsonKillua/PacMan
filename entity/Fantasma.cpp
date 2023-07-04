@@ -7,12 +7,13 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
     fantasmas[i].dir = Idle;
     fantasmas[i].pos.x = 1;
     fantasmas[i].pos.y = 1;
-    if (!fantasmas[i].texture.loadFromFile("img/ghost.png")) // ler imagem direita
+    if (!fantasmas[i].texture.loadFromFile("img/carro_policia.png")) // ler imagem direita
     {
-      std::cout << "Erro lendo imagem ghost.png\n";
+      std::cout << "Erro lendo imagem carro_policia.png\n";
       return false;
     }
     fantasmas[i].sprite.setTexture(fantasmas[i].texture);
+    fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
   }
   return true;
 }
