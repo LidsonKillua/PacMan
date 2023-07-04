@@ -9,3 +9,7 @@ GameError::GameError(string msg)
 {
   this->msg = msg;
 }
+
+ErroLeitura::ErroLeitura(string caminho){
+    GameError("Erro lendo imagem: " + caminho + "\n");
+}

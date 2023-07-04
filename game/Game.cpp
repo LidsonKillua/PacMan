@@ -67,7 +67,7 @@ void Game::eventLoop()
     {
       if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)
       {
-        Menu *menu = new Menu(window);
+        Menu * menu = new Menu(window);
         menu->run_menu();
         delete menu;
       }

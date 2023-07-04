@@ -1,4 +1,5 @@
 #include "pacman.hpp"
+#include "../globals/Consts.cpp"
 
 Pacman::Pacman()
 {
@@ -16,29 +17,30 @@ bool Pacman::initialize()
   pos.y = 8;
   frameAtual = 0;
   tempAcumul = 0.0f;
-  if (!textures[Right].loadFromFile("img/carrodir.png")) // ler imagem direita
+
+  if (!textures[Right].loadFromFile(c_ImgCarDir)) // ler imagem direita
   {
-    std::cout << "Erro lendo imagem carrodir.png\n";
+    throw new ErroLeitura(c_ImgCarDir);
     return false;
   }
   sprite.setTexture(textures[Right]);
   sprite.setScale(sf::Vector2f(1.1f, 1.1f));
 
-  if (!textures[Left].loadFromFile("img/carroesq.png")) // ler imagem esquerda
+  if (!textures[Left].loadFromFile(c_ImgCarEsq)) // ler imagem esquerda
   {
-    std::cout << "Erro lendo imagem carroesq.png\n";
+    throw new ErroLeitura(c_ImgCarEsq);
     return false;
   }
 
-  if (!textures[Down].loadFromFile("img/carrodwn.png")) // ler imagem esquerda
+  if (!textures[Down].loadFromFile(c_ImgCarDwn)) // ler imagem esquerda
   {
-    std::cout << "Erro lendo imagem carrodwn.png\n";
+    throw new ErroLeitura(c_ImgCarDwn);
     return false;
   }
 
-  if (!textures[Up].loadFromFile("img/carroup.png")) // ler imagem esquerda
+  if (!textures[Up].loadFromFile(c_ImgCarUp)) // ler imagem esquerda
   {
-    std::cout << "Erro lendo imagem carroup.png\n";
+    throw new ErroLeitura(c_ImgCarUp);
     return false;
   }
   return true;
@@ -48,15 +50,18 @@ bool Pacman::initialize()
 void Pacman::move(char mapa[ROWS][COLS])
 {
   Position movement;
+
   // Caso seja possível mover na direção que é a intenção do usuário, a intenção se torna a Direção de movimento.
   if (canMove(intent, pos, mapa))
     dir = intent;
+
   // Se puder se mover na direção, realiza o movimento
   if (canMove(dir, pos, mapa))
   {
     updateAnimation();
     movement = getMovement(dir, pos, mapa);
     pos = movement;
+
     if (dir == Left)
       sprite.setTexture(textures[Left]);
     else if (dir == Right)

@@ -4,11 +4,6 @@
 Menu::Menu(sf::RenderWindow* win){
     window = win;
 
-    btnContinuar = new sf::RectangleShape();
-    btnReiniciar = new sf::RectangleShape();
-    btnSobre = new sf::RectangleShape();
-    btnSair = new sf::RectangleShape();
-
     font = new sf::Font();
     image = new sf::Texture();
     bg = new sf::Sprite();
@@ -17,10 +12,8 @@ Menu::Menu(sf::RenderWindow* win){
 }
 
 Menu::~Menu(){
-    delete btnContinuar;
-    delete btnReiniciar;
-    delete btnSobre;
-    delete btnSair;
+    for(auto b : btns)
+        delete b;
 
     delete font;
     delete image;
@@ -36,38 +29,21 @@ void Menu::set_values(){
     pos_mouse = {0, 0};
     mouse_coord = {0, 0};
 
-    options = {"PAc CRIME", "CONTINUAR", "REINICIAR", "SOBRE", "SAIR"};
-    texts.resize(5);
-    coords = {{402, 47}, {392, 185}, {410, 292}, {499, 400}, {543, 510}};
-    sizes = {62, 62, 62, 62, 62};
+    options = {"CONTINUAR", "REINICIAR", "SOBRE", "SAIR"};
+    btns.resize(4);
+    coords = {{367, 165}, {367, 270}, {367, 375}, {367, 480}};
+    sizes = {{546, 104}, {546, 104}, {546, 104}, {546, 104}};
 
-    for(std::size_t i{}; i < texts.size(); i++){
-        texts[i].setFont(*font);
-        texts[i].setString(options[i]);
-        texts[i].setCharacterSize(sizes[i]);
-        texts[i].setOutlineColor(sf::Color::Black);
-        texts[i].setOutlineThickness(3);
-        texts[i].setColor(sf::Color::Yellow);
-        texts[i].setPosition(coords[i]);
+    for(std::size_t i{}; i < btns.size(); i++){
+        btns[i] = new sf::RectangleShape();
+        btns[i]->setSize(sizes[i]);
+        btns[i]->setPosition(coords[i]);
+        btns[i]->setOutlineColor(sf::Color::Black);
+        btns[i]->setFillColor(sf::Color::Transparent);
     }
 
-    btnContinuar->setSize(sf::Vector2f(546, 104));
-    btnReiniciar->setSize(sf::Vector2f(546, 104));
-    btnSobre->setSize(sf::Vector2f(546, 104));
-    btnSair->setSize(sf::Vector2f(546, 104));
-
-    btnContinuar->setPosition(sf::Vector2f(367, 165));
-    btnReiniciar->setPosition(sf::Vector2f(367, 270));
-    btnSobre->setPosition(sf::Vector2f(367, 375));
-    btnSair->setPosition(sf::Vector2f(367, 480));
-
-    btnContinuar->setFillColor(sf::Color::Transparent);
-    btnReiniciar->setFillColor(sf::Color::Transparent);
-    btnSobre->setFillColor(sf::Color::Transparent);
-    btnSair->setFillColor(sf::Color::Transparent);
-
-    texts[1].setOutlineColor(sf::Color::Yellow);
-    pos = 1;
+    pos = 0;
+    btns[0]->setOutlineThickness(3);
 }
 
 void Menu::loop_events(){
@@ -85,22 +61,22 @@ void Menu::loop_events(){
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed){
-            if(pos < 4){
+            if(pos < 3){
                 pos++;
                 pressed = true;
-                texts[pos].setOutlineThickness(2);
-                texts[pos - 1].setOutlineThickness(4);
+                btns[pos]->setOutlineThickness(3);
+                btns[pos - 1]->setOutlineThickness(0);
                 pressed = false;
                 theselect = false;
             }
         }
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !pressed){
-            if(pos > 1){
+            if(pos > 0){
                 pos--;
                 pressed = true;
-                texts[pos].setOutlineThickness(2);
-                texts[pos + 1].setOutlineThickness(4);
+                btns[pos]->setOutlineThickness(3);
+                btns[pos + 1]->setOutlineThickness(0);
                 pressed = false;
                 theselect = false;
             }
@@ -108,13 +84,13 @@ void Menu::loop_events(){
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect){
             theselect = true;
-            std::cout << options[pos] << std::endl;
+            RealizarTarefa(pos);
         }
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-            if(btnContinuar->getGlobalBounds().contains(mouse_coord)){
-                std::cout << options[1] << std::endl;
-            }
+            for(std::size_t i{}; i < btns.size(); i++)
+                if(btns[i]->getGlobalBounds().contains(mouse_coord))
+                    RealizarTarefa(i);
         }
     }
 }
@@ -123,9 +99,8 @@ void Menu::draw_all(){
     window->clear();
     window->draw(*bg);
 
-    for(auto t : texts){
-        window->draw(t);
-    }
+    for(auto b : btns)
+        window->draw(*b);
 
     window->display();
 }
@@ -134,5 +109,19 @@ void Menu::run_menu(){
     while(!sair){
         loop_events();
         draw_all();
+    }
+}
+
+void Menu::RealizarTarefa(int option){
+    switch(option){
+    case 0:
+        break;
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        window->close();
+        break;
     }
 }

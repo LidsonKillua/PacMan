@@ -1,4 +1,5 @@
 #include "fantasma.hpp"
+#include "../globals/Consts.cpp"
 
 bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
 {
@@ -7,9 +8,9 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
     fantasmas[i].dir = Idle;
     fantasmas[i].pos.x = 1;
     fantasmas[i].pos.y = 1;
-    if (!fantasmas[i].texture.loadFromFile("img/carro_policia.png")) // ler imagem direita
+    if (!fantasmas[i].texture.loadFromFile(c_ImgPolDir)) // ler imagem direita
     {
-      std::cout << "Erro lendo imagem carro_policia.png\n";
+      throw new ErroLeitura(c_ImgPolDir);
       return false;
     }
     fantasmas[i].sprite.setTexture(fantasmas[i].texture);
@@ -32,7 +33,11 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
 }
 
 /******************************************************************************
-Função pra transformar posição da matriz em um número de vértice. O intuito disso é poder ver a matriz como uma espécie de grafo. Nesse grafo, cada posição da matriz corresponderi a um vértice, identificado por esse número. As arestas são calculadas dinâmicamente, pela checagem dos nós adjacentes e verificação se é possível se mover para essa posição (é possível caso não seja uma parede).
+Função pra transformar posição da matriz em um número de vértice. O intuito disso
+é poder ver a matriz como uma espécie de grafo. Nesse grafo, cada posição da matriz
+corresponderia a um vértice, identificado por esse número. As arestas são calculadas
+dinâmicamente, pela checagem dos nós adjacentes e verificação se é possível se mover
+para essa posição (é possível caso não seja uma parede).
 ******************************************************************************/
 int Fantasma::posToNumber(Position pos)
 {
@@ -49,7 +54,9 @@ Position Fantasma::numberToPos(int number)
 }
 
 /******************************************************************************
-Função que realiza uma BFS no mapa até encontrar o Pacman, descobrindo assim o menor caminho. Ela retorna a posição que corresponde ao primeiro movimento que o fantasma deve realizar
+Função que realiza uma BFS no mapa até encontrar o Pacman, descobrindo assim o
+menor caminho. Ela retorna a posição que corresponde ao primeiro movimento que o
+fantasma deve realizar
 ******************************************************************************/
 Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacman pacman)
 {
@@ -59,7 +66,10 @@ Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacm
   int originV, u;
   bool visited[ROWS * COLS] = {false};
   /*
-  Esse array guarda quem é o vértice "pai" de cada vértice x dentro da BFS. Ou seja, o vértice a partir do qual se chegou no vértice x. Ele é necessário para reconstruir o menor caminho até o Pacman, no sentido contrário: do Pacman à posição original. Assim, é possível saber qual deve ser o primeiro movimento do Fantasma.
+  Esse array guarda quem é o vértice "pai" de cada vértice x dentro da BFS. Ou seja,
+  o vértice a partir do qual se chegou no vértice x. Ele é necessário para reconstruir
+  o menor caminho até o Pacman, no sentido contrário: do Pacman à posição original.
+  Assim, é possível saber qual deve ser o primeiro movimento do Fantasma.
    */
   int parent[ROWS * COLS];
   // Converte a posição do fantasma em um número de vértice que a representa
@@ -82,7 +92,8 @@ Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacm
       break;
 
     /*
-    Checa se Fantasma, a partir da posição atual, pode se mover para cada direção, e caso possa, adiciona o número de vértice correspondente à nova posição à lista de adjacentes.
+    Checa se Fantasma, a partir da posição atual, pode se mover para cada direção,
+    e caso possa, adiciona o número de vértice correspondente à nova posição à lista de adjacentes.
     */
     if (canMove(Left, pos, mapa))
       adjacents.push_back(posToNumber(getMovement(Left, pos, mapa)));

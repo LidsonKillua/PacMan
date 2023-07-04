@@ -11,6 +11,16 @@ using namespace std;
 const int TAMX = 1200; // Tamanho da Janela
 const int TAMY = 768;  // Tamanho da Janela
 
+// Caminhos imagens Pac
+const char c_ImgCarDir[17] = "img/carrodir.png";
+const char c_ImgCarEsq[17] = "img/carroesq.png";
+const char c_ImgCarDwn[17] = "img/carrodwn.png";
+const char c_ImgCarUp[16] = "img/carroup.png";
+
+//Caminhos imagens Policia
+const char c_ImgPolDir[17] = /*"carro_policia.png"*/"img/ghost.png";
+
+
 enum Direction
 {
   Left,
@@ -33,4 +43,9 @@ class GameError : exception
 public:
   string msg;
   GameError(string msg);
+};
+
+class ErroLeitura{
+public:
+    ErroLeitura(string msg);
 };
