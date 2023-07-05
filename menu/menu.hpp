@@ -2,9 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "../globals/globals.hpp"
 
 class Menu {
-    int pos;
+    int pos, cont = 0;
     bool pressed, theselect, sair;
 
     sf::RenderWindow * window;
@@ -30,4 +31,5 @@ class Menu {
         Menu(sf::RenderWindow* win);
         ~Menu();
         void run_menu();
+        bool Reiniciar = false;
 };

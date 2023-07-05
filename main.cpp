@@ -4,15 +4,23 @@ using namespace std;
 
 int main()
 {
-    Game game;
 
-    try
-    {
-        game.gameLoop();
-    }
-    catch (GameError error)
-    {
-        cout << error.msg << endl;
+    while(true){
+        try
+        {
+            Game game;
+
+            game.initialize();
+            game.gameLoop();
+
+            if(!game.Reiniciando)
+                break;
+
+        }
+        catch (GameError error)
+        {
+            cout << error.msg << endl;
+        }
     }
 
     return 0;

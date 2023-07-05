@@ -31,19 +31,22 @@ void Menu::set_values(){
 
     options = {"CONTINUAR", "REINICIAR", "SOBRE", "SAIR"};
     btns.resize(4);
-    coords = {{367, 165}, {367, 270}, {367, 375}, {367, 480}};
-    sizes = {{546, 104}, {546, 104}, {546, 104}, {546, 104}};
+    // Valores pegos no Gimp Após desenhar os botões lá
+    coords = {{332, 176}, {332, 283}, {332, 390}, {332, 498}};
+    sizes = {{532, 87}, {532, 87}, {532, 87}, {532, 87}};
 
     for(std::size_t i{}; i < btns.size(); i++){
         btns[i] = new sf::RectangleShape();
         btns[i]->setSize(sizes[i]);
         btns[i]->setPosition(coords[i]);
-        btns[i]->setOutlineColor(sf::Color::Black);
+        btns[i]->setOutlineColor(sf::Color::Yellow);
+        btns[i]->setOutlineThickness(8);
         btns[i]->setFillColor(sf::Color::Transparent);
     }
 
     pos = 0;
-    btns[0]->setOutlineThickness(3);
+    btns[0]->setOutlineColor(sf::Color::Black);
+    //btns[0]->setOutlineThickness(3);
 }
 
 void Menu::loop_events(){
@@ -64,8 +67,8 @@ void Menu::loop_events(){
             if(pos < 3){
                 pos++;
                 pressed = true;
-                btns[pos]->setOutlineThickness(3);
-                btns[pos - 1]->setOutlineThickness(0);
+                btns[pos]->setOutlineColor(sf::Color::Black);//->setOutlineThickness(3);
+                btns[pos - 1]->setOutlineColor(sf::Color::Yellow);//->setOutlineThickness(0);
                 pressed = false;
                 theselect = false;
             }
@@ -75,8 +78,8 @@ void Menu::loop_events(){
             if(pos > 0){
                 pos--;
                 pressed = true;
-                btns[pos]->setOutlineThickness(3);
-                btns[pos + 1]->setOutlineThickness(0);
+                btns[pos]->setOutlineColor(sf::Color::Black);//->setOutlineThickness(3);
+                btns[pos + 1]->setOutlineColor(sf::Color::Yellow);//->setOutlineThickness(0);
                 pressed = false;
                 theselect = false;
             }
@@ -99,6 +102,16 @@ void Menu::draw_all(){
     window->clear();
     window->draw(*bg);
 
+
+    cont++;
+    // faz o botão selecionado piscar
+    if(cont == 2000){
+        cont = 0;
+        // se for amarelo muda pra preto, se não muda pra amarelo
+        btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == sf::Color::Yellow)  ? sf::Color::Black : sf::Color::Yellow);
+    }
+
+
     for(auto b : btns)
         window->draw(*b);
 
@@ -115,8 +128,11 @@ void Menu::run_menu(){
 void Menu::RealizarTarefa(int option){
     switch(option){
     case 0:
+        sair = true;
         break;
     case 1:
+        sair = true;
+        Reiniciar = true;
         break;
     case 2:
         break;

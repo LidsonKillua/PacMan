@@ -36,6 +36,7 @@ public:
   };
   sf::Clock clock;
   int pontos;
+  bool Reiniciando = false;
   void initialize();
   void gameLoop();
   Game();

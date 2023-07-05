@@ -3,8 +3,12 @@
 
 Game::Game()
 {
+}
+
+void Game::initialize(){
   // cria a janela
-  window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
+  if(!Reiniciando)
+    window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
   initializeBackground();
   initializePilulas();
@@ -18,6 +22,7 @@ Game::Game()
     throw new GameError("Erro ao inicializar Fantasmas!");
 
   pontos = 0;
+  Reiniciando = false;
 }
 
 void Game::initializeBackground()
@@ -43,7 +48,7 @@ void Game::initializePilulas()
 void Game::gameLoop()
 {
   // executa o programa enquanto a janela esta aberta
-  while (window->isOpen())
+  while(!Reiniciando/*window->isOpen()*/)
   {
     eventLoop();
     updateGame();
@@ -70,6 +75,11 @@ void Game::eventLoop()
         Menu * menu = new Menu(window);
         menu->run_menu();
         delete menu;
+
+        if(menu->Reiniciar){
+            Reiniciando = true;
+            break;
+        }
       }
       if (event.key.code == sf::Keyboard::Left)
       {
