@@ -1,5 +1,4 @@
 #include "pacman.hpp"
-#include "../globals/Consts.cpp"
 
 Pacman::Pacman()
 {

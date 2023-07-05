@@ -1,5 +1,4 @@
 #include "fantasma.hpp"
-#include "../globals/Consts.cpp"
 
 bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
 {
