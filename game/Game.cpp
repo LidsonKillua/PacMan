@@ -111,7 +111,7 @@ void Game::updateGame()
     // MOVE FANTASMAS
     for (int i = 0; i < numFantasmas; i++)
     {
-      fantasmas[i].move(mapa, pacman);
+      fantasmas[i].move(mapa, pacman, fantasmas);
     }
 
     // MOVE PACMAN
