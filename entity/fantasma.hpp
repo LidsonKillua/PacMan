@@ -2,6 +2,7 @@
 #include "entity.hpp"
 #include "pacman.hpp"
 #include <queue>
+#include <time.h>
 using namespace std;
 
 // Definição dos tipos de fantasma: aleatório ou perseguidor
@@ -25,5 +26,6 @@ public:
 private:
   int posToNumber(Position pos);
   Position numberToPos(int number);
-  Position getBestDirection(char mapa[ROWS][COLS], Position pos, Pacman pacman);
+  Direction getMovePerseguidor(char mapa[ROWS][COLS], Position pos, Pacman pacman);
+  Direction getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman);
 };

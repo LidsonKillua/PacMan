@@ -5,8 +5,6 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
   for (int i = 0; i < numFantasmas; i++)
   {
     fantasmas[i].dir = Idle;
-    fantasmas[i].pos.x = 1;
-    fantasmas[i].pos.y = 1;
     if (!fantasmas[i].texture.loadFromFile(c_ImgPolDir)) // ler imagem direita
     {
       throw new ErroLeitura(c_ImgPolDir);
@@ -15,6 +13,12 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
     fantasmas[i].sprite.setTexture(fantasmas[i].texture);
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
   }
+  fantasmas[0].pos.x = 1;
+  fantasmas[0].pos.y = 1;
+  fantasmas[0].tipo = Aleatorio;
+  fantasmas[1].pos.x = 23;
+  fantasmas[1].pos.y = 14;
+  fantasmas[1].tipo = Perseguidor;
   return true;
 }
 
@@ -25,10 +29,14 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
   if (pacman.dir == Idle)
     return;
   Direction dir;
-  // Obtém a posição para onde deve se mover
-  Position pos = getBestDirection(mapa, this->pos, pacman);
-  // Move-se para essa posição
-  this->pos = pos;
+  if (tipo == Perseguidor)
+    // Obtém a posição para onde deve se mover
+    dir = getMovePerseguidor(mapa, pos, pacman);
+  else
+    dir = getMoveAleatorio(mapa, pos, pacman);
+
+  // Move-se para essa direção
+  pos = getMovement(dir, pos, mapa);
 }
 
 /******************************************************************************
@@ -57,7 +65,7 @@ Função que realiza uma BFS no mapa até encontrar o Pacman, descobrindo assim 
 menor caminho. Ela retorna a posição que corresponde ao primeiro movimento que o
 fantasma deve realizar
 ******************************************************************************/
-Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacman pacman)
+Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, Pacman pacman)
 {
   // Variáveis para o BFS
   queue<int> q;
@@ -117,7 +125,7 @@ Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacm
   }
   // Se o Pacman está na mesma posição que o fantasma, o fantasma deve apenas ficar parado
   if (u == originV)
-    return origin;
+    return Idle;
   // Reconstrói o caminho até o nó cujo pai é o nó de origem (o primeiro movimento do Fantasma)
   while (parent[u] != originV)
   {
@@ -125,7 +133,50 @@ Position Fantasma::getBestDirection(char mapa[ROWS][COLS], Position origin, Pacm
   }
   // Traduz o número do vértice em posição no mapa, para saber pra qual posição o fantasma deve ir em seu primeiro movimento.
   pos = numberToPos(u);
-  return pos;
+  // De acordo com o deslocamento quanto ao ponto de origem, retorna a direção pra onde o fantasma deve se mover
+  if (pos.x == origin.x - 1 || (origin.x == 0 && pos.x == COLS - 2))
+    return Left;
+  else if (pos.x == origin.x + 1 || (origin.x == COLS - 2 && pos.x == 0))
+    return Right;
+  else if (pos.y == origin.y - 1 || (origin.y == 0 && pos.y == ROWS - 1))
+    return Up;
+  else if (pos.y == origin.y + 1 || (origin.y == ROWS - 1 && pos.y == 0))
+    return Down;
+  return Idle;
+}
+
+Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman)
+{
+  srand(time(0));
+  Direction possibleDirections[4];
+  int possibilities = 0;
+  if (canMove(Left, pos, mapa) && dir != Right)
+    possibleDirections[possibilities++] = Left;
+  if (canMove(Right, pos, mapa) && dir != Left)
+    possibleDirections[possibilities++] = Right;
+  if (canMove(Down, pos, mapa) && dir != Up)
+    possibleDirections[possibilities++] = Down;
+  if (canMove(Up, pos, mapa) && dir != Down)
+    possibleDirections[possibilities++] = Up;
+  if (possibilities > 1)
+  {
+    int i = rand() % possibilities;
+    dir = possibleDirections[i];
+  }
+  else if (possibilities == 0)
+  {
+    if (dir == Left)
+      dir = Right;
+    else if (dir == Right)
+      dir = Left;
+    else if (dir == Down)
+      dir = Up;
+    else if (dir == Up)
+      dir = Down;
+  }
+  else
+    dir = possibleDirections[0];
+  return dir;
 }
 
 void Fantasma::draw(sf::RenderWindow *window)
