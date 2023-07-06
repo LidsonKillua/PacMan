@@ -5,13 +5,28 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
   for (int i = 0; i < numFantasmas; i++)
   {
     fantasmas[i].dir = Idle;
-    if (!fantasmas[i].texture.loadFromFile(c_ImgPolDir)) // ler imagem direita
+    if (!fantasmas[i].textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
     {
       throw new ErroLeitura(c_ImgPolDir);
       return false;
     }
-    fantasmas[i].sprite.setTexture(fantasmas[i].texture);
+    fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
+        if (!fantasmas[i].textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
+    {
+      throw new ErroLeitura(c_ImgPolEsq);
+      return false;
+    }
+        if (!fantasmas[i].textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
+    {
+      throw new ErroLeitura(c_ImgPolUp);
+      return false;
+    }
+        if (!fantasmas[i].textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
+    {
+      throw new ErroLeitura(c_ImgPolDwn);
+      return false;
+    }
   }
   fantasmas[0].pos.x = 1;
   fantasmas[0].pos.y = 1;
@@ -21,19 +36,72 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
   fantasmas[1].tipo = Perseguidor;
   return true;
 }
+void Fantasma::updateAnimationf() // animacao
+{
+  // Acumula o tempo decorrido
+  tempAcumul += defTempo;
+
+  // Atualiza a animacao se o tempo acumulado for maior ou igual a taxa de atualizacao
+  if (tempAcumul >= frameRate)
+  {
+    // Passa para o proximo frame
+    frameAtual = (frameAtual + 1) % totalFrames;
+
+    // Redefine o tempo acumulado
+    tempAcumul = 0.0f;
+  }
+}
 
 // Função pra mover o fantasma, herdando de Entity
-void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
+void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, Fantasma fantasmas[])
 {
   // Caso o Pacman esteja parado (início de jogo), nada ocorre
   if (pacman.dir == Idle)
     return;
-  Direction dir;
-  if (tipo == Perseguidor)
-    // Obtém a posição para onde deve se mover
-    dir = getMovePerseguidor(mapa, pos, pacman);
-  else
-    dir = getMoveAleatorio(mapa, pos, pacman);
+    Direction dir;
+    updateAnimationf();
+    if (tipo == Perseguidor)
+    {
+        // Obtém a posição para onde deve se mover
+        dir = getMovePerseguidor(mapa, pos, pacman);
+        if (dir == Left)
+        {
+            fantasmas[1].sprite.setTexture(fantasmas[1].textures[Left]);
+        }
+        else if (dir == Right)
+        {
+            fantasmas[1].sprite.setTexture(fantasmas[1].textures[Right]);
+        }
+        else if (dir == Up)
+        {
+            fantasmas[1].sprite.setTexture(fantasmas[1].textures[Up]);
+        }
+        else if (dir == Down)
+        {
+            fantasmas[1].sprite.setTexture(fantasmas[1].textures[Down]);
+        }
+    }
+    else
+    {
+        dir = getMoveAleatorio(mapa, pos, pacman);
+        if (dir == Left)
+        {
+            fantasmas[0].sprite.setTexture(fantasmas[0].textures[Left]);
+        }
+        else if (dir == Right)
+        {
+            fantasmas[0].sprite.setTexture(fantasmas[0].textures[Right]);
+        }
+        else if (dir == Up)
+        {
+            fantasmas[0].sprite.setTexture(fantasmas[0].textures[Up]);
+        }
+        else if (dir == Down)
+        {
+            fantasmas[0].sprite.setTexture(fantasmas[0].textures[Down]);
+        }
+    }
+
 
   // Move-se para essa direção
   pos = getMovement(dir, pos, mapa);
@@ -102,6 +170,7 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
     Checa se Fantasma, a partir da posição atual, pode se mover para cada direção,
     e caso possa, adiciona o número de vértice correspondente à nova posição à lista de adjacentes.
     */
+
     if (canMove(Left, pos, mapa))
       adjacents.push_back(posToNumber(getMovement(Left, pos, mapa)));
     if (canMove(Right, pos, mapa))
@@ -181,6 +250,10 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
 
 void Fantasma::draw(sf::RenderWindow *window)
 {
-  sprite.setPosition(pos.x * SIZE, pos.y * SIZE);
-  window->draw(sprite);
+        int frameWidth = textures[Right].getSize().x / totalFrames;
+        int frameHeight = textures[Right].getSize().y;
+        sf::IntRect frameRect(frameAtual * frameWidth, 0, frameWidth, frameHeight);
+        sprite.setTextureRect(frameRect);
+        sprite.setPosition(pos.x * SIZE, pos.y * SIZE);
+        window->draw(sprite);
 }
