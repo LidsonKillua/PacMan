@@ -18,7 +18,10 @@ const char c_ImgCarDwn[17] = "img/carrodwn.png";
 const char c_ImgCarUp[16] = "img/carroup.png";
 
 // Caminhos imagens Policia
-const char c_ImgPolDir[17] = /*"carro_policia.png"*/ "img/ghost.png";
+const char c_ImgPolDir[25] = "img/carro_policiadir.png";
+const char c_ImgPolEsq[25] = "img/carro_policiaesq.png";
+const char c_ImgPolUp[25] = "img/carro_policiaup.png";
+const char c_ImgPolDwn[25] = "img/carro_policiadnw.png";
 
 enum Direction
 {
