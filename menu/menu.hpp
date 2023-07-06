@@ -9,7 +9,6 @@ class Menu {
     bool pressed, theselect, sair;
 
     sf::RenderWindow * window;
-    sf::Font * font;
     sf::Texture * image;
     sf::Sprite * bg;
 

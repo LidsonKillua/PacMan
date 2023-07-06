@@ -4,7 +4,6 @@
 Menu::Menu(sf::RenderWindow* win){
     window = win;
 
-    font = new sf::Font();
     image = new sf::Texture();
     bg = new sf::Sprite();
 
@@ -15,7 +14,6 @@ Menu::~Menu(){
     for(auto b : btns)
         delete b;
 
-    delete font;
     delete image;
     delete bg;
 }
@@ -23,7 +21,6 @@ Menu::~Menu(){
 void Menu::set_values(){
     pos = 0;
     pressed = theselect = sair = false;
-    font->loadFromFile("fonts/pacFont.TTF");
     image->loadFromFile("img/Menu.png");
     bg->setTexture(*image);
     pos_mouse = {0, 0};
@@ -46,7 +43,6 @@ void Menu::set_values(){
 
     pos = 0;
     btns[0]->setOutlineColor(sf::Color::Black);
-    //btns[0]->setOutlineThickness(3);
 }
 
 void Menu::loop_events(){

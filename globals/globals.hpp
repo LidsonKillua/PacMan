@@ -7,7 +7,7 @@ using namespace std;
 #define COLS 26
 #define SIZE 48        // Tamanho de cada celula do mapa
 #define numFantasmas 2 // Alterar a Quantidade de Fantasmas
-#define qtdPilulas 30  // Alterar a Quantidade de Pilulas
+const int qtdPilulas = 177;  // Alterar a Quantidade de Pilulas
 const int TAMX = 1200; // Tamanho da Janela
 const int TAMY = 768;  // Tamanho da Janela
 
@@ -30,6 +30,12 @@ enum Direction
   Up,
   Down,
   Idle
+};
+
+enum Dificult{
+  Easy,
+  Normal,
+  Hard
 };
 
 struct Position

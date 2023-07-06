@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "../menu/menu.hpp"
+#include <iostream>
 
 Game::Game()
 {
@@ -11,6 +12,7 @@ void Game::initialize(){
     window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
   initializeBackground();
+  InitializeScore();
   initializePilulas();
 
   // Inicializa o Pacman
@@ -43,6 +45,16 @@ void Game::initializePilulas()
   pilula->setFillColor(sf::Color(255, 255, 0));
   pilula->setOutlineThickness(-1);
   pilula->setOutlineColor(sf::Color(255, 255, 255));
+}
+
+void Game::InitializeScore(){
+  font = new sf::Font();
+  font->loadFromFile("fonts/emulogic.ttf");
+
+  score.setFont(*font);
+  score.setString("SCORE 000");
+  score.setCharacterSize(25);
+  score.setPosition(sf::Vector2f(628, 10));
 }
 
 void Game::gameLoop()
@@ -121,10 +133,15 @@ void Game::updateGame()
     {
       mapa[pacman.pos.y][pacman.pos.x] = '0';
       pontos++;
-      cout << "PONTOS: " << pontos << endl;
+
+      string pts = (pontos > 99 ? to_string(pontos) :
+                   (pontos > 9  ? "0" + to_string(pontos) :
+                                  "00" + to_string(pontos)));
+
+      score.setString("SCORE " + pts);
 
       if (pontos == qtdPilulas)
-        cout << "Voce Venceu!" << endl;
+        score.setString("Voce Venceu!");
     }
 
     clock.restart(); // recomeca contagem do tempo
@@ -138,6 +155,7 @@ void Game::drawGame()
   window->clear(sf::Color::Black);
 
   window->draw(*background); // desenha o mapa no fundo da tela
+  window->draw(score);
 
   for (int i = 0; i < ROWS; i++)
     for (int j = 0; j < COLS; j++)
@@ -163,6 +181,7 @@ void Game::drawGame()
 Game::~Game()
 {
   delete window;
+  delete font;
   delete pilula;
   delete fd;
   delete background;
