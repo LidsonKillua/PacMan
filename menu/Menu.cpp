@@ -1,7 +1,8 @@
 #include "menu.hpp"
 #include <iostream>
 
-Menu::Menu(sf::RenderWindow* win){
+Menu::Menu(sf::RenderWindow* win)
+{
     window = win;
 
     image = new sf::Texture();
@@ -10,7 +11,8 @@ Menu::Menu(sf::RenderWindow* win){
     set_values();
 }
 
-Menu::~Menu(){
+Menu::~Menu()
+{
     for(auto b : btns)
         delete b;
 
@@ -18,7 +20,8 @@ Menu::~Menu(){
     delete bg;
 }
 
-void Menu::set_values(){
+void Menu::set_values()
+{
     pos = 0;
     pressed = theselect = sair = false;
     image->loadFromFile("img/Menu.png");
@@ -32,7 +35,8 @@ void Menu::set_values(){
     coords = {{332, 176}, {332, 283}, {332, 390}, {332, 498}};
     sizes = {{532, 87}, {532, 87}, {532, 87}, {532, 87}};
 
-    for(std::size_t i{}; i < btns.size(); i++){
+    for(std::size_t i{}; i < btns.size(); i++)
+    {
         btns[i] = new sf::RectangleShape();
         btns[i]->setSize(sizes[i]);
         btns[i]->setPosition(coords[i]);
@@ -45,22 +49,28 @@ void Menu::set_values(){
     btns[0]->setOutlineColor(sf::Color::Black);
 }
 
-void Menu::loop_events(){
+void Menu::loop_events()
+{
     sf::Event event;
-    while(window->pollEvent(event)){
-        if(event.type == sf::Event::Closed){
+    while(window->pollEvent(event))
+    {
+        if(event.type == sf::Event::Closed)
+        {
             window->close();
         }
 
         pos_mouse = sf::Mouse::getPosition(*window);
         mouse_coord = window->mapPixelToCoords(pos_mouse);
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        {
             sair = true;
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed){
-            if(pos < 3){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
+        {
+            if(pos < 3)
+            {
                 pos++;
                 pressed = true;
                 btns[pos]->setOutlineColor(sf::Color::Black);//->setOutlineThickness(3);
@@ -70,8 +80,10 @@ void Menu::loop_events(){
             }
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !pressed){
-            if(pos > 0){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !pressed)
+        {
+            if(pos > 0)
+            {
                 pos--;
                 pressed = true;
                 btns[pos]->setOutlineColor(sf::Color::Black);//->setOutlineThickness(3);
@@ -81,12 +93,14 @@ void Menu::loop_events(){
             }
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect)
+        {
             theselect = true;
             RealizarTarefa(pos);
         }
 
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
             for(std::size_t i{}; i < btns.size(); i++)
                 if(btns[i]->getGlobalBounds().contains(mouse_coord))
                     RealizarTarefa(i);
@@ -94,16 +108,20 @@ void Menu::loop_events(){
     }
 }
 
-void Menu::draw_all(){
+void Menu::draw_all()
+{
     window->draw(*bg);
+
 
     cont++;
     // faz o botão selecionado piscar
-    if(cont == 2000){
+    if(cont == 2000)
+    {
         cont = 0;
         // se for amarelo muda pra preto, se não muda pra amarelo
         btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == sf::Color::Yellow)  ? sf::Color::Black : sf::Color::Yellow);
     }
+
 
     for(auto b : btns)
         window->draw(*b);
@@ -111,15 +129,33 @@ void Menu::draw_all(){
     window->display();
 }
 
-void Menu::run_menu(){
-    while(!sair){
+void Menu::run_menu()
+{
+    sf::SoundBuffer msmenu;
+
+    // Load it from a file
+    if (!msmenu.loadFromFile("audio/musicamenu.wav"))
+    {
+        std::cout << "musicamenu load failed!";
+    }
+
+    // Create a sound source and bind it to the buffer
+    sf::Sound sdmenu;
+    sdmenu.setBuffer(msmenu);
+    sdmenu.play();
+
+    // Play the sound
+    while(!sair)
+    {
         loop_events();
         draw_all();
     }
 }
 
-void Menu::RealizarTarefa(int option){
-    switch(option){
+void Menu::RealizarTarefa(int option)
+{
+    switch(option)
+    {
     case 0:
         sair = true;
         break;

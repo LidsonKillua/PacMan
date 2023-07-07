@@ -97,19 +97,19 @@ void Game::eventLoop()
           break;
         }
       }
-      if (event.key.code == sf::Keyboard::Left)
+      if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
       {
         pacman.intent = Left;
       }
-      else if (event.key.code == sf::Keyboard::Right)
+      else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D)
       {
         pacman.intent = Right;
       }
-      else if (event.key.code == sf::Keyboard::Up)
+      else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
       {
         pacman.intent = Up;
       }
-      else if (event.key.code == sf::Keyboard::Down)
+      else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
       {
         pacman.intent = Down;
       }
