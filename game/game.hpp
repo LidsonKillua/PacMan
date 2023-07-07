@@ -14,17 +14,17 @@ public:
   sf::Texture *fd;
   sf::Sprite *background;
 
-  sf::Font * font;
+  sf::Font *font;
   sf::Text score;
 
   Pacman pacman;
   Fantasma fantasmas[numFantasmas];
   char mapa[ROWS][COLS] = {
       // Mapa do jogo
-      //0: Rua
-      //1: Parede
-      //2: Pílulas
-      //3: Parede Invisível/Onde só fantasma anda
+      // 0: Rua
+      // 1: Parede
+      // 2: Pï¿½lulas
+      // 3: Parede Invisï¿½vel/Onde sï¿½ fantasma anda
       "1111111111110111111111111",
       "1222222222222222222222221",
       "1211211111112111111121121",
@@ -43,6 +43,7 @@ public:
       "1111111111110111111111111",
   };
   sf::Clock clock;
+  sf::Clock posClock;
   int pontos;
   bool Reiniciando = false;
   void initialize();
@@ -56,5 +57,6 @@ private:
   void InitializeScore();
   void eventLoop();
   void updateGame();
+  void updatePos();
   void drawGame();
 };

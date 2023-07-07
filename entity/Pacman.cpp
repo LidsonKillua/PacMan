@@ -14,6 +14,8 @@ bool Pacman::initialize()
   intent = Idle;
   pos.x = 12;
   pos.y = 8;
+  drawPos.x = pos.x * SIZE;
+  drawPos.y = pos.y * SIZE;
   frameAtual = 0;
   tempAcumul = 0.0f;
 
@@ -50,9 +52,12 @@ void Pacman::move(char mapa[ROWS][COLS])
 {
   Position movement;
 
-  // Caso seja possível mover na direção que é a intenção do usuário, a intenção se torna a Direção de movimento.
-  if (canMove(intent, pos, mapa))
+  // Caso seja possível se mover na direção da intenção do usuário, ela se torna a direção de movimento.
+  int diffX = abs(drawPos.x - pos.x * SIZE);
+  int diffY = abs(drawPos.y - pos.y * SIZE);
+  if (canMove(intent, pos, mapa) && diffX <= TOLERANCE && diffY <= TOLERANCE && !isIdle)
     dir = intent;
+  isIdle = false;
 
   // Se puder se mover na direção, realiza o movimento
   if (canMove(dir, pos, mapa))
@@ -60,16 +65,26 @@ void Pacman::move(char mapa[ROWS][COLS])
     updateAnimation();
     movement = getMovement(dir, pos, mapa);
     pos = movement;
-
-    if (dir == Left)
-      sprite.setTexture(textures[Left]);
-    else if (dir == Right)
-      sprite.setTexture(textures[Right]);
-    else if (dir == Up)
-      sprite.setTexture(textures[Up]);
-    else if (dir == Down)
-      sprite.setTexture(textures[Down]);
+    drawPos.x = pos.x * SIZE;
+    drawPos.y = pos.y * SIZE;
   }
+  /************* Preparação para o próximo movimento **************************
+  Se, após o movimento, é possível se mover na direção da intent, já atualiza a direção
+  ****************************************************************************/
+  if (canMove(intent, pos, mapa))
+    dir = intent;
+  if (dir != Idle)
+    sprite.setTexture(textures[dir]);
+}
+
+void Pacman::updateDrawPos(char mapa[ROWS][COLS])
+{
+  if (intent != dir && !canMove(dir, pos, mapa))
+  {
+    isIdle = true;
+    // sprite.setTexture(textures[intent]);
+  }
+  Entity::updateDrawPos(mapa);
 }
 
 void Pacman::updateAnimation() // animacao
@@ -94,6 +109,6 @@ void Pacman::draw(sf::RenderWindow *window)
   int frameHeight = textures[Right].getSize().y;
   sf::IntRect frameRect(frameAtual * frameWidth, 0, frameWidth, frameHeight);
   sprite.setTextureRect(frameRect);
-  sprite.setPosition(pos.x * SIZE, pos.y * SIZE);
+  sprite.setPosition(drawPos.x, drawPos.y);
   window->draw(sprite);
 }

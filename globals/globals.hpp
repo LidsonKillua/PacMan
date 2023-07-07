@@ -3,13 +3,19 @@
 #include <string>
 using namespace std;
 
+// Variáveis do jogo
 #define ROWS 16
 #define COLS 26
-#define SIZE 48        // Tamanho de cada celula do mapa
-#define numFantasmas 2 // Alterar a Quantidade de Fantasmas
-const int qtdPilulas = 177;  // Alterar a Quantidade de Pilulas
-const int TAMX = 1200; // Tamanho da Janela
-const int TAMY = 768;  // Tamanho da Janela
+#define SIZE 48             // Tamanho de cada celula do mapa
+#define numFantasmas 2      // Alterar a Quantidade de Fantasmas
+const int qtdPilulas = 177; // Alterar a Quantidade de Pilulas
+const int TAMX = 1200;      // Tamanho da Janela
+const int TAMY = 768;       // Tamanho da Janela
+
+// Variáveis de animação
+#define UPDATE_GAME_T 0.2 // Tempo para atualizar o jogo (1 ciclo)
+#define SMOOTHNESS 8      // Define quantas vezes a posição é atualizada em 1 ciclo
+#define TOLERANCE 5       // Tolerância de quantos pixels o Pacman pode passar da posição de virar e, ao receber o intent, ainda ser capaz de se mover nessa direção
 
 // Caminhos imagens Pac
 const char c_ImgCarDir[17] = "img/carrodir.png";
@@ -32,7 +38,8 @@ enum Direction
   Idle
 };
 
-enum Dificult{
+enum Dificult
+{
   Easy,
   Normal,
   Hard

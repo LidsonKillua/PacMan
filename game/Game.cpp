@@ -6,9 +6,10 @@ Game::Game()
 {
 }
 
-void Game::initialize(){
+void Game::initialize()
+{
   // cria a janela
-  if(!Reiniciando)
+  if (!Reiniciando)
     window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
   initializeBackground();
@@ -47,7 +48,8 @@ void Game::initializePilulas()
   pilula->setOutlineColor(sf::Color(255, 255, 255));
 }
 
-void Game::InitializeScore(){
+void Game::InitializeScore()
+{
   font = new sf::Font();
   font->loadFromFile("fonts/emulogic.ttf");
 
@@ -60,10 +62,11 @@ void Game::InitializeScore(){
 void Game::gameLoop()
 {
   // executa o programa enquanto a janela esta aberta
-  while(!Reiniciando/*window->isOpen()*/)
+  while (!Reiniciando /*window->isOpen()*/)
   {
     eventLoop();
     updateGame();
+    updatePos();
     drawGame();
   }
 }
@@ -84,13 +87,14 @@ void Game::eventLoop()
     {
       if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)
       {
-        Menu * menu = new Menu(window);
+        Menu *menu = new Menu(window);
         menu->run_menu();
         delete menu;
 
-        if(menu->Reiniciar){
-            Reiniciando = true;
-            break;
+        if (menu->Reiniciar)
+        {
+          Reiniciando = true;
+          break;
         }
       }
       if (event.key.code == sf::Keyboard::Left)
@@ -115,10 +119,10 @@ void Game::eventLoop()
 
 void Game::updateGame()
 {
-  // Muda a posicao do PacMan a cada 0.2 segundos
-  if (clock.getElapsedTime() > sf::seconds(0.2))
+  // Muda o estado do jogo a cada UPDATE_GAME_T segundos
+  if (clock.getElapsedTime() > sf::seconds(UPDATE_GAME_T))
   {
-    // tempo desde ultimo restart > 0.2s?
+    // tempo desde ultimo restart > UPDATE_GAME_Ts?
 
     // MOVE FANTASMAS
     for (int i = 0; i < numFantasmas; i++)
@@ -134,9 +138,7 @@ void Game::updateGame()
       mapa[pacman.pos.y][pacman.pos.x] = '0';
       pontos++;
 
-      string pts = (pontos > 99 ? to_string(pontos) :
-                   (pontos > 9  ? "0" + to_string(pontos) :
-                                  "00" + to_string(pontos)));
+      string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
 
       score.setString("SCORE " + pts);
 
@@ -145,6 +147,24 @@ void Game::updateGame()
     }
 
     clock.restart(); // recomeca contagem do tempo
+    posClock.restart();
+  }
+}
+
+void Game::updatePos()
+{
+  // Muda o estado do desenho a cada 0.2 segundos
+  if (posClock.getElapsedTime() > sf::seconds(UPDATE_GAME_T / SMOOTHNESS))
+  {
+    // MOVE FANTASMAS
+    for (int i = 0; i < numFantasmas; i++)
+    {
+      fantasmas[i].updateDrawPos(mapa, pacman);
+    }
+
+    pacman.updateDrawPos(mapa);
+
+    posClock.restart();
   }
 }
 

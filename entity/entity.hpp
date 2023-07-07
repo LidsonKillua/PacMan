@@ -11,9 +11,11 @@ class Entity
 public:
   sf::Sprite sprite;
   Direction dir;
+  Position drawPos;
   Position pos;
 
   Entity();
   bool canMove(Direction d, Position pos, char mapa[ROWS][COLS]);
   Position getMovement(Direction d, Position pos, char mapa[ROWS][COLS]);
+  virtual void updateDrawPos(char mapa[ROWS][COLS]);
 };

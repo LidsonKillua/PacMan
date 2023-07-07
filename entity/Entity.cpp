@@ -81,3 +81,17 @@ Position Entity::getMovement(Direction d, Position pos, char mapa[ROWS][COLS])
   }
   return newPos;
 }
+
+void Entity::updateDrawPos(char mapa[ROWS][COLS])
+{
+  if (!canMove(dir, pos, mapa))
+    return;
+  if (dir == Left)
+    drawPos.x -= SIZE / SMOOTHNESS;
+  else if (dir == Right)
+    drawPos.x += SIZE / SMOOTHNESS;
+  if (dir == Up)
+    drawPos.y -= SIZE / SMOOTHNESS;
+  else if (dir == Down)
+    drawPos.y += SIZE / SMOOTHNESS;
+}

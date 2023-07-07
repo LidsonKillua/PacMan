@@ -7,6 +7,7 @@ class Pacman : public Entity
 {
 public:
   Direction intent;
+  bool isIdle = false;
   map<Direction, sf::Texture> textures;
   // Animation Variables
   const int totalFrames = 8;     // Numero total de frames na animacao
@@ -18,6 +19,7 @@ public:
   Pacman();
   ~Pacman();
   void move(char mapa[ROWS][COLS]);
+  void updateDrawPos(char mapa[ROWS][COLS]) override;
   bool initialize();
   void updateAnimation();
   void draw(sf::RenderWindow *window);
