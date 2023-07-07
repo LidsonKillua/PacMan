@@ -57,7 +57,6 @@ private:
   void initializeBackground();
   void initializePilulas();
   void InitializeScore();
-  void initializeGameOverScreen();
   void eventLoop();
   bool checkCrossGameOver(Direction prevDir, Fantasma fantasma);
   bool checkGameOver();

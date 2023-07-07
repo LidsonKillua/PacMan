@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "../menu/menu.hpp"
+#include "../menu/fim.hpp"
 #include <iostream>
 
 void Game::initialize()
@@ -11,7 +12,6 @@ void Game::initialize()
   initializeBackground();
   InitializeScore();
   initializePilulas();
-  initializeGameOverScreen();
 
   // Inicializa o Pacman
   if (!pacman.initialize())
@@ -57,17 +57,6 @@ void Game::InitializeScore()
   score.setPosition(sf::Vector2f(628, 10));
 }
 
-void Game::initializeGameOverScreen()
-{
-  gameOverT = new sf::Texture();
-  // game over screen
-  if (!gameOverT->loadFromFile("img/wasted.png"))
-  {
-    throw new GameError("Fatal Error");
-  }
-  gameOverS = new sf::Sprite(*gameOverT);
-}
-
 // Loop principal do jogo.
 void Game::gameLoop()
 {
@@ -75,11 +64,8 @@ void Game::gameLoop()
   while (!Reiniciando && window->isOpen())
   {
     eventLoop();
-    if (!GameOver)
-    {
-      updateGame();
-      updatePos();
-    }
+    updateGame();
+    updatePos();
     drawGame();
   }
 }
@@ -173,15 +159,32 @@ void Game::processPilulas()
 
     score.setString("SCORE " + pts);
 
-    if (pontos == qtdPilulas)
+    if (pontos == qtdPilulas){
       score.setString("Voce Venceu!");
+
+      Final *menuF = new Final(window, false);
+      menuF->run_menu();
+
+      if (menuF->Reiniciar){
+        Reiniciando = true;
+      }
+
+      delete menuF;
+    }
   }
 }
 
 // Realiza o Game Over
 void Game::gameOver()
 {
-  GameOver = true;
+  Final *menuF = new Final(window, true);
+  menuF->run_menu();
+
+  if (menuF->Reiniciar){
+    Reiniciando = true;
+  }
+
+  delete menuF;
 }
 
 // Atualiza o estado do jogo
@@ -214,7 +217,6 @@ void Game::updateGame()
       gameOver();
       return;
     }
-
     processPilulas();
 
     clock.restart(); // recomeca contagem do tempo

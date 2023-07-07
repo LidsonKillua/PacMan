@@ -95,9 +95,7 @@ void Menu::loop_events(){
 }
 
 void Menu::draw_all(){
-    window->clear();
     window->draw(*bg);
-
 
     cont++;
     // faz o botão selecionado piscar
@@ -106,7 +104,6 @@ void Menu::draw_all(){
         // se for amarelo muda pra preto, se não muda pra amarelo
         btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == sf::Color::Yellow)  ? sf::Color::Black : sf::Color::Yellow);
     }
-
 
     for(auto b : btns)
         window->draw(*b);
