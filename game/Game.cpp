@@ -2,10 +2,6 @@
 #include "../menu/menu.hpp"
 #include <iostream>
 
-Game::Game()
-{
-}
-
 void Game::initialize()
 {
   // cria a janela
@@ -15,6 +11,7 @@ void Game::initialize()
   initializeBackground();
   InitializeScore();
   initializePilulas();
+  initializeGameOverScreen();
 
   // Inicializa o Pacman
   if (!pacman.initialize())
@@ -26,6 +23,7 @@ void Game::initialize()
 
   pontos = 0;
   Reiniciando = false;
+  GameOver = false;
 }
 
 void Game::initializeBackground()
@@ -59,14 +57,29 @@ void Game::InitializeScore()
   score.setPosition(sf::Vector2f(628, 10));
 }
 
+void Game::initializeGameOverScreen()
+{
+  gameOverT = new sf::Texture();
+  // game over screen
+  if (!gameOverT->loadFromFile("img/wasted.png"))
+  {
+    throw new GameError("Fatal Error");
+  }
+  gameOverS = new sf::Sprite(*gameOverT);
+}
+
+// Loop principal do jogo.
 void Game::gameLoop()
 {
-  // executa o programa enquanto a janela esta aberta
+  // executa o programa enquanto a janela esta aberta e não está reiniciando
   while (!Reiniciando && window->isOpen())
   {
     eventLoop();
-    updateGame();
-    updatePos();
+    if (!GameOver)
+    {
+      updateGame();
+      updatePos();
+    }
     drawGame();
   }
 }
@@ -118,41 +131,98 @@ void Game::eventLoop()
   }
 }
 
+// Verifica o Game Over em que fantasma e Pacman cruzam um pelo outro, sem parar na mesma posição (discreta) do mapa.
+bool Game::checkCrossGameOver(Direction prevDir, Fantasma fantasma)
+{
+  if (fantasma.pos == pacman.pos)
+  {
+    if (prevDir == Right && pacman.dir == Left)
+      return true;
+    if (prevDir == Left && pacman.dir == Right)
+      return true;
+    if (prevDir == Down && pacman.dir == Up)
+      return true;
+    if (prevDir == Up && pacman.dir == Down)
+      return true;
+  }
+  return false;
+}
+
+// Checa o Game Over padrão
+bool Game::checkGameOver()
+{
+  for (int i = 0; i < numFantasmas; i++)
+  {
+    if (fantasmas[i].pos == pacman.pos)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Checa a captura de pílulas (e possível vitória)
+void Game::processPilulas()
+{
+  if (mapa[pacman.pos.y][pacman.pos.x] == '2')
+  {
+    mapa[pacman.pos.y][pacman.pos.x] = '0';
+    pontos++;
+
+    string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
+
+    score.setString("SCORE " + pts);
+
+    if (pontos == qtdPilulas)
+      score.setString("Voce Venceu!");
+  }
+}
+
+// Realiza o Game Over
+void Game::gameOver()
+{
+  GameOver = true;
+}
+
+// Atualiza o estado do jogo
 void Game::updateGame()
 {
+  Direction prevDir;
   // Muda o estado do jogo a cada UPDATE_GAME_T segundos
   if (clock.getElapsedTime() > sf::seconds(UPDATE_GAME_T))
   {
-
     // MOVE FANTASMAS
     for (int i = 0; i < numFantasmas; i++)
     {
+      // Registra a direção do fantasma antes do movimento
+      prevDir = fantasmas[i].dir;
+      // Movimenta o fantasma
       fantasmas[i].move(mapa, pacman, fantasmas);
+      // Verifica o crossGameOver
+      if (checkCrossGameOver(prevDir, fantasmas[i]))
+      {
+        gameOver();
+        return;
+      }
     }
 
     // MOVE PACMAN
     pacman.move(mapa);
 
-    // Checa a captura de pílulas
-    if (mapa[pacman.pos.y][pacman.pos.x] == '2')
+    if (checkGameOver())
     {
-      mapa[pacman.pos.y][pacman.pos.x] = '0';
-      pontos++;
-
-      string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
-
-      score.setString("SCORE " + pts);
-
-      if (pontos == qtdPilulas)
-        score.setString("Voce Venceu!");
+      gameOver();
+      return;
     }
+
+    processPilulas();
 
     clock.restart(); // recomeca contagem do tempo
     posClock.restart();
   }
 }
 
-// Função pra atualizar a posição das entidades em um loop de tempo menor, a fim de aumentar a suavidade da movimentação
+// Atualiza a posição das entidades em um loop de tempo menor, a fim de aumentar a suavidade da movimentação
 void Game::updatePos()
 {
   // Muda o estado do desenho a cada fração de UPDATE_GAME_T, determinada pelo grau de SMOOTHNESS
@@ -171,7 +241,7 @@ void Game::updatePos()
   }
 }
 
-// desenhar tudo aqui...
+// Desenha tudo
 void Game::drawGame()
 {
   // limpa a janela com a cor preta
@@ -196,6 +266,11 @@ void Game::drawGame()
   // desenha Fantasmas
   for (int i = 0; i < numFantasmas; i++)
     fantasmas[i].draw(window);
+
+  if (GameOver)
+  {
+    window->draw(*gameOverS);
+  }
 
   // termina e desenha o frame corrente
   window->display();

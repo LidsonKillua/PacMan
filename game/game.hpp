@@ -13,6 +13,8 @@ public:
   sf::CircleShape *pilula;
   sf::Texture *fd;
   sf::Sprite *background;
+  sf::Texture *gameOverT;
+  sf::Sprite *gameOverS;
 
   sf::Font *font;
   sf::Text score;
@@ -23,8 +25,8 @@ public:
       // Mapa do jogo
       // 0: Rua
       // 1: Parede
-      // 2: P�lulas
-      // 3: Parede Invis�vel/Onde s� fantasma anda
+      // 2: Pilulas
+      // 3: Parede Invisivel/Onde so fantasma anda
       "1111111111110111111111111",
       "1222222222222222222222221",
       "1211211111112111111121121",
@@ -46,16 +48,21 @@ public:
   sf::Clock posClock;
   int pontos;
   bool Reiniciando = false;
+  bool GameOver = false;
   void initialize();
   void gameLoop();
-  Game();
   ~Game();
 
 private:
   void initializeBackground();
   void initializePilulas();
   void InitializeScore();
+  void initializeGameOverScreen();
   void eventLoop();
+  bool checkCrossGameOver(Direction prevDir, Fantasma fantasma);
+  bool checkGameOver();
+  void processPilulas();
+  void gameOver();
   void updateGame();
   void updatePos();
   void drawGame();
