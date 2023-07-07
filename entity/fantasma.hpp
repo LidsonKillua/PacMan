@@ -20,7 +20,6 @@ public:
   map<Direction, sf::Texture> textures;
   using Entity::Entity;
   void move(char mapa[ROWS][COLS], Pacman pacman, Fantasma fantasmas[]);
-  void updateDrawPos(char mapa[ROWS][COLS], Pacman pacman);
   void draw(sf::RenderWindow *window);
   static bool initializeFantasmas(Fantasma fantasmas[]);
   void updateAnimationf();

@@ -62,7 +62,7 @@ void Game::InitializeScore()
 void Game::gameLoop()
 {
   // executa o programa enquanto a janela esta aberta
-  while (!Reiniciando /*window->isOpen()*/)
+  while (!Reiniciando && window->isOpen())
   {
     eventLoop();
     updateGame();
@@ -71,6 +71,7 @@ void Game::gameLoop()
   }
 }
 
+// Loop de eventos (teclas pressionadas, por exemplo.)
 void Game::eventLoop()
 {
 
@@ -122,7 +123,6 @@ void Game::updateGame()
   // Muda o estado do jogo a cada UPDATE_GAME_T segundos
   if (clock.getElapsedTime() > sf::seconds(UPDATE_GAME_T))
   {
-    // tempo desde ultimo restart > UPDATE_GAME_Ts?
 
     // MOVE FANTASMAS
     for (int i = 0; i < numFantasmas; i++)
@@ -133,6 +133,7 @@ void Game::updateGame()
     // MOVE PACMAN
     pacman.move(mapa);
 
+    // Checa a captura de pílulas
     if (mapa[pacman.pos.y][pacman.pos.x] == '2')
     {
       mapa[pacman.pos.y][pacman.pos.x] = '0';
@@ -151,17 +152,19 @@ void Game::updateGame()
   }
 }
 
+// Função pra atualizar a posição das entidades em um loop de tempo menor, a fim de aumentar a suavidade da movimentação
 void Game::updatePos()
 {
-  // Muda o estado do desenho a cada 0.2 segundos
+  // Muda o estado do desenho a cada fração de UPDATE_GAME_T, determinada pelo grau de SMOOTHNESS
   if (posClock.getElapsedTime() > sf::seconds(UPDATE_GAME_T / SMOOTHNESS))
   {
-    // MOVE FANTASMAS
+    // Atualiza posição dos fantasmas
     for (int i = 0; i < numFantasmas; i++)
     {
-      fantasmas[i].updateDrawPos(mapa, pacman);
+      fantasmas[i].updateDrawPos(mapa);
     }
 
+    // Atualiza posição do Pacman
     pacman.updateDrawPos(mapa);
 
     posClock.restart();

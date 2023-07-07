@@ -40,6 +40,7 @@ bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
   fantasmas[1].tipo = Perseguidor;
   return true;
 }
+
 void Fantasma::updateAnimationf() // animacao
 {
   // Acumula o tempo decorrido
@@ -220,11 +221,6 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
   else
     dir = possibleDirections[0];
   return dir;
-}
-
-void Fantasma::updateDrawPos(char mapa[ROWS][COLS], Pacman pacman)
-{
-  Entity::updateDrawPos(mapa);
 }
 
 void Fantasma::draw(sf::RenderWindow *window)
