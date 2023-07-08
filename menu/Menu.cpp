@@ -7,6 +7,8 @@ Menu::Menu(sf::RenderWindow* win)
 
     image = new sf::Texture();
     bg = new sf::Sprite();
+    sdmenu = new sf::Sound;
+    msmenu = new sf::SoundBuffer;
 
     set_values();
 }
@@ -47,6 +49,15 @@ void Menu::set_values()
 
     pos = 0;
     btns[0]->setOutlineColor(sf::Color::Black);
+
+    // Load it from a file
+    if (!msmenu->loadFromFile("audio/musicamenu.wav"))
+    {
+        throw new GameError("Fatal Error: musicamenu load failed!");
+        std::cout << "musicamenu load failed!";
+    }
+
+    sdmenu->setBuffer(*msmenu);
 }
 
 void Menu::loop_events()
@@ -131,25 +142,15 @@ void Menu::draw_all()
 
 void Menu::run_menu()
 {
-    sf::SoundBuffer msmenu;
-
-    // Load it from a file
-    if (!msmenu.loadFromFile("audio/musicamenu.wav"))
-    {
-        std::cout << "musicamenu load failed!";
-    }
-
-    // Create a sound source and bind it to the buffer
-    sf::Sound sdmenu;
-    sdmenu.setBuffer(msmenu);
-    sdmenu.play();
-
     // Play the sound
-    while(!sair)
+    sdmenu->play();
+
+    while(!sair && window->isOpen())
     {
         loop_events();
         draw_all();
     }
+    sdmenu->stop();
 }
 
 void Menu::RealizarTarefa(int option)

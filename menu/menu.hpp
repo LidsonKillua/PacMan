@@ -21,6 +21,10 @@ class Menu {
     std::vector<sf::Vector2f> coords;
     std::vector<sf::Vector2f> sizes;
 
+    sf::SoundBuffer * msmenu;
+    // Create a sound source
+    sf::Sound * sdmenu;
+
     protected:
         void set_values();
         void loop_events();
