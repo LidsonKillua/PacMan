@@ -54,7 +54,6 @@ void Pacman::move(char mapa[ROWS][COLS])
   int diffY = abs(drawPos.y - pos.y * SIZE);
   if (canMove(intent, pos, mapa) && diffX <= TOLERANCE && diffY <= TOLERANCE && !isIdle)
     dir = intent;
-  isIdle = false;
 
   // Se puder se mover na direção, realiza o movimento
   if (canMove(dir, pos, mapa))
@@ -71,7 +70,10 @@ void Pacman::move(char mapa[ROWS][COLS])
     dir = intent;
   // Atualiza o sprite
   if (dir != Idle)
+  {
+    isIdle = false;
     sprite.setTexture(textures[dir]);
+  }
 }
 
 void Pacman::updateDrawPos(char mapa[ROWS][COLS])
