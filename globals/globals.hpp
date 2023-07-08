@@ -39,8 +39,8 @@ struct Position
 const Position PAC_POS = {12, 8};
 const Position FAN1_POS = {7, 8};
 const Position FAN2_POS = {8, 8};
-const Position FAN3_POS = {17, 8};
-const Position FAN4_POS = {16, 8};
+const Position FAN3_POS = {16, 8};
+const Position FAN4_POS = {17, 8};
 
 enum Direction
 {

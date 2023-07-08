@@ -21,7 +21,7 @@ void Game::initialize()
     throw new GameError("Erro ao inicializar Pacman!");
 
   // Inicializa os Fantasmas
-  fantasmas = Fantasma::initializeFantasmas();
+  fantasmas = Fantasma::initializeFantasmas(dificuldade);
 
   pontos = 0;
   Reiniciando = false;
@@ -205,7 +205,7 @@ void Game::updateGame()
       // Registra a direção do fantasma antes do movimento
       prevDir = fantasmas[i].dir;
       // Movimenta o fantasma
-      fantasmas[i].move(mapa, pacman);
+      fantasmas[i].move(mapa, pacman, i);
       // Verifica o crossGameOver
       if (checkCrossGameOver(prevDir, fantasmas[i]))
       {
@@ -288,8 +288,9 @@ Game::~Game()
   delete background;
 }
 
-void Game::EscolherDificuldade(){
-    EscDif * esc = new EscDif(window);
-    dificuldade = esc->run_escDif();
-    delete esc;
+void Game::EscolherDificuldade()
+{
+  EscDif *esc = new EscDif(window);
+  dificuldade = esc->run_escDif();
+  delete esc;
 }

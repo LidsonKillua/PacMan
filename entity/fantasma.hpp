@@ -16,11 +16,13 @@ enum TipoFantasma
 class Fantasma : public Entity
 {
 public:
+  bool isStart;
+  Direction startDir;
   TipoFantasma tipo;
   using Entity::Entity;
-  void move(char mapa[ROWS][COLS], Pacman pacman);
+  void move(char mapa[ROWS][COLS], Pacman pacman, int index);
   void draw(sf::RenderWindow *window);
-  static vector<Fantasma> initializeFantasmas();
+  static vector<Fantasma> initializeFantasmas(Dificult dificuldade);
   void updateAnimationf();
   // Animation Variables
   const int totalFrames = 8;     // Numero total de frames na animacao
@@ -34,5 +36,5 @@ private:
   int posToNumber(Position pos);
   Position numberToPos(int number);
   Direction getMovePerseguidor(char mapa[ROWS][COLS], Position pos, Pacman pacman);
-  Direction getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman);
+  Direction getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman, int index);
 };

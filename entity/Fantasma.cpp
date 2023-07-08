@@ -1,12 +1,14 @@
 #include "fantasma.hpp"
 
-vector<Fantasma> Fantasma::initializeFantasmas()
+vector<Fantasma> Fantasma::initializeFantasmas(Dificult dificuldade)
 {
   vector<Fantasma> fantasmas(numFantasmas, Fantasma());
   for (int i = 0; i < numFantasmas; i++)
   {
     fantasmas[0].tipo = Aleatorio;
     fantasmas[i].dir = Idle;
+    fantasmas[i].isStart = true;
+    fantasmas[i].startDir = Right;
     if (!fantasmas[i].textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
       throw new ErroLeitura(c_ImgPolDir);
     if (!fantasmas[i].textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
@@ -19,7 +21,8 @@ vector<Fantasma> Fantasma::initializeFantasmas()
     fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
   }
-  fantasmas[0].tipo = Perseguidor;
+  if (dificuldade > Easy)
+    fantasmas[0].tipo = Perseguidor;
   fantasmas[0].pos = FAN1_POS;
   fantasmas[0].setDrawPosFromPos();
   fantasmas[1].pos = FAN2_POS;
@@ -27,9 +30,11 @@ vector<Fantasma> Fantasma::initializeFantasmas()
   fantasmas[2].pos = FAN3_POS;
   fantasmas[2].setDrawPosFromPos();
   fantasmas[2].sprite.setTexture(fantasmas[2].textures[Left]);
+  fantasmas[2].startDir = Left;
   fantasmas[3].pos = FAN4_POS;
   fantasmas[3].setDrawPosFromPos();
   fantasmas[3].sprite.setTexture(fantasmas[3].textures[Left]);
+  fantasmas[3].startDir = Left;
   return fantasmas;
 }
 
@@ -50,7 +55,7 @@ void Fantasma::updateAnimationf() // animacao
 }
 
 // Função pra mover o fantasma, herdando de Entity
-void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
+void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
 {
   // Caso o Pacman esteja parado (início de jogo), nada ocorre
   if (pacman.dir == Idle)
@@ -66,7 +71,7 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
   if (tipo == Perseguidor)
     dir = getMovePerseguidor(mapa, pos, pacman);
   else
-    dir = getMoveAleatorio(mapa, pos, pacman);
+    dir = getMoveAleatorio(mapa, pos, pacman, index);
 
   // Muda o sprite
   if (dir != Idle)
@@ -183,17 +188,22 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
 }
 
 // Obtém a direção de movimento a cada instante para o fantasma aleatório
-Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman)
+Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman, int index)
 {
-  srand(time(0));
+  /*
+  A soma de time(0) com o index do fantasma, a fim de definir a seed, adiciona uma aleatoriedade maior, própria a cada fantasma, e evita que os fantasmas se movam alinhados.
+   */
+  srand(time(0) + index);
   Direction possibleDirections[4];
   int possibilities = 0;
 
   // Caso seja possível se mover numa direção, e ela não seja o contrário da direção atual, ela é adicionada como uma direção possível
   if (canMove(Left, pos, mapa) && dir != Right)
-    possibleDirections[possibilities++] = Left;
+    if (!(isStart && startDir == Right)) // Caso esteja no início do jogo, como dir é "Idle", tem que checar startDir, pra garantir que não se mova na direção contrária.
+      possibleDirections[possibilities++] = Left;
   if (canMove(Right, pos, mapa) && dir != Left)
-    possibleDirections[possibilities++] = Right;
+    if (!(isStart && startDir == Left))
+      possibleDirections[possibilities++] = Right;
   if (canMove(Down, pos, mapa) && dir != Up)
     possibleDirections[possibilities++] = Down;
   if (canMove(Up, pos, mapa) && dir != Down)
@@ -203,20 +213,29 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
   if (possibilities == 0)
   {
     if (dir == Left)
-      dir = Right;
+      return Right;
     else if (dir == Right)
-      dir = Left;
+      return Left;
     else if (dir == Down)
-      dir = Up;
+      return Up;
     else if (dir == Up)
-      dir = Down;
+      return Down;
   }
-  else // Escolhe uma direção aleatória
+
+  // Força policial a sair do pátio: no início do jogo, se há mais de uma direção possível, escolhe a que for diferente da direção atual
+  if (possibilities > 1 && isStart)
   {
-    int i = rand() % possibilities;
-    dir = possibleDirections[i];
+    isStart = false;
+    for (auto possible : possibleDirections)
+    {
+      if (possible != this->dir)
+        return possible;
+    }
   }
-  return dir;
+
+  // Escolhe uma direção aleatória
+  int i = rand() % possibilities;
+  return possibleDirections[i];
 }
 
 void Fantasma::draw(sf::RenderWindow *window)
