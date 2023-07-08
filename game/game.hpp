@@ -19,6 +19,7 @@ public:
   sf::Font *font;
   sf::Text score;
 
+  Dificult dificuldade;
   Pacman pacman;
   Fantasma fantasmas[numFantasmas];
   char mapa[ROWS][COLS] = {
@@ -57,6 +58,7 @@ private:
   void initializeBackground();
   void initializePilulas();
   void InitializeScore();
+  void EscolherDificuldade();
   void eventLoop();
   bool checkCrossGameOver(Direction prevDir, Fantasma fantasma);
   bool checkGameOver();

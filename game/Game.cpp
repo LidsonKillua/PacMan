@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "../menu/menu.hpp"
 #include "../menu/fim.hpp"
+#include "../menu/escDif.hpp"
 #include <iostream>
 
 void Game::initialize()
@@ -8,6 +9,8 @@ void Game::initialize()
   // cria a janela
   if (!Reiniciando)
     window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
+
+  EscolherDificuldade();
 
   initializeBackground();
   InitializeScore();
@@ -285,4 +288,10 @@ Game::~Game()
   delete pilula;
   delete fd;
   delete background;
+}
+
+void Game::EscolherDificuldade(){
+    EscDif * esc = new EscDif(window);
+    dificuldade = esc->run_escDif();
+    delete esc;
 }

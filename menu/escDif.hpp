@@ -1,17 +1,16 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
+#include "../globals/globals.hpp"
 
-class EscDif {
-    int pos;
+class EscDif{
+    int pos, cont = 0;
     bool pressed, theselect, sair;
+    Dificult dificuldade;
 
     sf::RenderWindow * window;
-    sf::RectangleShape * btnFacil;
-    sf::RectangleShape * btnMedio;
-    sf::RectangleShape * btnDificil;
-    sf::Font * font;
     sf::Texture * image;
     sf::Sprite * bg;
 
@@ -19,18 +18,22 @@ class EscDif {
     sf::Vector2f mouse_coord;
 
     std::vector<const char *> options;
+    std::vector<sf::RectangleShape *> btns;
     std::vector<sf::Vector2f> coords;
-    std::vector<sf::Text> texts;
-    std::vector<std::size_t> sizes;
+    std::vector<sf::Vector2f> sizes;
+
+    sf::SoundBuffer * msmenu;
+    // Create a sound source
+    sf::Sound * sdmenu;
 
     protected:
         void set_values();
         void loop_events();
         void draw_all();
+        void RealizarTarefa(int option);
 
     public:
         EscDif(sf::RenderWindow* win);
         ~EscDif();
-        void run_EscDif();
+        Dificult run_escDif();
 };
-
