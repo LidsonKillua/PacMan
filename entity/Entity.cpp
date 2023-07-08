@@ -1,21 +1,15 @@
 #include "entity.hpp"
 
-// Definição da classe Entity
-Entity::Entity(){};
-
 // Função que verifica se é possível se mover na direção desejada, a partir da posição pos
 bool Entity::canMove(Direction d, Position pos, char mapa[ROWS][COLS])
 {
-  /*
-  Para cada direção, se a tentativa de movimento for para fora do mapa, é possível mover (pois há um portal naquela posição). Caso contrário, verifica se não há uma parede na direção desejada.
-  */
   if (d == Up)
   {
-    if (pos.y == 0)
+    if (pos.y == 0) // É permitido mover para "fora do mapa" através do portal, que irá levar para a outra extremidade
     {
       return true;
     }
-    if (mapa[pos.y - 1][pos.x] != '1')
+    if (isValidPos(pos.x, pos.y - 1, mapa)) // Caso não haja portal, verifica se a célula para a qual se deseja mover é válida.
     {
       return true;
     }
@@ -24,24 +18,30 @@ bool Entity::canMove(Direction d, Position pos, char mapa[ROWS][COLS])
   {
     if (pos.y == ROWS - 1)
       return true;
-    if (mapa[pos.y + 1][pos.x] != '1')
+    if (isValidPos(pos.x, pos.y + 1, mapa))
       return true;
   }
   else if (d == Left)
   {
     if (pos.x == 0)
       return true;
-    if (mapa[pos.y][pos.x - 1] != '1')
+    if (isValidPos(pos.x - 1, pos.y, mapa))
       return true;
   }
   else if (d == Right)
   {
     if (pos.x == COLS - 2)
       return true;
-    if (mapa[pos.y][pos.x + 1] != '1')
+    if (isValidPos(pos.x + 1, pos.y, mapa))
       return true;
   }
   return false;
+}
+
+// Verifica se a posição x, y é válida. Implementação padrão: se a célula não é uma parede ('1')
+bool Entity::isValidPos(int x, int y, char mapa[ROWS][COLS])
+{
+  return mapa[y][x] != '1';
 }
 
 // Função que retorna a posição que será obtida com uma unidade de movimento na direção desejada, a partir de pos.
@@ -94,4 +94,10 @@ void Entity::updateDrawPos(char mapa[ROWS][COLS])
     drawPos.y -= SIZE / SMOOTHNESS;
   else if (dir == Down)
     drawPos.y += SIZE / SMOOTHNESS;
+}
+
+void Entity::setDrawPosFromPos()
+{
+  drawPos.x = pos.x * SIZE;
+  drawPos.y = pos.y * SIZE;
 }

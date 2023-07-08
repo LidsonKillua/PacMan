@@ -1,44 +1,36 @@
 #include "fantasma.hpp"
 
-bool Fantasma::initializeFantasmas(Fantasma fantasmas[])
+vector<Fantasma> Fantasma::initializeFantasmas()
 {
+  vector<Fantasma> fantasmas(numFantasmas, Fantasma());
   for (int i = 0; i < numFantasmas; i++)
   {
+    fantasmas[0].tipo = Aleatorio;
     fantasmas[i].dir = Idle;
     if (!fantasmas[i].textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
-    {
       throw new ErroLeitura(c_ImgPolDir);
-      return false;
-    }
+    if (!fantasmas[i].textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
+      throw new ErroLeitura(c_ImgPolEsq);
+    if (!fantasmas[i].textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
+      throw new ErroLeitura(c_ImgPolUp);
+    if (!fantasmas[i].textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
+      throw new ErroLeitura(c_ImgPolDwn);
+
     fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
-    if (!fantasmas[i].textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
-    {
-      throw new ErroLeitura(c_ImgPolEsq);
-      return false;
-    }
-    if (!fantasmas[i].textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
-    {
-      throw new ErroLeitura(c_ImgPolUp);
-      return false;
-    }
-    if (!fantasmas[i].textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
-    {
-      throw new ErroLeitura(c_ImgPolDwn);
-      return false;
-    }
   }
-  fantasmas[0].pos.x = 1;
-  fantasmas[0].pos.y = 1;
-  fantasmas[0].drawPos.x = fantasmas[0].pos.x * SIZE;
-  fantasmas[0].drawPos.y = fantasmas[0].pos.y * SIZE;
-  fantasmas[0].tipo = Aleatorio;
-  fantasmas[1].pos.x = 23;
-  fantasmas[1].pos.y = 14;
-  fantasmas[1].drawPos.x = fantasmas[1].pos.x * SIZE;
-  fantasmas[1].drawPos.y = fantasmas[1].pos.y * SIZE;
-  fantasmas[1].tipo = Perseguidor;
-  return true;
+  fantasmas[0].tipo = Perseguidor;
+  fantasmas[0].pos = FAN1_POS;
+  fantasmas[0].setDrawPosFromPos();
+  fantasmas[1].pos = FAN2_POS;
+  fantasmas[1].setDrawPosFromPos();
+  fantasmas[2].pos = FAN3_POS;
+  fantasmas[2].setDrawPosFromPos();
+  fantasmas[2].sprite.setTexture(fantasmas[2].textures[Left]);
+  fantasmas[3].pos = FAN4_POS;
+  fantasmas[3].setDrawPosFromPos();
+  fantasmas[3].sprite.setTexture(fantasmas[3].textures[Left]);
+  return fantasmas;
 }
 
 void Fantasma::updateAnimationf() // animacao
@@ -58,18 +50,17 @@ void Fantasma::updateAnimationf() // animacao
 }
 
 // Função pra mover o fantasma, herdando de Entity
-void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, Fantasma fantasmas[])
+void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman)
 {
   // Caso o Pacman esteja parado (início de jogo), nada ocorre
   if (pacman.dir == Idle)
     return;
-  Position nextPos;
+
   updateAnimationf();
 
   // Move-se para a direção que já estava determinada
   pos = getMovement(dir, pos, mapa);
-  drawPos.x = pos.x * SIZE;
-  drawPos.y = pos.y * SIZE;
+  setDrawPosFromPos();
 
   // Obtem a próxima direção para já se preparar para a ação
   if (tipo == Perseguidor)
@@ -97,15 +88,13 @@ int Fantasma::posToNumber(Position pos)
 // Função pra transformar número de vértice em uma posição da matriz
 Position Fantasma::numberToPos(int number)
 {
-  Position pos;
-  pos.x = number % COLS;
-  pos.y = number / COLS;
+  Position pos = {number % COLS, number / COLS};
   return pos;
 }
 
 /******************************************************************************
 Função que realiza uma BFS no mapa até encontrar o Pacman, descobrindo assim o
-menor caminho. Ela retorna a posição que corresponde ao primeiro movimento que o
+menor caminho. Ela retorna a direção que corresponde ao primeiro movimento que o
 fantasma deve realizar
 ******************************************************************************/
 Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, Pacman pacman)
@@ -132,7 +121,9 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
   {
     u = q.front();
     q.pop();
+    // Marca vértice como visitado
     visited[u] = true;
+    // Converte número do vértice para uma posição no mapa
     pos = numberToPos(u);
     // Vetor que armazena os vértices adjacentes
     vector<int> adjacents;
@@ -143,7 +134,7 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
 
     /*
     Checa se Fantasma, a partir da posição atual, pode se mover para cada direção,
-    e caso possa, adiciona o número de vértice correspondente à nova posição à lista de adjacentes.
+    e caso possa, adiciona o número do vértice correspondente a essa nova posição à lista de adjacentes.
     */
 
     if (canMove(Left, pos, mapa))
@@ -158,8 +149,10 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
     // Percorre os nós adjacentes
     for (auto v : adjacents)
     {
+      // Verifica se já não foi visitado
       if (!visited[v])
       {
+        // Já marca como visitado, para evitar mais visitas desnecessárias
         visited[v] = true;
         /* Grava que o pai do nó adjacente "v" é "u", pois estamos acessando "v" a partir de "u"*/
         parent[v] = u;
@@ -167,33 +160,36 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
       }
     }
   }
-  // Se o Pacman está na mesma posição que o fantasma, o fantasma deve apenas ficar parado
+  // O último nó "u" visitado corresponde à posição do Pacman. Se o Pacman está na mesma posição que o fantasma, o fantasma deve apenas ficar parado
   if (u == originV)
     return Idle;
-  // Reconstrói o caminho até o nó cujo pai é o nó de origem (o primeiro movimento do Fantasma)
+  // Reconstrói o caminho até o nó cujo pai é o nó de origem do Fantasma (pra rastrear o primeiro movimento do Fantasma)
   while (parent[u] != originV)
   {
     u = parent[u];
   }
   // Traduz o número do vértice em posição no mapa, para saber pra qual posição o fantasma deve ir em seu primeiro movimento.
   pos = numberToPos(u);
-  // De acordo com o deslocamento quanto ao ponto de origem, retorna a direção pra onde o fantasma deve se mover
-  if (pos.x == origin.x - 1 || (origin.x == 0 && pos.x == COLS - 2))
+  // Testa todas as direções para encontrar a direção que me fará chegar a "pos", que corresponde à direção do primeiro movimento.
+  if (getMovement(Left, origin, mapa) == pos)
     return Left;
-  else if (pos.x == origin.x + 1 || (origin.x == COLS - 2 && pos.x == 0))
+  else if (getMovement(Right, origin, mapa) == pos)
     return Right;
-  else if (pos.y == origin.y - 1 || (origin.y == 0 && pos.y == ROWS - 1))
+  else if (getMovement(Up, origin, mapa) == pos)
     return Up;
-  else if (pos.y == origin.y + 1 || (origin.y == ROWS - 1 && pos.y == 0))
+  else if (getMovement(Down, origin, mapa) == pos)
     return Down;
   return Idle;
 }
 
+// Obtém a direção de movimento a cada instante para o fantasma aleatório
 Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman)
 {
   srand(time(0));
   Direction possibleDirections[4];
   int possibilities = 0;
+
+  // Caso seja possível se mover numa direção, e ela não seja o contrário da direção atual, ela é adicionada como uma direção possível
   if (canMove(Left, pos, mapa) && dir != Right)
     possibleDirections[possibilities++] = Left;
   if (canMove(Right, pos, mapa) && dir != Left)
@@ -202,12 +198,9 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
     possibleDirections[possibilities++] = Down;
   if (canMove(Up, pos, mapa) && dir != Down)
     possibleDirections[possibilities++] = Up;
-  if (possibilities > 1)
-  {
-    int i = rand() % possibilities;
-    dir = possibleDirections[i];
-  }
-  else if (possibilities == 0)
+
+  // Caminho sem saída: retorna por onde veio
+  if (possibilities == 0)
   {
     if (dir == Left)
       dir = Right;
@@ -218,8 +211,11 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
     else if (dir == Up)
       dir = Down;
   }
-  else
-    dir = possibleDirections[0];
+  else // Escolhe uma direção aleatória
+  {
+    int i = rand() % possibilities;
+    dir = possibleDirections[i];
+  }
   return dir;
 }
 

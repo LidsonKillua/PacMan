@@ -1,21 +1,12 @@
 #include "pacman.hpp"
 
-Pacman::Pacman()
-{
-}
-
-Pacman::~Pacman()
-{
-}
-
 bool Pacman::initialize()
 {
   dir = Idle;
   intent = Idle;
-  pos.x = 12;
-  pos.y = 8;
-  drawPos.x = pos.x * SIZE;
-  drawPos.y = pos.y * SIZE;
+  pos = PAC_POS;
+  setDrawPosFromPos();
+  isIdle = true;
   frameAtual = 0;
   tempAcumul = 0.0f;
 
@@ -47,6 +38,12 @@ bool Pacman::initialize()
   return true;
 }
 
+// Verifica se a posição x, y é válida. Implementação para Pacman: se a célula não é uma parede ('1') e não é área acessível somente aos fantasmas ('3')
+bool Pacman::isValidPos(int x, int y, char mapa[ROWS][COLS])
+{
+  return mapa[y][x] != '1' && mapa[y][x] != '3';
+}
+
 // Função pra mover o pacman
 void Pacman::move(char mapa[ROWS][COLS])
 {
@@ -65,14 +62,14 @@ void Pacman::move(char mapa[ROWS][COLS])
     updateAnimation();
     movement = getMovement(dir, pos, mapa);
     pos = movement;
-    drawPos.x = pos.x * SIZE;
-    drawPos.y = pos.y * SIZE;
+    setDrawPosFromPos();
   }
   /************* Preparação para o próximo movimento **************************
   Se, após o movimento, é possível se mover na direção da intent, já atualiza a direção
   ****************************************************************************/
   if (canMove(intent, pos, mapa))
     dir = intent;
+  // Atualiza o sprite
   if (dir != Idle)
     sprite.setTexture(textures[dir]);
 }

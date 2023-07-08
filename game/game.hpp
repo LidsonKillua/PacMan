@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "../globals/globals.hpp"
 #include <iostream>
+#include <vector>
 #include "../entity/pacman.hpp"
 #include "../entity/fantasma.hpp"
 
@@ -13,15 +14,13 @@ public:
   sf::CircleShape *pilula;
   sf::Texture *fd;
   sf::Sprite *background;
-  sf::Texture *gameOverT;
-  sf::Sprite *gameOverS;
 
   sf::Font *font;
   sf::Text score;
 
   Dificult dificuldade;
   Pacman pacman;
-  Fantasma fantasmas[numFantasmas];
+  vector<Fantasma> fantasmas;
   char mapa[ROWS][COLS] = {
       // Mapa do jogo
       // 0: Rua

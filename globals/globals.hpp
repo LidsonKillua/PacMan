@@ -7,8 +7,8 @@ using namespace std;
 #define ROWS 16
 #define COLS 26
 #define SIZE 48             // Tamanho de cada celula do mapa
-#define numFantasmas 2      // Alterar a Quantidade de Fantasmas
-const int qtdPilulas = 17/*7*/; // Alterar a Quantidade de Pilulas
+#define numFantasmas 4      // Alterar a Quantidade de Fantasmas
+const int qtdPilulas = 177; // Alterar a Quantidade de Pilulas
 const int TAMX = 1200;      // Tamanho da Janela
 const int TAMY = 768;       // Tamanho da Janela
 
@@ -29,6 +29,19 @@ const char c_ImgPolEsq[25] = "img/carro_policiaesq.png";
 const char c_ImgPolUp[25] = "img/carro_policiaup.png";
 const char c_ImgPolDwn[25] = "img/carro_policiadnw.png";
 
+struct Position
+{
+  int x;
+  int y;
+};
+
+// Posições iniciais
+const Position PAC_POS = {12, 8};
+const Position FAN1_POS = {7, 8};
+const Position FAN2_POS = {8, 8};
+const Position FAN3_POS = {17, 8};
+const Position FAN4_POS = {16, 8};
+
 enum Direction
 {
   Left,
@@ -43,12 +56,6 @@ enum Dificult
   Easy,
   Normal,
   Hard
-};
-
-struct Position
-{
-  int x;
-  int y;
 };
 
 bool operator==(const Position &lhs, const Position &rhs);

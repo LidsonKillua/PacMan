@@ -21,8 +21,7 @@ void Game::initialize()
     throw new GameError("Erro ao inicializar Pacman!");
 
   // Inicializa os Fantasmas
-  if (!Fantasma::initializeFantasmas(fantasmas))
-    throw new GameError("Erro ao inicializar Fantasmas!");
+  fantasmas = Fantasma::initializeFantasmas();
 
   pontos = 0;
   Reiniciando = false;
@@ -162,13 +161,15 @@ void Game::processPilulas()
 
     score.setString("SCORE " + pts);
 
-    if (pontos == qtdPilulas){
+    if (pontos == qtdPilulas)
+    {
       score.setString("Voce Venceu!");
 
       Final *menuF = new Final(window, false);
       menuF->run_menu();
 
-      if (menuF->Reiniciar){
+      if (menuF->Reiniciar)
+      {
         Reiniciando = true;
       }
 
@@ -183,7 +184,8 @@ void Game::gameOver()
   Final *menuF = new Final(window, true);
   menuF->run_menu();
 
-  if (menuF->Reiniciar){
+  if (menuF->Reiniciar)
+  {
     Reiniciando = true;
   }
 
@@ -203,7 +205,7 @@ void Game::updateGame()
       // Registra a direção do fantasma antes do movimento
       prevDir = fantasmas[i].dir;
       // Movimenta o fantasma
-      fantasmas[i].move(mapa, pacman, fantasmas);
+      fantasmas[i].move(mapa, pacman);
       // Verifica o crossGameOver
       if (checkCrossGameOver(prevDir, fantasmas[i]))
       {
@@ -215,6 +217,7 @@ void Game::updateGame()
     // MOVE PACMAN
     pacman.move(mapa);
 
+    // Verifica Game Over padrão
     if (checkGameOver())
     {
       gameOver();
@@ -271,11 +274,6 @@ void Game::drawGame()
   // desenha Fantasmas
   for (int i = 0; i < numFantasmas; i++)
     fantasmas[i].draw(window);
-
-  if (GameOver)
-  {
-    window->draw(*gameOverS);
-  }
 
   // termina e desenha o frame corrente
   window->display();

@@ -17,11 +17,10 @@ class Fantasma : public Entity
 {
 public:
   TipoFantasma tipo;
-  map<Direction, sf::Texture> textures;
   using Entity::Entity;
-  void move(char mapa[ROWS][COLS], Pacman pacman, Fantasma fantasmas[]);
+  void move(char mapa[ROWS][COLS], Pacman pacman);
   void draw(sf::RenderWindow *window);
-  static bool initializeFantasmas(Fantasma fantasmas[]);
+  static vector<Fantasma> initializeFantasmas();
   void updateAnimationf();
   // Animation Variables
   const int totalFrames = 8;     // Numero total de frames na animacao
