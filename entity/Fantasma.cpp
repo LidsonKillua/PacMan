@@ -9,14 +9,14 @@ vector<Fantasma> Fantasma::initializeFantasmas(Dificult dificuldade)
     fantasmas[i].dir = Idle;
     fantasmas[i].isStart = true;
     fantasmas[i].startDir = Right;
-    if (!fantasmas[i].textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
-      throw new ErroLeitura(c_ImgPolDir);
-    if (!fantasmas[i].textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
-      throw new ErroLeitura(c_ImgPolEsq);
-    if (!fantasmas[i].textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
-      throw new ErroLeitura(c_ImgPolUp);
-    if (!fantasmas[i].textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
-      throw new ErroLeitura(c_ImgPolDwn);
+    if (!fantasmas[i].textures[Right].loadFromFile(c_ImgPolDir[i])) // ler imagem direita
+      throw new ErroLeitura(c_ImgPolDir[i]);
+    if (!fantasmas[i].textures[Left].loadFromFile(c_ImgPolEsq[i])) // ler imagem esq
+      throw new ErroLeitura(c_ImgPolEsq[i]);
+    if (!fantasmas[i].textures[Up].loadFromFile(c_ImgPolUp[i])) // ler imagem cima
+      throw new ErroLeitura(c_ImgPolUp[i]);
+    if (!fantasmas[i].textures[Down].loadFromFile(c_ImgPolDwn[i])) // ler imagem baixo
+      throw new ErroLeitura(c_ImgPolDwn[i]);
 
     fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
@@ -57,7 +57,7 @@ void Fantasma::updateAnimationf() // animacao
   }
 }
 
-void Fantasma::mudarCarroPolicia() // animacao
+void Fantasma::mudarCarroPolicia(int i) // animacao
 {
   if (tipo == Perseguidor)
   {
@@ -72,14 +72,14 @@ void Fantasma::mudarCarroPolicia() // animacao
   }
   else
   {
-    if (!textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
-      throw new ErroLeitura(c_ImgPolDir);
-    if (!textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
-      throw new ErroLeitura(c_ImgPolEsq);
-    if (!textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
-      throw new ErroLeitura(c_ImgPolUp);
-    if (!textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
-      throw new ErroLeitura(c_ImgPolDwn);
+    if (!textures[Right].loadFromFile(c_ImgPolDir[i])) // ler imagem direita
+      throw new ErroLeitura(c_ImgPolDir[i]);
+    if (!textures[Left].loadFromFile(c_ImgPolEsq[i])) // ler imagem esq
+      throw new ErroLeitura(c_ImgPolEsq[i]);
+    if (!textures[Up].loadFromFile(c_ImgPolUp[i])) // ler imagem cima
+      throw new ErroLeitura(c_ImgPolUp[i]);
+    if (!textures[Down].loadFromFile(c_ImgPolDwn[i])) // ler imagem baixo
+      throw new ErroLeitura(c_ImgPolDwn[i]);
   }
 }
 
@@ -94,7 +94,7 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
 
   if (tipo != oldtipo)
   {
-    mudarCarroPolicia();
+    mudarCarroPolicia(index);
   }
   oldtipo = tipo;
 

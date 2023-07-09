@@ -24,7 +24,7 @@ void Game::initialize()
   fantasmas = Fantasma::initializeFantasmas(dificuldade);
   for (int i = 0; i < numFantasmas; i++)
   {
-    fantasmas[i].mudarCarroPolicia();
+    fantasmas[i].mudarCarroPolicia(i);
   }
 
   pontos = 0;

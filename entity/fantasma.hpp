@@ -23,7 +23,7 @@ public:
   void move(char mapa[ROWS][COLS], Pacman pacman, int index);
   void draw(sf::RenderWindow *window);
   static vector<Fantasma> initializeFantasmas(Dificult dificuldade);
-  void mudarCarroPolicia();
+  void mudarCarroPolicia(int i);
   void updateAnimationf();
   // Animation Variables
   const int totalFrames = 8;     // Numero total de frames na animacao

@@ -23,11 +23,37 @@ const char c_ImgCarEsq[17] = "img/carroesq.png";
 const char c_ImgCarDwn[17] = "img/carrodwn.png";
 const char c_ImgCarUp[16] = "img/carroup.png";
 
-// Caminhos imagens Policia
-const char c_ImgPolDir[25] = "img/carro_policiadir.png";
-const char c_ImgPolEsq[25] = "img/carro_policiaesq.png";
-const char c_ImgPolUp[25] = "img/carro_policiaup.png";
-const char c_ImgPolDwn[25] = "img/carro_policiadnw.png";
+// Caminhos imagens dos policiais (virados para direita)
+const char c_ImgPolDir[4][25] = {
+    "img/carro_policiadir.png",
+    "img/carro_nypddir.png",
+    "img/carro_ufvdir.png",
+    "img/carro_apoiodir.png",
+};
+
+// Caminhos imagens dos policiais (virados para esquerda)
+const char c_ImgPolEsq[4][25] = {
+    "img/carro_policiaesq.png",
+    "img/carro_nypdesq.png",
+    "img/carro_ufvesq.png",
+    "img/carro_apoioesq.png",
+};
+
+// Caminhos imagens dos policiais (virados para cima)
+const char c_ImgPolUp[4][25] = {
+    "img/carro_policiaup.png",
+    "img/carro_nypdup.png",
+    "img/carro_ufvup.png",
+    "img/carro_apoioup.png",
+};
+
+// Caminhos imagens dos policiais (virados para baixo)
+const char c_ImgPolDwn[4][25] = {
+    "img/carro_policiadwn.png",
+    "img/carro_nypddwn.png",
+    "img/carro_ufvdwn.png",
+    "img/carro_apoiodwn.png",
+};
 
 // Caminhos imagens Perseguidor(SWAT)
 const char c_ImgSwtDir[25] = "img/carro_swatdir.png";
