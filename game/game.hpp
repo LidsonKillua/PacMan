@@ -46,9 +46,10 @@ public:
   };
   sf::Clock clock;
   sf::Clock posClock;
-  int pontos;
+  int pontos, cont = 0;
   bool Reiniciando = false;
   bool GameOver = false;
+  bool perseguir = true;
   void initialize();
   void gameLoop();
   ~Game();

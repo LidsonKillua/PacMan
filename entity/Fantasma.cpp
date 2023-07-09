@@ -55,7 +55,7 @@ void Fantasma::updateAnimationf() // animacao
 }
 
 // Função pra mover o fantasma, herdando de Entity
-void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
+void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index, bool perseguir)
 {
   // Caso o Pacman esteja parado (início de jogo), nada ocorre
   if (pacman.dir == Idle)
@@ -68,7 +68,7 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
   setDrawPosFromPos();
 
   // Obtem a próxima direção para já se preparar para a ação
-  if (tipo == Perseguidor)
+  if (tipo == Perseguidor && perseguir)
     dir = getMovePerseguidor(mapa, pos, pacman);
   else
     dir = getMoveAleatorio(mapa, pos, pacman, index);

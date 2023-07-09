@@ -20,7 +20,7 @@ public:
   Direction startDir;
   TipoFantasma tipo;
   using Entity::Entity;
-  void move(char mapa[ROWS][COLS], Pacman pacman, int index);
+  void move(char mapa[ROWS][COLS], Pacman pacman, int index, bool perseguir);
   void draw(sf::RenderWindow *window);
   static vector<Fantasma> initializeFantasmas(Dificult dificuldade);
   void updateAnimationf();

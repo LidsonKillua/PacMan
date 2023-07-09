@@ -156,6 +156,18 @@ void Game::processPilulas()
   {
     mapa[pacman.pos.y][pacman.pos.x] = '0';
     pontos++;
+    cont++;
+
+    if (dificuldade == Normal)
+        // Habilita/Desabilita o perseguidor a cada 20 pílulas
+        perseguir = ((pontos/20)%2 != 0);
+    else if (dificuldade == Hard){
+        // Habilita o perseguidor por 40 pílulas e desabilita por 20
+        if((perseguir && cont >= 40) || (!perseguir && cont >= 20)){
+            perseguir = !perseguir;
+            cont = 0;
+        }
+    }
 
     string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
 
@@ -205,7 +217,7 @@ void Game::updateGame()
       // Registra a direção do fantasma antes do movimento
       prevDir = fantasmas[i].dir;
       // Movimenta o fantasma
-      fantasmas[i].move(mapa, pacman, i);
+      fantasmas[i].move(mapa, pacman, i, perseguir);
       // Verifica o crossGameOver
       if (checkCrossGameOver(prevDir, fantasmas[i]))
       {
