@@ -5,8 +5,11 @@ Final::Final(sf::RenderWindow *win, bool preso)
 {
     window = win;
 
-    image = new sf::Texture();
-    bg = new sf::Sprite();
+    imgT = new sf::Texture();
+    imgS = new sf::Sprite();
+
+    bgT = new sf::Texture();
+    bgS = new sf::Sprite();
 
     set_values(preso);
     InitializeTxtReiniciar();
@@ -14,18 +17,24 @@ Final::Final(sf::RenderWindow *win, bool preso)
 
 Final::~Final()
 {
-    delete image;
-    delete bg;
+    delete imgT;
+    delete imgS;
+    delete bgT;
+    delete bgS;
 }
 
 void Final::set_values(bool preso)
 {
     sair = false;
 
-    // pega a imagem de win se n�o foi preso
-    image->loadFromFile(preso ? "img/wasted.png" : "img/win.png");
+    // pega a imgTm de win se n�o foi preso
+    imgT->loadFromFile(preso ? "img/wasted.png" : "img/win.png");
+    imgS->setTexture(*imgT);
 
-    bg->setTexture(*image);
+    // Imagem de fundo: captura a imagem atual da tela
+    bgT->create(window->getSize().x, window->getSize().y);
+    bgT->update(*window);
+    bgS->setTexture(*bgT);
 }
 
 void Final::loop_events()
@@ -48,7 +57,8 @@ void Final::loop_events()
 
 void Final::draw_all()
 {
-    window->draw(*bg);
+    window->draw(*bgS);
+    window->draw(*imgS);
 
     cont++;
     // faz o bot�o selecionado piscar
