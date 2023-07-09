@@ -21,8 +21,10 @@ vector<Fantasma> Fantasma::initializeFantasmas(Dificult dificuldade)
     fantasmas[i].sprite.setTexture(fantasmas[i].textures[Right]);
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
   }
-  if (dificuldade > Easy)
+
+  if (dificuldade > Easy){
     fantasmas[0].tipo = Perseguidor;
+  }
   fantasmas[0].pos = FAN1_POS;
   fantasmas[0].setDrawPosFromPos();
   fantasmas[1].pos = FAN2_POS;
@@ -54,8 +56,32 @@ void Fantasma::updateAnimationf() // animacao
   }
 }
 
+void Fantasma::mudarCarroPolicia() // animacao
+{
+    if(tipo == Perseguidor){
+        if (!textures[Right].loadFromFile(c_ImgSwtDir)) // ler imagem direita
+            throw new ErroLeitura(c_ImgSwtDir);
+        if (!textures[Left].loadFromFile(c_ImgSwtEsq)) // ler imagem esq
+          throw new ErroLeitura(c_ImgSwtEsq);
+        if (!textures[Up].loadFromFile(c_ImgSwtUp)) // ler imagem cima
+          throw new ErroLeitura(c_ImgSwtUp);
+        if (!textures[Down].loadFromFile(c_ImgSwtDwn)) // ler imagem baixo
+          throw new ErroLeitura(c_ImgSwtDwn);
+    }
+    else{
+        if (!textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
+          throw new ErroLeitura(c_ImgPolDir);
+        if (!textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
+          throw new ErroLeitura(c_ImgPolEsq);
+        if (!textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
+          throw new ErroLeitura(c_ImgPolUp);
+        if (!textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
+          throw new ErroLeitura(c_ImgPolDwn);
+    }
+}
+
 // Função pra mover o fantasma, herdando de Entity
-void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index, bool perseguir)
+void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
 {
   // Caso o Pacman esteja parado (início de jogo), nada ocorre
   if (pacman.dir == Idle)
@@ -63,12 +89,17 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index, bool perseg
 
   updateAnimationf();
 
+  if(tipo != oldtipo){
+    mudarCarroPolicia();
+  }
+  oldtipo = tipo;
+
   // Move-se para a direção que já estava determinada
   pos = getMovement(dir, pos, mapa);
   setDrawPosFromPos();
 
   // Obtem a próxima direção para já se preparar para a ação
-  if (tipo == Perseguidor && perseguir)
+  if (tipo == Perseguidor)
     dir = getMovePerseguidor(mapa, pos, pacman);
   else
     dir = getMoveAleatorio(mapa, pos, pacman, index);

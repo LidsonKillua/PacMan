@@ -29,6 +29,12 @@ const char c_ImgPolEsq[25] = "img/carro_policiaesq.png";
 const char c_ImgPolUp[25] = "img/carro_policiaup.png";
 const char c_ImgPolDwn[25] = "img/carro_policiadnw.png";
 
+// Caminhos imagens Perseguidor(SWAT)
+const char c_ImgSwtDir[25] = "img/carro_swatdir.png";
+const char c_ImgSwtEsq[25] = "img/carro_swatesq.png";
+const char c_ImgSwtUp[25] = "img/carro_swatup.png";
+const char c_ImgSwtDwn[25] = "img/carro_swatdnw.png";
+
 struct Position
 {
   int x;

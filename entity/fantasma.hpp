@@ -18,11 +18,12 @@ class Fantasma : public Entity
 public:
   bool isStart;
   Direction startDir;
-  TipoFantasma tipo;
+  TipoFantasma tipo, oldtipo = Aleatorio;
   using Entity::Entity;
-  void move(char mapa[ROWS][COLS], Pacman pacman, int index, bool perseguir);
+  void move(char mapa[ROWS][COLS], Pacman pacman, int index);
   void draw(sf::RenderWindow *window);
   static vector<Fantasma> initializeFantasmas(Dificult dificuldade);
+  void mudarCarroPolicia();
   void updateAnimationf();
   // Animation Variables
   const int totalFrames = 8;     // Numero total de frames na animacao

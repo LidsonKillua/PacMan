@@ -22,6 +22,9 @@ void Game::initialize()
 
   // Inicializa os Fantasmas
   fantasmas = Fantasma::initializeFantasmas(dificuldade);
+  for (int i = 0; i < numFantasmas; i++){
+    fantasmas[i].mudarCarroPolicia();
+  }
 
   pontos = 0;
   Reiniciando = false;
@@ -158,9 +161,10 @@ void Game::processPilulas()
     pontos++;
     cont++;
 
-    if (dificuldade == Normal)
+    if (dificuldade == Normal){
         // Habilita/Desabilita o perseguidor a cada 20 pílulas
         perseguir = ((pontos/20)%2 != 0);
+    }
     else if (dificuldade == Hard){
         // Habilita o perseguidor por 40 pílulas e desabilita por 20
         if((perseguir && cont >= 40) || (!perseguir && cont >= 20)){
@@ -168,6 +172,7 @@ void Game::processPilulas()
             cont = 0;
         }
     }
+    fantasmas[0].tipo = perseguir ? Perseguidor : Aleatorio;
 
     string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
 
@@ -217,7 +222,7 @@ void Game::updateGame()
       // Registra a direção do fantasma antes do movimento
       prevDir = fantasmas[i].dir;
       // Movimenta o fantasma
-      fantasmas[i].move(mapa, pacman, i, perseguir);
+      fantasmas[i].move(mapa, pacman, i);
       // Verifica o crossGameOver
       if (checkCrossGameOver(prevDir, fantasmas[i]))
       {
