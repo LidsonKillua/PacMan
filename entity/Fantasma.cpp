@@ -261,17 +261,6 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
       return Down;
   }
 
-  // Força policial a sair do pátio: no início do jogo, se há mais de uma direção possível, escolhe a que for diferente da direção atual
-  if (possibilities > 1 && isStart)
-  {
-    isStart = false;
-    for (auto possible : possibleDirections)
-    {
-      if (possible != this->dir)
-        return possible;
-    }
-  }
-
   // Escolhe uma direção aleatória
   int i;
   do

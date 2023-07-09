@@ -51,7 +51,7 @@ public:
   int pontos, cont = 0;
   bool Reiniciando = false;
   bool GameOver = false;
-  bool perseguir = true;
+  bool perseguir = false;
   void initialize();
   void gameLoop();
   ~Game();
