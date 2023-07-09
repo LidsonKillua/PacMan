@@ -269,6 +269,8 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
   } while (isStart && possibilities > 1 && possibleDirections[i] == dir); /*
     Caso seja o início do jogo, para forçar o fantasma a mudar de direção e sair do pátio, é aplicado o seguinte: caso haja mais de uma possibilidade de movimento, sorteia uma nova direção aleatória enquanto a direção sorteada for igual à direção atual.
   */
+  if (isStart && possibilities > 1)
+    isStart = false;
   return possibleDirections[i];
 }
 
