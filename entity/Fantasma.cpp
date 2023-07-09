@@ -22,7 +22,8 @@ vector<Fantasma> Fantasma::initializeFantasmas(Dificult dificuldade)
     fantasmas[i].sprite.setScale(sf::Vector2f(1.1f, 1.1f));
   }
 
-  if (dificuldade > Easy){
+  if (dificuldade > Easy)
+  {
     fantasmas[0].tipo = Perseguidor;
   }
   fantasmas[0].pos = FAN1_POS;
@@ -58,26 +59,28 @@ void Fantasma::updateAnimationf() // animacao
 
 void Fantasma::mudarCarroPolicia() // animacao
 {
-    if(tipo == Perseguidor){
-        if (!textures[Right].loadFromFile(c_ImgSwtDir)) // ler imagem direita
-            throw new ErroLeitura(c_ImgSwtDir);
-        if (!textures[Left].loadFromFile(c_ImgSwtEsq)) // ler imagem esq
-          throw new ErroLeitura(c_ImgSwtEsq);
-        if (!textures[Up].loadFromFile(c_ImgSwtUp)) // ler imagem cima
-          throw new ErroLeitura(c_ImgSwtUp);
-        if (!textures[Down].loadFromFile(c_ImgSwtDwn)) // ler imagem baixo
-          throw new ErroLeitura(c_ImgSwtDwn);
-    }
-    else{
-        if (!textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
-          throw new ErroLeitura(c_ImgPolDir);
-        if (!textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
-          throw new ErroLeitura(c_ImgPolEsq);
-        if (!textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
-          throw new ErroLeitura(c_ImgPolUp);
-        if (!textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
-          throw new ErroLeitura(c_ImgPolDwn);
-    }
+  if (tipo == Perseguidor)
+  {
+    if (!textures[Right].loadFromFile(c_ImgSwtDir)) // ler imagem direita
+      throw new ErroLeitura(c_ImgSwtDir);
+    if (!textures[Left].loadFromFile(c_ImgSwtEsq)) // ler imagem esq
+      throw new ErroLeitura(c_ImgSwtEsq);
+    if (!textures[Up].loadFromFile(c_ImgSwtUp)) // ler imagem cima
+      throw new ErroLeitura(c_ImgSwtUp);
+    if (!textures[Down].loadFromFile(c_ImgSwtDwn)) // ler imagem baixo
+      throw new ErroLeitura(c_ImgSwtDwn);
+  }
+  else
+  {
+    if (!textures[Right].loadFromFile(c_ImgPolDir)) // ler imagem direita
+      throw new ErroLeitura(c_ImgPolDir);
+    if (!textures[Left].loadFromFile(c_ImgPolEsq)) // ler imagem esq
+      throw new ErroLeitura(c_ImgPolEsq);
+    if (!textures[Up].loadFromFile(c_ImgPolUp)) // ler imagem cima
+      throw new ErroLeitura(c_ImgPolUp);
+    if (!textures[Down].loadFromFile(c_ImgPolDwn)) // ler imagem baixo
+      throw new ErroLeitura(c_ImgPolDwn);
+  }
 }
 
 // Função pra mover o fantasma, herdando de Entity
@@ -89,7 +92,8 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
 
   updateAnimationf();
 
-  if(tipo != oldtipo){
+  if (tipo != oldtipo)
+  {
     mudarCarroPolicia();
   }
   oldtipo = tipo;
@@ -230,7 +234,8 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
 
   // Caso seja possível se mover numa direção, e ela não seja o contrário da direção atual, ela é adicionada como uma direção possível
   if (canMove(Left, pos, mapa) && dir != Right)
-    if (!(isStart && startDir == Right)) // Caso esteja no início do jogo, como dir é "Idle", tem que checar startDir, pra garantir que não se mova na direção contrária.
+    // Caso esteja no início do jogo, como dir é "Idle", tem que checar startDir a fim de garantir que o fantasma não se mova na direção contrária
+    if (!(isStart && startDir == Right))
       possibleDirections[possibilities++] = Left;
   if (canMove(Right, pos, mapa) && dir != Left)
     if (!(isStart && startDir == Left))
@@ -265,7 +270,13 @@ Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pac
   }
 
   // Escolhe uma direção aleatória
-  int i = rand() % possibilities;
+  int i;
+  do
+  {
+    i = rand() % possibilities;
+  } while (isStart && possibilities > 1 && possibleDirections[i] == dir); /*
+    Caso seja o início do jogo, para forçar o fantasma a mudar de direção e sair do pátio, é aplicado o seguinte: caso haja mais de uma possibilidade de movimento, sorteia uma nova direção aleatória enquanto a direção sorteada for igual à direção atual.
+  */
   return possibleDirections[i];
 }
 

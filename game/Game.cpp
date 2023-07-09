@@ -22,7 +22,8 @@ void Game::initialize()
 
   // Inicializa os Fantasmas
   fantasmas = Fantasma::initializeFantasmas(dificuldade);
-  for (int i = 0; i < numFantasmas; i++){
+  for (int i = 0; i < numFantasmas; i++)
+  {
     fantasmas[i].mudarCarroPolicia();
   }
 
@@ -123,18 +124,21 @@ void Game::eventLoop()
 }
 
 // Verifica o Game Over em que fantasma e Pacman cruzam um pelo outro, sem parar na mesma posição (discreta) do mapa.
-bool Game::checkCrossGameOver(Direction prevDir, Fantasma fantasma)
+bool Game::checkCrossGameOver(Direction prevDir)
 {
-  if (fantasma.pos == pacman.pos)
+  for (auto fantasma : fantasmas)
   {
-    if (prevDir == Right && pacman.dir == Left)
-      return true;
-    if (prevDir == Left && pacman.dir == Right)
-      return true;
-    if (prevDir == Down && pacman.dir == Up)
-      return true;
-    if (prevDir == Up && pacman.dir == Down)
-      return true;
+    if (fantasma.pos == pacman.pos)
+    {
+      if (prevDir == Right && fantasma.dir == Left)
+        return true;
+      if (prevDir == Left && fantasma.dir == Right)
+        return true;
+      if (prevDir == Down && fantasma.dir == Up)
+        return true;
+      if (prevDir == Up && fantasma.dir == Down)
+        return true;
+    }
   }
   return false;
 }
@@ -161,16 +165,19 @@ void Game::processPilulas()
     pontos++;
     cont++;
 
-    if (dificuldade == Normal){
-        // Habilita/Desabilita o perseguidor a cada 20 pílulas
-        perseguir = ((pontos/20)%2 != 0);
+    if (dificuldade == Normal)
+    {
+      // Habilita/Desabilita o perseguidor a cada 20 pílulas
+      perseguir = ((pontos / 20) % 2 != 0);
     }
-    else if (dificuldade == Hard){
-        // Habilita o perseguidor por 40 pílulas e desabilita por 20
-        if((perseguir && cont >= 40) || (!perseguir && cont >= 20)){
-            perseguir = !perseguir;
-            cont = 0;
-        }
+    else if (dificuldade == Hard)
+    {
+      // Habilita o perseguidor por 40 pílulas e desabilita por 20
+      if ((perseguir && cont >= 40) || (!perseguir && cont >= 20))
+      {
+        perseguir = !perseguir;
+        cont = 0;
+      }
     }
     fantasmas[0].tipo = perseguir ? Perseguidor : Aleatorio;
 
@@ -213,26 +220,29 @@ void Game::gameOver()
 void Game::updateGame()
 {
   Direction prevDir;
+  Position prevPos;
   // Muda o estado do jogo a cada UPDATE_GAME_T segundos
   if (clock.getElapsedTime() > sf::seconds(UPDATE_GAME_T))
   {
-    // MOVE FANTASMAS
-    for (int i = 0; i < numFantasmas; i++)
-    {
-      // Registra a direção do fantasma antes do movimento
-      prevDir = fantasmas[i].dir;
-      // Movimenta o fantasma
-      fantasmas[i].move(mapa, pacman, i);
-      // Verifica o crossGameOver
-      if (checkCrossGameOver(prevDir, fantasmas[i]))
-      {
-        gameOver();
-        return;
-      }
-    }
+    // Registra a direção e posição do fantasma antes do movimento
+    prevDir = pacman.dir;
+    prevPos = pacman.pos;
 
     // MOVE PACMAN
     pacman.move(mapa);
+
+    // Verifica o crossGameOver
+    if (checkCrossGameOver(prevDir))
+    {
+      pacman.pos = prevPos;
+      pacman.setDrawPosFromPos();
+      gameOver();
+      return;
+    }
+
+    // MOVE FANTASMAS
+    for (int i = 0; i < numFantasmas; i++)
+      fantasmas[i].move(mapa, pacman, i);
 
     // Verifica Game Over padrão
     if (checkGameOver())

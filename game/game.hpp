@@ -60,7 +60,7 @@ private:
   void InitializeScore();
   void EscolherDificuldade();
   void eventLoop();
-  bool checkCrossGameOver(Direction prevDir, Fantasma fantasma);
+  bool checkCrossGameOver(Direction prevDir);
   bool checkGameOver();
   void processPilulas();
   void gameOver();
