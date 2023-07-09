@@ -27,9 +27,18 @@ void Game::initialize()
     fantasmas[i].mudarCarroPolicia(i);
   }
 
+  initializeAllAudio();
+
   pontos = 0;
   Reiniciando = false;
   GameOver = false;
+}
+
+void Game::initializeAllAudio()
+{
+  if (!swatMusic.openFromFile(audio_swat))
+    throw new ErroLeitura(audio_swat);
+  swatMusic.setPlayingOffset(sf::seconds(2.f));
 }
 
 void Game::initializeBackground()
@@ -93,6 +102,7 @@ void Game::eventLoop()
     {
       if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)
       {
+        pauseAllAudio();
         Menu *menu = new Menu(window);
         menu->run_menu();
         delete menu;
@@ -102,6 +112,8 @@ void Game::eventLoop()
           Reiniciando = true;
           break;
         }
+        else
+          turnOnOffSwatMusic();
       }
       if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
       {
@@ -156,6 +168,25 @@ bool Game::checkGameOver()
   return false;
 }
 
+void Game::turnOnOffSwatMusic()
+{
+  if (perseguir)
+  {
+    swatMusic.play();
+    updateSwatMusic();
+  }
+  else
+    swatMusic.pause();
+}
+
+void Game::updateSwatMusic()
+{
+  if (pacman.dir == Idle)
+    swatMusic.setVolume(20);
+  else if (fantasmas[0].distPacman > 0)
+    swatMusic.setVolume(1.0 / fantasmas[0].distPacman * 100);
+}
+
 // Checa a captura de pílulas (e possível vitória)
 void Game::processPilulas()
 {
@@ -168,7 +199,12 @@ void Game::processPilulas()
     if (dificuldade == Normal)
     {
       // Habilita/Desabilita o perseguidor a cada 20 pílulas
-      perseguir = ((pontos / 20) % 2 != 0);
+      if (cont >= 20)
+      {
+        perseguir = !perseguir;
+        cont = 0;
+        turnOnOffSwatMusic();
+      }
     }
     else if (dificuldade == Hard)
     {
@@ -177,6 +213,7 @@ void Game::processPilulas()
       {
         perseguir = !perseguir;
         cont = 0;
+        turnOnOffSwatMusic();
       }
     }
     fantasmas[0].tipo = perseguir ? Perseguidor : Aleatorio;
@@ -189,6 +226,7 @@ void Game::processPilulas()
     {
       score.setString("Voce Venceu!");
 
+      pauseAllAudio();
       Final *menuF = new Final(window, false);
       menuF->run_menu();
 
@@ -205,6 +243,7 @@ void Game::processPilulas()
 // Realiza o Game Over
 void Game::gameOver()
 {
+  pauseAllAudio();
   Final *menuF = new Final(window, true);
   menuF->run_menu();
 
@@ -214,6 +253,11 @@ void Game::gameOver()
   }
 
   delete menuF;
+}
+
+void Game::pauseAllAudio()
+{
+  swatMusic.pause();
 }
 
 // Atualiza o estado do jogo
@@ -227,6 +271,15 @@ void Game::updateGame()
     // Registra a direção e posição do fantasma antes do movimento
     prevDir = pacman.dir;
     prevPos = pacman.pos;
+
+    // Se houver Swat (perseguidor)
+    if (perseguir)
+    {
+      // Inicia a música da Swat caso Pacman esteja fazendo seu primeiro movimento
+      if (pacman.dir == Idle && pacman.intent != Idle)
+        turnOnOffSwatMusic();
+      updateSwatMusic();
+    }
 
     // MOVE PACMAN
     pacman.move(mapa);

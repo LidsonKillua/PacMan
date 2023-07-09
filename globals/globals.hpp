@@ -61,6 +61,9 @@ const char c_ImgSwtEsq[25] = "img/carro_swatesq.png";
 const char c_ImgSwtUp[25] = "img/carro_swatup.png";
 const char c_ImgSwtDwn[25] = "img/carro_swatdnw.png";
 
+/************* CAMINHOS PARA ARQUIVOS DE ÁUDIO ****************/
+const char audio_swat[25] = "audio/swat.wav";
+
 struct Position
 {
   int x;

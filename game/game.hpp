@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "../globals/globals.hpp"
 #include <iostream>
 #include <vector>
@@ -10,6 +11,7 @@
 class Game
 {
 public:
+  sf::Music swatMusic;
   sf::RenderWindow *window;
   sf::CircleShape *pilula;
   sf::Texture *fd;
@@ -55,6 +57,7 @@ public:
   ~Game();
 
 private:
+  void initializeAllAudio();
   void initializeBackground();
   void initializePilulas();
   void InitializeScore();
@@ -62,8 +65,11 @@ private:
   void eventLoop();
   bool checkCrossGameOver(Direction prevDir);
   bool checkGameOver();
+  void turnOnOffSwatMusic();
+  void updateSwatMusic();
   void processPilulas();
   void gameOver();
+  void pauseAllAudio();
   void updateGame();
   void updatePos();
   void drawGame();

@@ -19,6 +19,7 @@ public:
   bool isStart;
   Direction startDir;
   TipoFantasma tipo, oldtipo = Aleatorio;
+  int distPacman;
   using Entity::Entity;
   void move(char mapa[ROWS][COLS], Pacman pacman, int index);
   void draw(sf::RenderWindow *window);

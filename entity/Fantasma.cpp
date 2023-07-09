@@ -204,10 +204,13 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
   if (u == originV)
     return Idle;
   // Reconstrói o caminho até o nó cujo pai é o nó de origem do Fantasma (pra rastrear o primeiro movimento do Fantasma)
+  int distPacman = 1;
   while (parent[u] != originV)
   {
     u = parent[u];
+    distPacman++;
   }
+  this->distPacman = distPacman;
   // Traduz o número do vértice em posição no mapa, para saber pra qual posição o fantasma deve ir em seu primeiro movimento.
   pos = numberToPos(u);
   // Testa todas as direções para encontrar a direção que me fará chegar a "pos", que corresponde à direção do primeiro movimento.
