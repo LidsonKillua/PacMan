@@ -24,7 +24,7 @@ vector<Fantasma> Fantasma::initializeFantasmas(Dificult dificuldade)
 
   if (dificuldade > Easy)
   {
-    fantasmas[0].tipo = Perseguidor;
+    fantasmas[1].tipo = Perseguidor;
   }
   fantasmas[0].pos = FAN1_POS;
   fantasmas[0].setDrawPosFromPos();

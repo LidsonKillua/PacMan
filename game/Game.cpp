@@ -216,7 +216,7 @@ void Game::processPilulas()
         turnOnOffSwatMusic();
       }
     }
-    fantasmas[0].tipo = perseguir ? Perseguidor : Aleatorio;
+    fantasmas[1].tipo = perseguir ? Perseguidor : Aleatorio;
 
     string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
 
