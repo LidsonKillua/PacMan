@@ -39,6 +39,9 @@ void Game::initializeAllAudio()
   if (!swatMusic.openFromFile(audio_swat))
     throw new ErroLeitura(audio_swat);
   swatMusic.setPlayingOffset(sf::seconds(2.f));
+
+  if (!mscBichoVino.openFromFile(audio_BichoVindo))
+    throw new ErroLeitura(audio_BichoVindo);
 }
 
 void Game::initializeBackground()
@@ -202,6 +205,7 @@ void Game::processPilulas()
       if (cont >= 20)
       {
         perseguir = !perseguir;
+        AltPerseguidor(perseguir);
         cont = 0;
         turnOnOffSwatMusic();
       }
@@ -212,11 +216,11 @@ void Game::processPilulas()
       if ((perseguir && cont >= 40) || (!perseguir && cont >= 20))
       {
         perseguir = !perseguir;
+        AltPerseguidor(perseguir);
         cont = 0;
         turnOnOffSwatMusic();
       }
     }
-    fantasmas[1].tipo = perseguir ? Perseguidor : Aleatorio;
 
     string pts = (pontos > 99 ? to_string(pontos) : (pontos > 9 ? "0" + to_string(pontos) : "00" + to_string(pontos)));
 
@@ -373,4 +377,16 @@ void Game::EscolherDificuldade()
   EscDif *esc = new EscDif(window);
   dificuldade = esc->run_escDif();
   delete esc;
+}
+
+void Game::AltPerseguidor(bool sim)
+{
+    if(sim){
+        fantasmas[1].tipo = Perseguidor;
+        mscBichoVino.stop();
+        mscBichoVino.play();
+        //mscBichoVino.
+    }
+    else
+        fantasmas[1].tipo = Aleatorio;
 }

@@ -12,6 +12,7 @@ class Game
 {
 public:
   sf::Music swatMusic;
+  sf::Music mscBichoVino;
   sf::RenderWindow *window;
   sf::CircleShape *pilula;
   sf::Texture *fd;
@@ -73,4 +74,5 @@ private:
   void updateGame();
   void updatePos();
   void drawGame();
+  void AltPerseguidor(bool sim);
 };
