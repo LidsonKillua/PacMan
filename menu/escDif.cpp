@@ -74,7 +74,7 @@ void EscDif::loop_events(){
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
         {
-            if(pos < 3)
+            if(pos < 2)
             {
                 pos++;
                 pressed = true;
