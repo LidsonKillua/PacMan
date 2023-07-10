@@ -42,6 +42,11 @@ void Game::initializeAllAudio()
 
   if (!mscBichoVino.openFromFile(audio_BichoVindo))
     throw new ErroLeitura(audio_BichoVindo);
+
+  if (!motorMusic.openFromFile(audio_motor))
+    throw new ErroLeitura(audio_motor);
+  motorMusic.play();
+
 }
 
 void Game::initializeBackground()

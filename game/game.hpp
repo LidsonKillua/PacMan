@@ -13,6 +13,7 @@ class Game
 public:
   sf::Music swatMusic;
   sf::Music mscBichoVino;
+  sf::Music motorMusic;
   sf::RenderWindow *window;
   sf::CircleShape *pilula;
   sf::Texture *fd;
