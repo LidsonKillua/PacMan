@@ -50,7 +50,7 @@ public:
   };
   sf::Clock clock;
   sf::Clock posClock;
-  int pontos, cont = 40;
+  int pontos, cont = 0;
   bool Reiniciando = false;
   bool GameOver = false;
   bool perseguir = false;

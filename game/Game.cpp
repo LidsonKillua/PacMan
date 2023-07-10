@@ -45,8 +45,8 @@ void Game::initializeAllAudio()
 
   if (!motorMusic.openFromFile(audio_motor))
     throw new ErroLeitura(audio_motor);
-  motorMusic.play();
 
+  motorMusic.play();
 }
 
 void Game::initializeBackground()
@@ -267,6 +267,7 @@ void Game::gameOver()
 void Game::pauseAllAudio()
 {
   swatMusic.pause();
+  motorMusic.pause();
 }
 
 // Atualiza o estado do jogo
@@ -388,9 +389,8 @@ void Game::AltPerseguidor(bool sim)
 {
     if(sim){
         fantasmas[1].tipo = Perseguidor;
-        mscBichoVino.stop();
+        mscBichoVino.stop();  // reiniciar a partir do primeiro toque
         mscBichoVino.play();
-        //mscBichoVino.
     }
     else
         fantasmas[1].tipo = Aleatorio;

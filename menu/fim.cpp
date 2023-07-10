@@ -35,6 +35,33 @@ void Final::set_values(bool preso)
     bgT->create(window->getSize().x, window->getSize().y);
     bgT->update(*window);
     bgS->setTexture(*bgT);
+
+
+    srand(time(0));
+    int i = 0;
+
+    if(preso){
+        i = rand() % qtdFalasD;
+        cout << rand() << "  " << i;
+        if (!FraseFim.openFromFile(falas_FinaisD[i]))
+            throw new ErroLeitura(audios_FinaisD[i]);
+
+        i = rand() % qtdMscD;
+        if (!MusicaFim.openFromFile(audios_FinaisD[i]))
+            throw new ErroLeitura(audios_FinaisD[i]);
+    }
+    else{
+        i = rand() % qtdFalasV;
+        if (!FraseFim.openFromFile(audios_FinaisV[i]))
+            throw new ErroLeitura(audios_FinaisV[i]);
+
+        i = rand() % qtdMscV;
+        if (!MusicaFim.openFromFile(audios_FinaisV[i]))
+            throw new ErroLeitura(audios_FinaisV[i]);
+    }
+
+    FraseFim.setVolume(30);
+    MusicaFim.setVolume(20);
 }
 
 void Final::loop_events()
@@ -87,6 +114,9 @@ void Final::InitializeTxtReiniciar()
 
 void Final::run_menu()
 {
+    FraseFim.play();
+    MusicaFim.play();
+
     while (!sair)
     {
         loop_events();

@@ -8,7 +8,7 @@ using namespace std;
 #define COLS 26
 #define SIZE 48             // Tamanho de cada celula do mapa
 #define numFantasmas 4      // Alterar a Quantidade de Fantasmas
-const int qtdPilulas = 177; // Alterar a Quantidade de Pilulas
+const int qtdPilulas = 10/*177*/; // Alterar a Quantidade de Pilulas
 const int TAMX = 1200;      // Tamanho da Janela
 const int TAMY = 768;       // Tamanho da Janela
 
@@ -63,8 +63,25 @@ const char c_ImgSwtDwn[25] = "img/carro_swatdnw.png";
 
 /************* CAMINHOS PARA ARQUIVOS DE ÁUDIO ****************/
 const char audio_swat[25] = "audio/swat.wav";
-const char audio_BichoVindo[33] = "audio/Ao_bicho_vindo_muleque.wav";
+const char audio_BichoVindo[33] = "audio/Ao-bicho-vindo-muleque.wav";
 const char audio_motor[25] = "audio/Motorcar.wav";
+
+// lista de áudios de Derrota
+const int qtdMscD = 2;
+const char audios_FinaisD[qtdMscD][50] = {"audio/Derrota/Musica/tema-triste-toguro.wav",
+                                          "audio/Derrota/Musica/Naruto-Funk-Triste.wav"};
+
+const int qtdFalasD = 2;
+const char falas_FinaisD[qtdFalasD][50] = {"audio/Derrota/Fala/me-ferrei-amigos-estevao.wav",
+                                           "audio/Derrota/Fala/o-moreno-ta-ingnorante.wav"};
+
+// lista de áudios de Vitória
+const int qtdMscV = 2;
+const char audios_FinaisV[qtdMscV][50] = {"audio/Derrota/Fala/me-ferrei-amigos-estevao.wav",
+                                          "audio/Derrota/Fala/o-moreno-ta-ingnorante.wav"};
+
+const int qtdFalasV = 1;
+const char falas_FinaisV[qtdFalasV][50] = {"audio/Vitoria/Fala/asmei.wav"};
 
 struct Position
 {
