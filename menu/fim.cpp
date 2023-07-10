@@ -52,7 +52,7 @@ void Final::set_values(bool preso)
     }
     else{
         i = rand() % qtdFalasV;
-        if (!FraseFim.openFromFile(audios_FinaisV[i]))
+        if (!FraseFim.openFromFile(falas_FinaisV[i]))
             throw new ErroLeitura(audios_FinaisV[i]);
 
         i = rand() % qtdMscV;

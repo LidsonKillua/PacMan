@@ -67,21 +67,33 @@ const char audio_BichoVindo[33] = "audio/Ao-bicho-vindo-muleque.wav";
 const char audio_motor[25] = "audio/Motorcar.wav";
 
 // lista de áudios de Derrota
-const int qtdMscD = 2;
-const char audios_FinaisD[qtdMscD][50] = {"audio/Derrota/Musica/tema-triste-toguro.wav",
-                                          "audio/Derrota/Musica/Naruto-Funk-Triste.wav"};
+const int qtdMscD = 3;
+const char audios_FinaisD[qtdMscD][50] = {
+    "audio/Derrota/Musica/tema-triste-toguro.wav",
+    "audio/Derrota/Musica/Naruto-Funk-Triste.wav",
+    "audio/Derrota/Musica/titanic-parody.wav"
+};
 
-const int qtdFalasD = 2;
-const char falas_FinaisD[qtdFalasD][50] = {"audio/Derrota/Fala/me-ferrei-amigos-estevao.wav",
-                                           "audio/Derrota/Fala/o-moreno-ta-ingnorante.wav"};
+const int qtdFalasD = 4;
+const char falas_FinaisD[qtdFalasD][50] = {
+    "audio/Derrota/Fala/me-ferrei-amigos-estevao.wav",
+    "audio/Derrota/Fala/o-moreno-ta-ingnorante.wav",
+    "audio/Derrota/Fala/super-mario-death.wav",
+    "audio/Derrota/Fala/the-price-is-right.wav"
+};
 
 // lista de áudios de Vitória
 const int qtdMscV = 2;
-const char audios_FinaisV[qtdMscV][50] = {"audio/Derrota/Fala/me-ferrei-amigos-estevao.wav",
-                                          "audio/Derrota/Fala/o-moreno-ta-ingnorante.wav"};
+const char audios_FinaisV[qtdMscV][50] = {
+    "audio/Vitoria/Musica/giga-chad-theme.wav",
+    "audio/Vitoria/Musica/baby-dont-hurt-me.wav"
+};
 
-const int qtdFalasV = 1;
-const char falas_FinaisV[qtdFalasV][50] = {"audio/Vitoria/Fala/asmei.wav"};
+const int qtdFalasV = 2;
+const char falas_FinaisV[qtdFalasV][50] = {
+    "audio/Vitoria/Fala/asmei.wav",
+    "audio/Vitoria/Fala/cr_suuu.wav"
+};
 
 struct Position
 {
