@@ -39,7 +39,7 @@ public:
       "1211111112111112111111121",
       "0222222222222222222222220",
       "1211121111112111111211121",
-      "1222221333300033331222221",
+      "1242221333300033331222221",
       "1211121111112111111211121",
       "1222122222222222222212221",
       "1112111212111112121112111",
@@ -50,10 +50,16 @@ public:
   };
   sf::Clock clock;
   sf::Clock posClock;
+
+  sf::Sprite *jare;
+  sf::Texture *Tjare;
+
   int pontos, cont = 0;
   bool Reiniciando = false;
   bool GameOver = false;
   bool perseguir = false;
+  bool Moveu = false;
+  bool PrimeiroMovimento = true;
   void initialize();
   void gameLoop();
   ~Game();
@@ -62,8 +68,10 @@ private:
   void initializeAllAudio();
   void initializeBackground();
   void initializePilulas();
+  void initializeJare();
   void InitializeScore();
   void EscolherDificuldade();
+  void MenuInicial();
   void eventLoop();
   bool checkCrossGameOver(Direction prevDir);
   bool checkGameOver();

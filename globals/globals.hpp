@@ -8,7 +8,7 @@ using namespace std;
 #define COLS 26
 #define SIZE 48             // Tamanho de cada celula do mapa
 #define numFantasmas 4      // Alterar a Quantidade de Fantasmas
-const int qtdPilulas = 10/*177*/; // Alterar a Quantidade de Pilulas
+const int qtdPilulas = 177; // Alterar a Quantidade de Pilulas
 const int TAMX = 1200;      // Tamanho da Janela
 const int TAMY = 768;       // Tamanho da Janela
 
@@ -61,7 +61,16 @@ const char c_ImgSwtEsq[25] = "img/carro_swatesq.png";
 const char c_ImgSwtUp[25] = "img/carro_swatup.png";
 const char c_ImgSwtDwn[25] = "img/carro_swatdnw.png";
 
+//Imagem inicial
+const char c_ImgInicio[17] = "img/wasted.png";
+
+const char c_ImgJare[17] = "img/jare.png";
+
 /************* CAMINHOS PARA ARQUIVOS DE ÁUDIO ****************/
+//Musica inicial
+const char c_MscIni[25] = "audio/musicamenu.wav";
+const char c_MscMenu[25] = "audio/musicamenu.wav";
+
 const char audio_swat[25] = "audio/swat.wav";
 const char audio_BichoVindo[33] = "audio/Ao-bicho-vindo-muleque.wav";
 const char audio_motor[25] = "audio/Motorcar.wav";

@@ -51,10 +51,9 @@ void Menu::set_values()
     btns[0]->setOutlineColor(sf::Color::Black);
 
     // Load it from a file
-    if (!msmenu->loadFromFile("audio/musicamenu.wav"))
+    if (!msmenu->loadFromFile(c_MscMenu))
     {
-        throw new GameError("Fatal Error: musicamenu load failed!");
-        std::cout << "musicamenu load failed!";
+        throw new GameError(c_MscMenu);
     }
 
     sdmenu->setBuffer(*msmenu);
@@ -84,8 +83,8 @@ void Menu::loop_events()
             {
                 pos++;
                 pressed = true;
-                btns[pos]->setOutlineColor(sf::Color::Black);//->setOutlineThickness(3);
-                btns[pos - 1]->setOutlineColor(sf::Color::Yellow);//->setOutlineThickness(0);
+                btns[pos]->setOutlineColor(sf::Color::Black);
+                btns[pos - 1]->setOutlineColor(sf::Color::Yellow);
                 pressed = false;
                 theselect = false;
             }
@@ -97,8 +96,8 @@ void Menu::loop_events()
             {
                 pos--;
                 pressed = true;
-                btns[pos]->setOutlineColor(sf::Color::Black);//->setOutlineThickness(3);
-                btns[pos + 1]->setOutlineColor(sf::Color::Yellow);//->setOutlineThickness(0);
+                btns[pos]->setOutlineColor(sf::Color::Black);
+                btns[pos + 1]->setOutlineColor(sf::Color::Yellow);
                 pressed = false;
                 theselect = false;
             }
@@ -123,7 +122,6 @@ void Menu::draw_all()
 {
     window->draw(*bg);
 
-
     cont++;
     // faz o botão selecionado piscar
     if(cont == 2000)
@@ -132,7 +130,6 @@ void Menu::draw_all()
         // se for amarelo muda pra preto, se não muda pra amarelo
         btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == sf::Color::Yellow)  ? sf::Color::Black : sf::Color::Yellow);
     }
-
 
     for(auto b : btns)
         window->draw(*b);

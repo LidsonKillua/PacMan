@@ -42,9 +42,8 @@ void Final::set_values(bool preso)
 
     if(preso){
         i = rand() % qtdFalasD;
-        cout << rand() << "  " << i;
         if (!FraseFim.openFromFile(falas_FinaisD[i]))
-            throw new ErroLeitura(audios_FinaisD[i]);
+            throw new ErroLeitura(falas_FinaisD[i]);
 
         i = rand() % qtdMscD;
         if (!MusicaFim.openFromFile(audios_FinaisD[i]))
@@ -53,7 +52,7 @@ void Final::set_values(bool preso)
     else{
         i = rand() % qtdFalasV;
         if (!FraseFim.openFromFile(falas_FinaisV[i]))
-            throw new ErroLeitura(audios_FinaisV[i]);
+            throw new ErroLeitura(falas_FinaisV[i]);
 
         i = rand() % qtdMscV;
         if (!MusicaFim.openFromFile(audios_FinaisV[i]))
@@ -114,6 +113,8 @@ void Final::InitializeTxtReiniciar()
 
 void Final::run_menu()
 {
+    FraseFim.setVolume(20);
+    MusicaFim.setVolume(15);
     FraseFim.play();
     MusicaFim.play();
 

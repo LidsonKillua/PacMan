@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "../menu/menu.hpp"
 #include "../menu/fim.hpp"
+#include "../menu/inicio.hpp"
 #include "../menu/escDif.hpp"
 #include <iostream>
 
@@ -10,7 +11,12 @@ void Game::initialize()
   if (!Reiniciando)
     window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
+  MenuInicial();
   EscolherDificuldade();
+
+  if(dificuldade > Easy){
+    perseguir = true;
+  }
 
   initializeBackground();
   InitializeScore();
@@ -38,15 +44,13 @@ void Game::initializeAllAudio()
 {
   if (!swatMusic.openFromFile(audio_swat))
     throw new ErroLeitura(audio_swat);
-  swatMusic.setPlayingOffset(sf::seconds(2.f));
+  //swatMusic.setPlayingOffset(sf::seconds(1.f));
 
   if (!mscBichoVino.openFromFile(audio_BichoVindo))
     throw new ErroLeitura(audio_BichoVindo);
 
   if (!motorMusic.openFromFile(audio_motor))
     throw new ErroLeitura(audio_motor);
-
-  motorMusic.play();
 }
 
 void Game::initializeBackground()
@@ -67,6 +71,17 @@ void Game::initializePilulas()
   pilula->setFillColor(sf::Color(255, 255, 0));
   pilula->setOutlineThickness(-1);
   pilula->setOutlineColor(sf::Color(255, 255, 255));
+}
+
+void Game::initializeJare()
+{
+  Tjare = new sf::Texture();
+
+  if (!Tjare->loadFromFile(c_ImgJare)) // ler imagem direita
+    throw new ErroLeitura(c_ImgJare);
+
+  jare = new sf::Sprite(*Tjare);
+  jare->setScale(sf::Vector2f(1.1f, 1.1f));
 }
 
 void Game::InitializeScore()
@@ -126,18 +141,22 @@ void Game::eventLoop()
       if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
       {
         pacman.intent = Left;
+        Moveu = true;
       }
       else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D)
       {
         pacman.intent = Right;
+        Moveu = true;
       }
       else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
       {
         pacman.intent = Up;
+        Moveu = true;
       }
       else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
       {
         pacman.intent = Down;
+        Moveu = true;
       }
     }
   }
@@ -190,9 +209,9 @@ void Game::turnOnOffSwatMusic()
 void Game::updateSwatMusic()
 {
   if (pacman.dir == Idle)
-    swatMusic.setVolume(20);
-  else if (fantasmas[0].distPacman > 0)
-    swatMusic.setVolume(1.0 / fantasmas[0].distPacman * 100);
+    swatMusic.setVolume(15);
+  else if (fantasmas[1].distPacman > 0)
+    swatMusic.setVolume(1.0 / fantasmas[1].distPacman * 100);
 }
 
 // Checa a captura de pílulas (e possível vitória)
@@ -273,6 +292,12 @@ void Game::pauseAllAudio()
 // Atualiza o estado do jogo
 void Game::updateGame()
 {
+  if(PrimeiroMovimento && Moveu){
+    PrimeiroMovimento = false;
+    motorMusic.setVolume(20);
+    motorMusic.play();
+  }
+
   Direction prevDir;
   Position prevPos;
   // Muda o estado do jogo a cada UPDATE_GAME_T segundos
@@ -356,6 +381,12 @@ void Game::drawGame()
         pilula->setPosition(j * SIZE + SIZE / 2, i * SIZE + SIZE / 2);
         window->draw(*pilula);
       }
+
+      if (mapa[i][j] == '4') // jaré
+      {
+        //jare->setPosition(j * SIZE, i * SIZE);
+        //window->draw(*jare);
+      }
     }
 
   // desenha PacMan
@@ -385,11 +416,19 @@ void Game::EscolherDificuldade()
   delete esc;
 }
 
+void Game::MenuInicial()
+{
+  Inicio *ini = new Inicio(window);
+  ini->run_menu();
+  delete ini;
+}
+
 void Game::AltPerseguidor(bool sim)
 {
     if(sim){
         fantasmas[1].tipo = Perseguidor;
         mscBichoVino.stop();  // reiniciar a partir do primeiro toque
+        mscBichoVino.setVolume(20);
         mscBichoVino.play();
     }
     else
