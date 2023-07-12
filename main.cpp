@@ -4,7 +4,9 @@ using namespace std;
 
 int main()
 {
-    while(true){
+    srand(time(0));
+    while (true)
+    {
         try
         {
             Game game;
@@ -12,9 +14,8 @@ int main()
             game.initialize();
             game.gameLoop();
 
-            if(!game.Reiniciando)
+            if (!game.Reiniciando)
                 break;
-
         }
         catch (GameError error)
         {

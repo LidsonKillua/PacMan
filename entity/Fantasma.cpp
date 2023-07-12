@@ -106,7 +106,7 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
   if (tipo == Perseguidor)
     dir = getMovePerseguidor(mapa, pos, pacman);
   else
-    dir = getMoveAleatorio(mapa, pos, pacman, index);
+    dir = getMoveAleatorio(mapa, pos, pacman);
 
   // Muda o sprite
   if (dir != Idle)
@@ -226,12 +226,8 @@ Direction Fantasma::getMovePerseguidor(char mapa[ROWS][COLS], Position origin, P
 }
 
 // Obtém a direção de movimento a cada instante para o fantasma aleatório
-Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman, int index)
+Direction Fantasma::getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman)
 {
-  /*
-  A soma de time(0) com o index do fantasma, a fim de definir a seed, adiciona uma aleatoriedade maior, própria a cada fantasma, e evita que os fantasmas se movam alinhados.
-   */
-  srand(time(0) + index);
   Direction possibleDirections[4];
   int possibilities = 0;
 

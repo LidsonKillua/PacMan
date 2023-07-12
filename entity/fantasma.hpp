@@ -38,5 +38,5 @@ private:
   int posToNumber(Position pos);
   Position numberToPos(int number);
   Direction getMovePerseguidor(char mapa[ROWS][COLS], Position pos, Pacman pacman);
-  Direction getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman, int index);
+  Direction getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman);
 };
