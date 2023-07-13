@@ -8,13 +8,11 @@
 class Inicio
 {
     bool sair = false, desenharTxt = true;
-    int cont = 0;
+    int cont = 0, iImg = 0;
 
     sf::RenderWindow *window;
     sf::Texture *imgT;
-    sf::Texture *bgT;
     sf::Sprite *imgS;
-    sf::Sprite *bgS;
     sf::Text txtIniciar;
     sf::Font *font;
 
@@ -30,5 +28,6 @@ protected:
     void set_values();
     void InitializeTxtIniciar();
     void loop_events();
+    void atualizarImg();
     void draw_all();
 };

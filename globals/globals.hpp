@@ -62,7 +62,7 @@ const char c_ImgSwtUp[25] = "img/carro_swatup.png";
 const char c_ImgSwtDwn[25] = "img/carro_swatdnw.png";
 
 //Imagem inicial
-const char c_ImgInicio[17] = "img/wasted.png";
+const char c_ImgInicio[35] = "img/inicial/videoqueeuquero"; // Falta o Indice que é definido no inicio.cpp e a extensão
 
 const char c_ImgJare[17] = "img/jare.png";
 

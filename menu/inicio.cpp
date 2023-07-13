@@ -1,5 +1,7 @@
 #include "inicio.hpp"
 #include <iostream>
+#include <string>
+#include <string.h>
 
 Inicio::Inicio(sf::RenderWindow *win)
 {
@@ -7,9 +9,6 @@ Inicio::Inicio(sf::RenderWindow *win)
 
     imgT = new sf::Texture();
     imgS = new sf::Sprite();
-
-    bgT = new sf::Texture();
-    bgS = new sf::Sprite();
 
     set_values();
     InitializeTxtIniciar();
@@ -19,26 +18,35 @@ Inicio::~Inicio()
 {
     delete imgT;
     delete imgS;
-    delete bgT;
-    delete bgS;
 }
 
 void Inicio::set_values()
 {
     // imagem do inicio
-    imgT->loadFromFile(c_ImgInicio);
+    string indice = "00" + to_string(iImg);
+    imgT->loadFromFile(c_ImgInicio + indice + ".jpg");
     imgS->setTexture(*imgT);
-
-    // Imagem de fundo: captura a imagem atual da tela
-    bgT->create(window->getSize().x, window->getSize().y);
-    bgT->update(*window);
-    bgS->setTexture(*bgT);
 
     if (!MscInicio.openFromFile(c_MscIni))
         throw new ErroLeitura(c_MscIni);
 
     MscInicio.setVolume(50);
 }
+
+void Inicio::atualizarImg()
+{
+    string indice = (iImg > 99 ? to_string(iImg) : (iImg > 9 ? "0" + to_string(iImg) : "00" + to_string(iImg)));
+
+    imgT->loadFromFile(c_ImgInicio + indice + ".jpg");
+    imgS->setTexture(*imgT);
+
+    if(iImg >= 299)
+        iImg = 0;
+    else
+        iImg++;
+}
+
+
 
 void Inicio::loop_events()
 {
@@ -56,7 +64,6 @@ void Inicio::loop_events()
 
 void Inicio::draw_all()
 {
-    window->draw(*bgS);
     window->draw(*imgS);
 
     cont++;
@@ -91,6 +98,7 @@ void Inicio::run_menu()
     while (!sair)
     {
         loop_events();
+        atualizarImg();
         draw_all();
     }
 }
