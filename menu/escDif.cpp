@@ -31,6 +31,9 @@ void EscDif::set_values()
     pos_mouse = {0, 0};
     mouse_coord = {0, 0};
 
+    CorAmarela = sf::Color(255, 198, 0);
+    CorSelecionado = sf::Color::Blue;
+
     options = {"EASY", "NORMAL", "HARD"};
     btns.resize(3);
     // Valores pegos no Gimp Após desenhar os botões lá
@@ -42,13 +45,13 @@ void EscDif::set_values()
         btns[i] = new sf::RectangleShape();
         btns[i]->setSize(sizes[i]);
         btns[i]->setPosition(coords[i]);
-        btns[i]->setOutlineColor(sf::Color::Yellow);
+        btns[i]->setOutlineColor(CorAmarela);
         btns[i]->setOutlineThickness(8);
         btns[i]->setFillColor(sf::Color::Transparent);
     }
 
     pos = 0;
-    btns[0]->setOutlineColor(sf::Color::Black);
+    btns[0]->setOutlineColor(CorSelecionado);
 
     // Load it from a file
     if (!msmenu->loadFromFile("audio/musicamenu.wav"))
@@ -78,8 +81,8 @@ void EscDif::loop_events(){
             {
                 pos++;
                 pressed = true;
-                btns[pos]->setOutlineColor(sf::Color::Black);
-                btns[pos - 1]->setOutlineColor(sf::Color::Yellow);
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos - 1]->setOutlineColor(CorAmarela);
                 pressed = false;
                 theselect = false;
             }
@@ -91,8 +94,8 @@ void EscDif::loop_events(){
             {
                 pos--;
                 pressed = true;
-                btns[pos]->setOutlineColor(sf::Color::Black);
-                btns[pos + 1]->setOutlineColor(sf::Color::Yellow);
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos + 1]->setOutlineColor(CorAmarela);
                 pressed = false;
                 theselect = false;
             }
@@ -126,7 +129,7 @@ void EscDif::draw_all()
     {
         cont = 0;
         // se for amarelo muda pra preto, se não muda pra amarelo
-        btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == sf::Color::Yellow)  ? sf::Color::Black : sf::Color::Yellow);
+        btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == CorAmarela)  ? CorSelecionado : CorAmarela);
     }
 
 

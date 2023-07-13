@@ -16,6 +16,9 @@ class Menu {
     sf::Vector2i pos_mouse;
     sf::Vector2f mouse_coord;
 
+    sf::Color CorAmarela;
+    sf::Color CorSelecionado;
+
     std::vector<const char *> options;
     std::vector<sf::RectangleShape *> btns;
     std::vector<sf::Vector2f> coords;

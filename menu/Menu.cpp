@@ -11,6 +11,9 @@ Menu::Menu(sf::RenderWindow* win)
     sdmenu = new sf::Sound;
     msmenu = new sf::SoundBuffer;
 
+    CorAmarela = sf::Color(255, 198, 0);
+    CorSelecionado = sf::Color::Blue;
+
     set_values();
 }
 
@@ -43,13 +46,13 @@ void Menu::set_values()
         btns[i] = new sf::RectangleShape();
         btns[i]->setSize(sizes[i]);
         btns[i]->setPosition(coords[i]);
-        btns[i]->setOutlineColor(sf::Color::Yellow);
+        btns[i]->setOutlineColor(CorAmarela);
         btns[i]->setOutlineThickness(8);
         btns[i]->setFillColor(sf::Color::Transparent);
     }
 
     pos = 0;
-    btns[0]->setOutlineColor(sf::Color::Black);
+    btns[0]->setOutlineColor(CorSelecionado);
 
     // Load it from a file
     if (!msmenu->loadFromFile(c_MscMenu))
@@ -84,8 +87,8 @@ void Menu::loop_events()
             {
                 pos++;
                 pressed = true;
-                btns[pos]->setOutlineColor(sf::Color::Black);
-                btns[pos - 1]->setOutlineColor(sf::Color::Yellow);
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos - 1]->setOutlineColor(CorAmarela);
                 pressed = false;
                 theselect = false;
             }
@@ -97,8 +100,8 @@ void Menu::loop_events()
             {
                 pos--;
                 pressed = true;
-                btns[pos]->setOutlineColor(sf::Color::Black);
-                btns[pos + 1]->setOutlineColor(sf::Color::Yellow);
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos + 1]->setOutlineColor(CorAmarela);
                 pressed = false;
                 theselect = false;
             }
@@ -129,7 +132,7 @@ void Menu::draw_all()
     {
         cont = 0;
         // se for amarelo muda pra preto, se não muda pra amarelo
-        btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == sf::Color::Yellow)  ? sf::Color::Black : sf::Color::Yellow);
+        btns[pos]->setOutlineColor((btns[pos]->getOutlineColor() == CorAmarela) ? CorSelecionado : CorAmarela);
     }
 
     for(auto b : btns)

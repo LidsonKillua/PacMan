@@ -14,6 +14,9 @@ class EscDif{
     sf::Texture * image;
     sf::Sprite * bg;
 
+    sf::Color CorAmarela;
+    sf::Color CorSelecionado;
+
     sf::Vector2i pos_mouse;
     sf::Vector2f mouse_coord;
 
