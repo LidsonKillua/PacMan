@@ -251,7 +251,7 @@ void Game::processPilulas()
 
     score.setString("SCORE " + pts);
 
-    if (pontos == ptsParaVencer)
+    if (pontos >= ptsParaVencer)
     {
       score.setString("Voce Venceu!");
 
