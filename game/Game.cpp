@@ -21,6 +21,7 @@ void Game::initialize()
   initializeBackground();
   InitializeScore();
   initializePilulas();
+  initializeJare();
 
   // Inicializa o Pacman
   if (!pacman.initialize())
@@ -81,7 +82,6 @@ void Game::initializeJare()
     throw new ErroLeitura(c_ImgJare);
 
   jare = new sf::Sprite(*Tjare);
-  jare->setScale(sf::Vector2f(1.1f, 1.1f));
 }
 
 void Game::InitializeScore()
@@ -329,8 +329,9 @@ void Game::updateGame()
     }
 
     // MOVE FANTASMAS
-    for (int i = 0; i < numFantasmas; i++)
-      fantasmas[i].move(mapa, pacman, i);
+    for (int i = 0; i < numFantasmas; i++){
+      fantasmas[i].move(mapa, pacman, i, dificuldade, qtdJare);
+    }
 
     // Verifica Game Over padrão
     if (checkGameOver())
@@ -384,8 +385,8 @@ void Game::drawGame()
 
       if (mapa[i][j] == '4') // jaré
       {
-        //jare->setPosition(j * SIZE, i * SIZE);
-        //window->draw(*jare);
+        jare->setPosition(j * SIZE, i * SIZE);
+        window->draw(*jare);
       }
     }
 

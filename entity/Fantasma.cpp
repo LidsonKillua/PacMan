@@ -84,7 +84,7 @@ void Fantasma::mudarCarroPolicia(int i) // animacao
 }
 
 // Função pra mover o fantasma, herdando de Entity
-void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
+void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index, Dificult dificuldade, int qtdJare)
 {
   // Caso o Pacman esteja parado (início de jogo), nada ocorre
   if (pacman.dir == Idle)
@@ -111,6 +111,31 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index)
   // Muda o sprite
   if (dir != Idle)
     sprite.setTexture(textures[dir]);
+
+  if(dificuldade == Hard && qtdJare < 3 && EhEncruzilhadaVazia(mapa, pos) && (rand() % 10 > 7)){ // 30%
+        mapa[pos.x][pos.y] = '4';
+        qtdJare++;
+  }
+}
+
+bool Fantasma::EhEncruzilhadaVazia(char mapa[ROWS][COLS], Position pos){
+  int qtdParedes = 0;
+
+  if(mapa[pos.x][pos.y] == '0'){
+    if(mapa[pos.x-1][pos.y-1] == '1')
+        qtdParedes++;
+    if(mapa[pos.x-1][pos.y+1] == '1')
+        qtdParedes++;
+    if(mapa[pos.x+1][pos.y-1] == '1')
+        qtdParedes++;
+    if(mapa[pos.x+1][pos.y+1] == '1')
+        qtdParedes++;
+
+    if(qtdParedes < 2 )
+        return true;
+  }
+
+  return false;
 }
 
 /******************************************************************************

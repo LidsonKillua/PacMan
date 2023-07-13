@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-// Variáveis do jogo
+// Constantes do jogo
 #define ROWS 16
 #define COLS 26
 #define SIZE 48             // Tamanho de cada celula do mapa

@@ -21,7 +21,7 @@ public:
   TipoFantasma tipo, oldtipo = Aleatorio;
   int distPacman;
   using Entity::Entity;
-  void move(char mapa[ROWS][COLS], Pacman pacman, int index);
+  void move(char mapa[ROWS][COLS], Pacman pacman, int index, Dificult dificuldade, int qtdJare);
   void draw(sf::RenderWindow *window);
   static vector<Fantasma> initializeFantasmas(Dificult dificuldade);
   void mudarCarroPolicia(int i);
@@ -39,4 +39,5 @@ private:
   Position numberToPos(int number);
   Direction getMovePerseguidor(char mapa[ROWS][COLS], Position pos, Pacman pacman);
   Direction getMoveAleatorio(char mapa[ROWS][COLS], Position origin, Pacman pacman);
+  bool EhEncruzilhadaVazia(char mapa[ROWS][COLS], Position pos);
 };
