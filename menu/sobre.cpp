@@ -33,8 +33,6 @@ Sobre::~Sobre()
 
 void Sobre::set_values()
 {
-    // imagem do inicio
-    string indice = "00" + to_string(iImg);
     imgT->loadFromFile(c_ImgSobre);
     imgS->setTexture(*imgT);
 
@@ -70,7 +68,6 @@ void Sobre::loop_events(int &ptsEgg)
         {
             if(egg->getGlobalBounds().contains(mouse_coord)){
                 ptsEgg = 50; // Hack para precisar de menos pontos para vencer
-                cout << "teste" << endl;
                 sair = true;
             }
         }
@@ -82,8 +79,10 @@ void Sobre::draw_all()
     window->draw(*imgS);
     window->draw(*egg);
 
+    iImg++;
     // piscar o texto
-    if (iImg % 10 == 0){
+    if (iImg == 2000){
+        iImg = 0;
         desenharTxt = !desenharTxt;
     }
 
