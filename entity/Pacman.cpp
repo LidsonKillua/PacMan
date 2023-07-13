@@ -45,7 +45,7 @@ bool Pacman::isValidPos(int x, int y, char mapa[ROWS][COLS])
 }
 
 // Função pra mover o pacman
-void Pacman::move(char mapa[ROWS][COLS])
+void Pacman::move(char mapa[ROWS][COLS], int qtdJare)
 {
   Position movement;
 
@@ -73,6 +73,13 @@ void Pacman::move(char mapa[ROWS][COLS])
   {
     isIdle = false;
     sprite.setTexture(textures[dir]);
+  }
+
+  if(mapa[pos.y][pos.x] == '4'){
+    mapa[pos.y][pos.x] = '0';
+    qtdJare--;
+    //dir = Idle;
+    //pneuFurou = true;
   }
 }
 

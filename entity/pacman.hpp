@@ -7,7 +7,8 @@ class Pacman : public Entity
 {
 public:
   Direction intent;
-  bool isIdle = false;
+  bool isIdle = false, pneuFurou = false;
+  int contFurado = 0;
   // Animation Variables
   const int totalFrames = 8;     // Numero total de frames na animacao
   const float frameRate = 0.01f; // Taxa de atualizacao da animacao
@@ -15,7 +16,7 @@ public:
   int frameAtual;
   float tempAcumul;
   bool isValidPos(int x, int y, char mapa[ROWS][COLS]) override;
-  void move(char mapa[ROWS][COLS]);
+  void move(char mapa[ROWS][COLS], int qtdJare);
   void updateDrawPos(char mapa[ROWS][COLS]) override;
   bool initialize();
   void updateAnimation();

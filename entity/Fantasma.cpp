@@ -112,23 +112,30 @@ void Fantasma::move(char mapa[ROWS][COLS], Pacman pacman, int index, Dificult di
   if (dir != Idle)
     sprite.setTexture(textures[dir]);
 
-  if(dificuldade == Hard && qtdJare < 3 && EhEncruzilhadaVazia(mapa, pos) && (rand() % 10 > 7)){ // 30%
-        mapa[pos.x][pos.y] = '4';
+  if(dificuldade == Hard && qtdJare < 1 && EhEncruzilhadaVazia(mapa, pos) && (rand() % 10 > 7)){ // 30%
+        mapa[pos.y][pos.x] = '4';
         qtdJare++;
+  }
+  else if(mapa[pos.y][pos.x] == '4'){
+        mapa[pos.y][pos.x] = '0';
+        qtdJare--;
   }
 }
 
 bool Fantasma::EhEncruzilhadaVazia(char mapa[ROWS][COLS], Position pos){
   int qtdParedes = 0;
 
-  if(mapa[pos.x][pos.y] == '0'){
-    if(mapa[pos.x-1][pos.y-1] == '1')
+  if(mapa[pos.y][pos.x] == '0'){
+    if(mapa[pos.y-1][pos.x] == '1')
         qtdParedes++;
-    if(mapa[pos.x-1][pos.y+1] == '1')
+
+    if(mapa[pos.y+1][pos.x] == '1')
         qtdParedes++;
-    if(mapa[pos.x+1][pos.y-1] == '1')
+
+    if(mapa[pos.y][pos.x-1] == '1')
         qtdParedes++;
-    if(mapa[pos.x+1][pos.y+1] == '1')
+
+    if(mapa[pos.y][pos.x+1] == '1')
         qtdParedes++;
 
     if(qtdParedes < 2 )

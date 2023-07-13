@@ -317,7 +317,7 @@ void Game::updateGame()
     }
 
     // MOVE PACMAN
-    pacman.move(mapa);
+    pacman.move(mapa, qtdJare);
 
     // Verifica o crossGameOver
     if (checkCrossGameOver(prevDir))
