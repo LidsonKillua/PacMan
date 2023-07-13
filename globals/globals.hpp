@@ -63,6 +63,7 @@ const char c_ImgSwtDwn[25] = "img/carro_swatdnw.png";
 
 //Imagem inicial
 const char c_ImgInicio[35] = "img/inicial/videoqueeuquero"; // Falta o Indice que é definido no inicio.cpp e a extensão
+const char c_ImgSobre[35] = "img/sobre.jpg";
 
 const char c_ImgJare[17] = "img/jare.png";
 
@@ -70,6 +71,7 @@ const char c_ImgJare[17] = "img/jare.png";
 //Musica inicial
 const char c_MscIni[25] = "audio/musicamenu.wav";
 const char c_MscMenu[25] = "audio/musicamenu.wav";
+const char c_AudioLadrao[25] = "audio/ChavesLadrao.wav";
 
 const char audio_swat[25] = "audio/swat.wav";
 const char audio_BichoVindo[33] = "audio/Ao-bicho-vindo-muleque.wav";

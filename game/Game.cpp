@@ -36,6 +36,7 @@ void Game::initialize()
 
   initializeAllAudio();
 
+  ptsParaVencer = qtdPilulas;
   pontos = 0;
   Reiniciando = false;
   GameOver = false;
@@ -127,7 +128,7 @@ void Game::eventLoop()
       {
         pauseAllAudio();
         Menu *menu = new Menu(window);
-        menu->run_menu();
+        menu->run_menu(ptsParaVencer);
         delete menu;
 
         if (menu->Reiniciar)
@@ -250,7 +251,7 @@ void Game::processPilulas()
 
     score.setString("SCORE " + pts);
 
-    if (pontos == qtdPilulas)
+    if (pontos == ptsParaVencer)
     {
       score.setString("Voce Venceu!");
 

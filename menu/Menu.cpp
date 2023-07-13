@@ -1,4 +1,5 @@
 #include "menu.hpp"
+#include "sobre.hpp"
 #include <iostream>
 
 Menu::Menu(sf::RenderWindow* win)
@@ -137,8 +138,10 @@ void Menu::draw_all()
     window->display();
 }
 
-void Menu::run_menu()
+void Menu::run_menu(int &ptsParaVencer)
 {
+    ptsEgg = ptsParaVencer;
+
     // Play the sound
     sdmenu->play();
 
@@ -147,7 +150,9 @@ void Menu::run_menu()
         loop_events();
         draw_all();
     }
+
     sdmenu->stop();
+    ptsParaVencer = ptsEgg;
 }
 
 void Menu::RealizarTarefa(int option)
@@ -157,12 +162,20 @@ void Menu::RealizarTarefa(int option)
     case 0:
         sair = true;
         break;
+
     case 1:
         sair = true;
         Reiniciar = true;
         break;
-    case 2:
+
+    case 2:{
+        Sobre *sobre = new Sobre(window);
+        sobre->run_menu(ptsEgg);
+        delete sobre;
         break;
+    }
+
+
     case 3:
         window->close();
         break;

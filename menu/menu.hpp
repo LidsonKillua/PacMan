@@ -6,7 +6,7 @@
 #include "../globals/globals.hpp"
 
 class Menu {
-    int pos, cont = 0;
+    int pos, cont = 0, ptsEgg;
     bool pressed, theselect, sair;
 
     sf::RenderWindow * window;
@@ -34,6 +34,6 @@ class Menu {
     public:
         Menu(sf::RenderWindow* win);
         ~Menu();
-        void run_menu();
+        void run_menu(int &ptsParaVencer);
         bool Reiniciar = false;
 };

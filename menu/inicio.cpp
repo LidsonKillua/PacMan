@@ -66,11 +66,8 @@ void Inicio::draw_all()
 {
     window->draw(*imgS);
 
-    cont++;
-    // faz o bot�o selecionado piscar
-    if (cont == 2000)
-    {
-        cont = 0;
+    // piscar o texto
+    if (iImg % 6 == 0){
         desenharTxt = !desenharTxt;
     }
 
@@ -88,7 +85,7 @@ void Inicio::InitializeTxtIniciar()
     txtIniciar.setFont(*font);
     txtIniciar.setString("PRESS ENTER TO PLAY");
     txtIniciar.setCharacterSize(25);
-    txtIniciar.setPosition(sf::Vector2f(260, 567));
+    txtIniciar.setPosition(sf::Vector2f(363, 567));
 }
 
 void Inicio::run_menu()

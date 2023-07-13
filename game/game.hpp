@@ -54,7 +54,7 @@ public:
   sf::Sprite *jare;
   sf::Texture *Tjare;
 
-  int pontos, cont = 0, qtdJare = 0;
+  int pontos, cont = 0, qtdJare = 0, ptsParaVencer;
   bool Reiniciando = false;
   bool GameOver = false;
   bool perseguir = false;

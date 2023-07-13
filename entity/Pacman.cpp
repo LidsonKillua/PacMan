@@ -47,6 +47,15 @@ bool Pacman::isValidPos(int x, int y, char mapa[ROWS][COLS])
 // Função pra mover o pacman
 void Pacman::move(char mapa[ROWS][COLS], int qtdJare)
 {
+  if(pneuFurou){
+    contFurado++;
+
+    if(contFurado >= 1)
+        pneuFurou = false;
+
+    return;
+  }
+
   Position movement;
 
   // Caso seja possível se mover na direção da intenção do usuário, ela se torna a direção de movimento.
@@ -78,13 +87,15 @@ void Pacman::move(char mapa[ROWS][COLS], int qtdJare)
   if(mapa[pos.y][pos.x] == '4'){
     mapa[pos.y][pos.x] = '0';
     qtdJare--;
-    //dir = Idle;
-    //pneuFurou = true;
+    pneuFurou = true;
+    contFurado = 0;
   }
 }
 
 void Pacman::updateDrawPos(char mapa[ROWS][COLS])
 {
+  if(pneuFurou) return;
+
   if (intent != dir && !canMove(dir, pos, mapa))
   {
     isIdle = true;
@@ -95,6 +106,8 @@ void Pacman::updateDrawPos(char mapa[ROWS][COLS])
 
 void Pacman::updateAnimation() // animacao
 {
+  if(pneuFurou) return;
+
   // Acumula o tempo decorrido
   tempAcumul += defTempo;
 
