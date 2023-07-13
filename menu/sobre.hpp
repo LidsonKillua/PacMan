@@ -17,6 +17,7 @@ class Sobre
     sf::Texture *imgT;
     sf::Sprite *imgS;
     sf::Text txtIniciar;
+    sf::Text txtSobre;
     sf::Font *font;
     sf::RectangleShape *egg; //easter egg
 

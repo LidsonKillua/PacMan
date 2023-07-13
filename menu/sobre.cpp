@@ -89,6 +89,8 @@ void Sobre::draw_all()
     if (desenharTxt)
         window->draw(txtIniciar);
 
+    window->draw(txtSobre);
+
     window->display();
 }
 
@@ -101,6 +103,13 @@ void Sobre::InitializeTxtIniciar()
     txtIniciar.setString("PRESS ESC TO CLOSE");
     txtIniciar.setCharacterSize(25);
     txtIniciar.setPosition(sf::Vector2f(363, 667));
+
+    txtSobre.setFont(*font);
+    txtSobre.setString("Thierry Stofel  Lidson Oliveira  Joao Vitor Melo");
+    txtSobre.setCharacterSize(20);
+    txtSobre.setOutlineColor(sf::Color::Black);
+    txtSobre.setOutlineThickness(3);
+    txtSobre.setPosition(sf::Vector2f(50, 30));
 }
 
 void Sobre::run_menu(int &ptsEgg)
