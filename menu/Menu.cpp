@@ -178,7 +178,6 @@ void Menu::RealizarTarefa(int option)
         break;
     }
 
-
     case 3:
         window->close();
         break;

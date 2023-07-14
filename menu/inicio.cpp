@@ -36,9 +36,7 @@ void Inicio::set_values()
 void Inicio::atualizarImg()
 {
     string indice = (iImg > 99 ? to_string(iImg) : (iImg > 9 ? "0" + to_string(iImg) : "00" + to_string(iImg)));
-
     imgT->loadFromFile(c_ImgInicio + indice + ".jpg");
-    imgS->setTexture(*imgT);
 
     if(iImg >= 299)
         iImg = 0;
