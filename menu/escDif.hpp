@@ -34,6 +34,7 @@ class EscDif{
         void loop_events();
         void draw_all();
         void RealizarTarefa(int option);
+        void Dormir(int ms);
 
     public:
         EscDif(sf::RenderWindow* win);

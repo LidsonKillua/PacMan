@@ -65,6 +65,16 @@ void Final::set_values(bool preso)
 
 void Final::loop_events()
 {
+    for(int i = 0; i<8; i++){
+        bool Jpressed = sf::Joystick::isButtonPressed(0, i);
+
+        if (Jpressed){
+            sair = true;
+            reiniciar = true;
+            break;
+        }
+    }
+
     sf::Event event;
     while (window->pollEvent(event))
     {
@@ -73,18 +83,7 @@ void Final::loop_events()
             window->close();
         }
 
-        bool Jpressed = sf::Joystick::isButtonPressed(0, 0);
-
-        // xPosition < 0 : esquerda,
-        // xPosition > 0 : direita
-        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-        // yPosition < 0 : cima,
-        // yPosition > 0 : baixo
-        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-
-        // Por enquanto o enter do Fliperama vai ser joystick a direita(não sei o outro botão)
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) || (Jpressed && xPosition > 0))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
         {
             sair = true;
             Reiniciar = true;

@@ -33,6 +33,7 @@ class Menu {
         void loop_events();
         void draw_all();
         void RealizarTarefa(int option);
+        void Dormir(int ms);
 
     public:
         Menu(sf::RenderWindow* win);

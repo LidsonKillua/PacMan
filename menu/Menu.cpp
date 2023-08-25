@@ -65,6 +65,46 @@ void Menu::set_values()
 
 void Menu::loop_events()
 {
+    for(int i = 0; i<8; i++){
+        bool Jpressed = sf::Joystick::isButtonPressed(0, i);
+
+        if (Jpressed && !theselect)
+        {
+            RealizarTarefa(pos);
+            sair = true;
+        }
+    }
+
+    // xPosition < 0 : esquerda,
+    // xPosition > 0 : direita
+    float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+    // yPosition < 0 : cima,
+    // yPosition > 0 : baixo
+    float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+    if (yPosition > 0)
+    {
+        if(pos < 2)
+        {
+            pos++;
+            btns[pos]->setOutlineColor(CorSelecionado);
+            btns[pos - 1]->setOutlineColor(CorAmarela);
+        }
+        Dormir(1000);
+    }
+
+    if (yPosition < 0)
+    {
+        if(pos > 0)
+        {
+            pos--;
+            btns[pos]->setOutlineColor(CorSelecionado);
+            btns[pos + 1]->setOutlineColor(CorAmarela);
+        }
+        Dormir(1000);
+    }
+
     sf::Event event;
     while(window->pollEvent(event))
     {
@@ -73,22 +113,12 @@ void Menu::loop_events()
             window->close();
         }
 
-        bool Jpressed = sf::Joystick::isButtonPressed(0, 0);
-
-        // xPosition < 0 : esquerda,
-        // xPosition > 0 : direita
-        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-        // yPosition < 0 : cima,
-        // yPosition > 0 : baixo
-        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
             sair = true;
         }
 
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (Jpressed && yPosition > 0)) && !pressed)
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
         {
             if(pos < 3)
             {
@@ -101,7 +131,7 @@ void Menu::loop_events()
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (Jpressed && yPosition < 0) && !pressed)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !pressed)
         {
             if(pos > 0)
             {
@@ -114,8 +144,7 @@ void Menu::loop_events()
             }
         }
 
-        // Por enquanto o enter do Fliperama vai ser joystick a direita(não sei o outro botão)
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) || (Jpressed && xPosition > 0) && !theselect)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect)
         {
             theselect = true;
             RealizarTarefa(pos);
@@ -193,4 +222,13 @@ void Menu::RealizarTarefa(int option)
         window->close();
         break;
     }
+}
+
+
+void Menu::Dormir(int ms){
+    #ifdef WINDOWS_SYSTEM
+      Sleep(ms);
+    #else
+      usleep(ms);
+    #endif
 }

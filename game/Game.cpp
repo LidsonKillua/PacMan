@@ -115,11 +115,6 @@ void Game::gameLoop()
 // Loop de eventos (teclas pressionadas, por exemplo.)
 void Game::eventLoop()
 {
-
-  // verifica todos os eventos que foram acionados na janela desde a ultima iteracao do loop
-  sf::Event event;
-  while (window->pollEvent(event))
-  {
     bool pressed = sf::Joystick::isButtonPressed(0, 0);
 
     // xPosition < 0 : esquerda,
@@ -130,7 +125,47 @@ void Game::eventLoop()
     // yPosition > 0 : baixo
     float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
+    if (pressed)
+      {
+        pauseAllAudio();
+        Menu *menu = new Menu(window);
+        menu->run_menu(ptsParaVencer);
+        delete menu;
 
+        if (menu->Reiniciar)
+        {
+          Reiniciando = true;
+          break;
+        }
+        else
+          turnOnOffSwatMusic();
+      }
+      if (xPosition < 0)
+      {
+        pacman.intent = Left;
+        Moveu = true;
+      }
+      else if (xPosition > 0)
+      {
+        pacman.intent = Right;
+        Moveu = true;
+      }
+      else if (yPosition < 0)
+      {
+        pacman.intent = Up;
+        Moveu = true;
+      }
+      else if (yPosition > 0)
+      {
+        pacman.intent = Down;
+        Moveu = true;
+      }
+
+
+  // verifica todos os eventos que foram acionados na janela desde a ultima iteracao do loop
+  sf::Event event;
+  while (window->pollEvent(event))
+  {
     // evento "fechar" acionado: fecha a janela
     if (event.type == sf::Event::Closed)
       window->close();

@@ -46,24 +46,23 @@ void Inicio::atualizarImg()
 
 void Inicio::loop_events()
 {
+    for(int i = 0; i<8; i++){
+        bool Jpressed = sf::Joystick::isButtonPressed(0, i);
+
+        if (Jpressed){
+            sair = true;
+            break;
+        }
+    }
+
     sf::Event event;
     while (window->pollEvent(event)){
         if (event.type == sf::Event::Closed){
             window->close();
         }
 
-        bool Jpressed = sf::Joystick::isButtonPressed(0, 0);
-
-        // xPosition < 0 : esquerda,
-        // xPosition > 0 : direita
-        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-        // yPosition < 0 : cima,
-        // yPosition > 0 : baixo
-        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-
-        // Por enquanto o enter do Fliperama vai ser joystick a direita(não sei o outro botão)
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) || (Jpressed && xPosition > 0)){
+        // Por enquanto o enter do Fliperama vai ser joystick a direita(nï¿½o sei o outro botï¿½o)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
             sair = true;
         }
     }
