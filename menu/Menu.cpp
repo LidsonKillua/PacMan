@@ -86,12 +86,13 @@ void Menu::loop_events()
 
             if (Jpressed)
             {
-                cout << Jpressed << i;
                 RealizarTarefa(pos);
                 sair = true;
                 break;
             }
         }
+
+        if (sair) break;
 
         // xPosition < 0 : esquerda,
         // xPosition > 0 : direita
@@ -109,7 +110,7 @@ void Menu::loop_events()
                 btns[pos]->setOutlineColor(CorSelecionado);
                 btns[pos - 1]->setOutlineColor(CorAmarela);
             }
-            Dormir(1000);
+            Dormir(500);
         }
 
         if (yPosition < -Deadzone)
@@ -120,7 +121,7 @@ void Menu::loop_events()
                 btns[pos]->setOutlineColor(CorSelecionado);
                 btns[pos + 1]->setOutlineColor(CorAmarela);
             }
-            Dormir(1000);
+            Dormir(500);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -194,10 +195,11 @@ void Menu::draw_all()
 void Menu::run_menu(int &ptsParaVencer)
 {
     ptsEgg = ptsParaVencer;
-    Dormir(3000);
 
     // Play the sound
     sdmenu->play();
+    draw_all();
+    Dormir(500);
 
     while(!sair && window->isOpen())
     {

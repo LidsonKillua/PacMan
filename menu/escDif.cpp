@@ -85,6 +85,8 @@ void EscDif::loop_events(){
             }
         }
 
+        if (sair) break;
+
         // xPosition < 0 : esquerda,
         // xPosition > 0 : direita
         float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
@@ -101,7 +103,7 @@ void EscDif::loop_events(){
                 btns[pos]->setOutlineColor(CorSelecionado);
                 btns[pos - 1]->setOutlineColor(CorAmarela);
             }
-            Dormir(1000);
+            Dormir(500);
         }
 
         if (yPosition < -Deadzone)
@@ -112,10 +114,8 @@ void EscDif::loop_events(){
                 btns[pos]->setOutlineColor(CorSelecionado);
                 btns[pos + 1]->setOutlineColor(CorAmarela);
             }
-            Dormir(1000);
+            Dormir(500);
         }
-
-        cout << xPosition << " " << yPosition << endl;
 
 
         if(event.type == sf::Event::Closed)

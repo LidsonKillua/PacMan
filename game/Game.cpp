@@ -8,11 +8,12 @@
 void Game::initialize()
 {
   // cria a janela
-  if (!Reiniciando)
+  if (!Reiniciando){
     window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
-  sf::View view(sf::FloatRect(0.f, 0.f, 1200.f, 768.f));
-  window->setView(view);
+    sf::View view(sf::FloatRect(0.f, 0.f, 1200.f, 768.f));
+    window->setView(view);
+  }
 
   MenuInicial();
   EscolherDificuldade();
