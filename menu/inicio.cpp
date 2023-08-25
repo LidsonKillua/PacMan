@@ -44,8 +44,6 @@ void Inicio::atualizarImg()
         iImg++;
 }
 
-
-
 void Inicio::loop_events()
 {
     sf::Event event;
@@ -54,7 +52,18 @@ void Inicio::loop_events()
             window->close();
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+        bool Jpressed = sf::Joystick::isButtonPressed(0, 0);
+
+        // xPosition < 0 : esquerda,
+        // xPosition > 0 : direita
+        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+        // yPosition < 0 : cima,
+        // yPosition > 0 : baixo
+        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+        // Por enquanto o enter do Fliperama vai ser joystick a direita(não sei o outro botão)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) || (Jpressed && xPosition > 0)){
             sair = true;
         }
     }

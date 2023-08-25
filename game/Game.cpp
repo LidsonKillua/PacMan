@@ -11,6 +11,9 @@ void Game::initialize()
   if (!Reiniciando)
     window = new sf::RenderWindow(sf::VideoMode(TAMX, TAMY), "Pac-Man");
 
+  sf::View view(sf::FloatRect(0.f, 0.f, 1200.f, 768.f));
+  window->setView(view);
+
   MenuInicial();
   EscolherDificuldade();
 
@@ -117,6 +120,17 @@ void Game::eventLoop()
   sf::Event event;
   while (window->pollEvent(event))
   {
+    bool pressed = sf::Joystick::isButtonPressed(0, 0);
+
+    // xPosition < 0 : esquerda,
+    // xPosition > 0 : direita
+    float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+    // yPosition < 0 : cima,
+    // yPosition > 0 : baixo
+    float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+
     // evento "fechar" acionado: fecha a janela
     if (event.type == sf::Event::Closed)
       window->close();
@@ -139,22 +153,22 @@ void Game::eventLoop()
         else
           turnOnOffSwatMusic();
       }
-      if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
+      if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A || (pressed && xPosition > 0))
       {
         pacman.intent = Left;
         Moveu = true;
       }
-      else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D)
+      else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D || (pressed && xPosition < 0))
       {
         pacman.intent = Right;
         Moveu = true;
       }
-      else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
+      else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W || (pressed && yPosition < 0))
       {
         pacman.intent = Up;
         Moveu = true;
       }
-      else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
+      else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S || (pressed && yPosition > 0))
       {
         pacman.intent = Down;
         Moveu = true;

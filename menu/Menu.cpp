@@ -73,15 +73,22 @@ void Menu::loop_events()
             window->close();
         }
 
-        pos_mouse = sf::Mouse::getPosition(*window);
-        mouse_coord = window->mapPixelToCoords(pos_mouse);
+        bool Jpressed = sf::Joystick::isButtonPressed(0, 0);
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        // xPosition < 0 : esquerda,
+        // xPosition > 0 : direita
+        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+        // yPosition < 0 : cima,
+        // yPosition > 0 : baixo
+        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
             sair = true;
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (Jpressed && yPosition > 0)) && !pressed)
         {
             if(pos < 3)
             {
@@ -94,7 +101,7 @@ void Menu::loop_events()
             }
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !pressed)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (Jpressed && yPosition < 0) && !pressed)
         {
             if(pos > 0)
             {
@@ -107,11 +114,15 @@ void Menu::loop_events()
             }
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !theselect)
+        // Por enquanto o enter do Fliperama vai ser joystick a direita(não sei o outro botão)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) || (Jpressed && xPosition > 0) && !theselect)
         {
             theselect = true;
             RealizarTarefa(pos);
         }
+
+        pos_mouse = sf::Mouse::getPosition(*window);
+        mouse_coord = window->mapPixelToCoords(pos_mouse);
 
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {

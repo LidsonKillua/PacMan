@@ -51,20 +51,36 @@ void Sobre::set_values()
 
 void Sobre::loop_events(int &ptsEgg)
 {
+    int contJ = 0;
     sf::Event event;
+
     while (window->pollEvent(event)){
         if (event.type == sf::Event::Closed){
             window->close();
         }
 
-        pos_mouse = sf::Mouse::getPosition(*window);
-        mouse_coord = window->mapPixelToCoords(pos_mouse);
+        bool Jpressed = sf::Joystick::isButtonPressed(0, 0);
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+        // xPosition < 0 : esquerda,
+        // xPosition > 0 : direita
+        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+        // yPosition < 0 : cima,
+        // yPosition > 0 : baixo
+        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+        if (Jpressed && xPosition > 0) contJ++;
+
+        // Por enquanto o esc do Fliperama vai ser joystick a esquerda(não sei o outro botão)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || (Jpressed && xPosition < 0)){
             sair = true;
         }
 
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        pos_mouse = sf::Mouse::getPosition(*window);
+        mouse_coord = window->mapPixelToCoords(pos_mouse);
+
+        // Se clicar no doce de leite ou jogar o joystick para a direita duas vezes
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left) || contJ > 2)
         {
             if(egg->getGlobalBounds().contains(mouse_coord)){
                 ptsEgg = 50; // Hack para precisar de menos pontos para vencer
