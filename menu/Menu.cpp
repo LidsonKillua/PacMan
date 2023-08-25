@@ -1,3 +1,11 @@
+
+#ifdef _WIN32
+#define WINDOWS_SYSTEM
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include "menu.hpp"
 #include "sobre.hpp"
 #include <iostream>
@@ -118,7 +126,7 @@ void Menu::loop_events()
             sair = true;
         }
 
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
         {
             if(pos < 3)
             {
@@ -229,6 +237,6 @@ void Menu::Dormir(int ms){
     #ifdef WINDOWS_SYSTEM
       Sleep(ms);
     #else
-      usleep(ms);
+      usleep(1000);
     #endif
 }

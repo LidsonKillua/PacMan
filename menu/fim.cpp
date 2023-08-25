@@ -70,7 +70,7 @@ void Final::loop_events()
 
         if (Jpressed){
             sair = true;
-            reiniciar = true;
+            Reiniciar = true;
             break;
         }
     }

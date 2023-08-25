@@ -64,28 +64,35 @@ void Sobre::loop_events(int &ptsEgg)
         }
     }
 
+    // xPosition < 0 : esquerda,
+    // xPosition > 0 : direita
+    float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+    // yPosition < 0 : cima,
+    // yPosition > 0 : baixo
+    float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+    if (!apertouDir && xPosition > 0){
+        contJ++;
+        apertouDir = true;
+    }
+
+    if (!apertouEsq && xPosition < 0){
+        contJ++;
+        apertouEsq = true;
+    }
+
+    if (contJ > 1){
+        ptsEgg = 50; // Hack para precisar de menos pontos para vencer
+        sair = true;
+    }
+
     while (window->pollEvent(event)){
         if (event.type == sf::Event::Closed){
             window->close();
         }
 
-        if (!apertouDir && xPosition > 0){ 
-            contJ++;
-            apertouDir = true;
-        }
-
-        if (!apertouEsq && xPosition < 0){ 
-            contJ++;
-            apertouEsq = true;
-        }
-
-        if (cont > 1){
-            ptsEgg = 50; // Hack para precisar de menos pontos para vencer
-            sair = true;
-        }
-
-        // Por enquanto o esc do Fliperama vai ser joystick a esquerda(n�o sei o outro bot�o)
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || (Jpressed && xPosition < 0)){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
             sair = true;
         }
 

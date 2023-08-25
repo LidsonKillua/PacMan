@@ -135,7 +135,6 @@ void Game::eventLoop()
         if (menu->Reiniciar)
         {
           Reiniciando = true;
-          break;
         }
         else
           turnOnOffSwatMusic();

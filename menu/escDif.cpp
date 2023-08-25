@@ -1,12 +1,12 @@
-#include "escDif.hpp"
-#include <iostream>
-
 #ifdef _WIN32
 #define WINDOWS_SYSTEM
 #include <Windows.h>
 #else
 #include <unistd.h>
 #endif
+
+#include "escDif.hpp"
+#include <iostream>
 
 EscDif::EscDif(sf::RenderWindow* win)
 {
@@ -120,7 +120,7 @@ void EscDif::loop_events(){
             window->close();
         }
 
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !pressed)
         {
             if(pos < 2)
             {
