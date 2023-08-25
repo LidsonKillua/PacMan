@@ -46,22 +46,21 @@ void Inicio::atualizarImg()
 
 void Inicio::loop_events()
 {
-    for(int i = 0; i<8; i++){
-        bool Jpressed = sf::Joystick::isButtonPressed(0, i);
-
-        if (Jpressed){
-            sair = true;
-            break;
-        }
-    }
-
     sf::Event event;
     while (window->pollEvent(event)){
         if (event.type == sf::Event::Closed){
             window->close();
         }
 
-        // Por enquanto o enter do Fliperama vai ser joystick a direita(n�o sei o outro bot�o)
+        for(int i = 0; i<8; i++){
+            bool Jpressed = sf::Joystick::isButtonPressed(0, i);
+
+            if (Jpressed){
+                sair = true;
+                break;
+            }
+        }
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
             sair = true;
         }

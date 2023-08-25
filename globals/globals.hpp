@@ -11,6 +11,7 @@ using namespace std;
 const int qtdPilulas = 177; // Alterar a Quantidade de Pilulas
 const int TAMX = 1200;      // Tamanho da Janela
 const int TAMY = 768;       // Tamanho da Janela
+const int Deadzone = 50;    // Deadzone do controle
 
 // Variáveis de animação
 #define UPDATE_GAME_T 0.2 // Tempo para atualizar o jogo (1 ciclo)

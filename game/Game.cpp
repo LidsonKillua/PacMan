@@ -115,7 +115,26 @@ void Game::gameLoop()
 // Loop de eventos (teclas pressionadas, por exemplo.)
 void Game::eventLoop()
 {
-    bool pressed = sf::Joystick::isButtonPressed(0, 0);
+    for(int i = 0; i<8; i++){
+        bool pressed = sf::Joystick::isButtonPressed(0, i);
+
+        if (pressed)
+        {
+            pauseAllAudio();
+            Menu *menu = new Menu(window);
+            menu->run_menu(ptsParaVencer);
+            delete menu;
+
+            if (menu->Reiniciar)
+            {
+                Reiniciando = true;
+            }
+            else
+                turnOnOffSwatMusic();
+
+            break;
+        }
+    }
 
     // xPosition < 0 : esquerda,
     // xPosition > 0 : direita
@@ -125,36 +144,22 @@ void Game::eventLoop()
     // yPosition > 0 : baixo
     float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
-    if (pressed)
-      {
-        pauseAllAudio();
-        Menu *menu = new Menu(window);
-        menu->run_menu(ptsParaVencer);
-        delete menu;
-
-        if (menu->Reiniciar)
-        {
-          Reiniciando = true;
-        }
-        else
-          turnOnOffSwatMusic();
-      }
-      if (xPosition < 0)
+      if (xPosition < -Deadzone)
       {
         pacman.intent = Left;
         Moveu = true;
       }
-      else if (xPosition > 0)
+      else if (xPosition > Deadzone)
       {
         pacman.intent = Right;
         Moveu = true;
       }
-      else if (yPosition < 0)
+      else if (yPosition < -Deadzone)
       {
         pacman.intent = Up;
         Moveu = true;
       }
-      else if (yPosition > 0)
+      else if (yPosition > Deadzone)
       {
         pacman.intent = Down;
         Moveu = true;
@@ -187,22 +192,22 @@ void Game::eventLoop()
         else
           turnOnOffSwatMusic();
       }
-      if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A || (pressed && xPosition > 0))
+      if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
       {
         pacman.intent = Left;
         Moveu = true;
       }
-      else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D || (pressed && xPosition < 0))
+      else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D)
       {
         pacman.intent = Right;
         Moveu = true;
       }
-      else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W || (pressed && yPosition < 0))
+      else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
       {
         pacman.intent = Up;
         Moveu = true;
       }
-      else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S || (pressed && yPosition > 0))
+      else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
       {
         pacman.intent = Down;
         Moveu = true;

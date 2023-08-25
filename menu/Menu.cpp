@@ -73,52 +73,54 @@ void Menu::set_values()
 
 void Menu::loop_events()
 {
-    for(int i = 0; i<8; i++){
-        bool Jpressed = sf::Joystick::isButtonPressed(0, i);
-
-        if (Jpressed && !theselect)
-        {
-            RealizarTarefa(pos);
-            sair = true;
-        }
-    }
-
-    // xPosition < 0 : esquerda,
-    // xPosition > 0 : direita
-    float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-    // yPosition < 0 : cima,
-    // yPosition > 0 : baixo
-    float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-
-    if (yPosition > 0)
-    {
-        if(pos < 2)
-        {
-            pos++;
-            btns[pos]->setOutlineColor(CorSelecionado);
-            btns[pos - 1]->setOutlineColor(CorAmarela);
-        }
-        Dormir(1000);
-    }
-
-    if (yPosition < 0)
-    {
-        if(pos > 0)
-        {
-            pos--;
-            btns[pos]->setOutlineColor(CorSelecionado);
-            btns[pos + 1]->setOutlineColor(CorAmarela);
-        }
-        Dormir(1000);
-    }
-
     sf::Event event;
     while(window->pollEvent(event))
     {
         if(event.type == sf::Event::Closed)
         {
             window->close();
+        }
+
+        for(int i = 0; i<8; i++){
+            bool Jpressed = sf::Joystick::isButtonPressed(0, i);
+
+            if (Jpressed)
+            {
+                cout << Jpressed << i;
+                RealizarTarefa(pos);
+                sair = true;
+                break;
+            }
+        }
+
+        // xPosition < 0 : esquerda,
+        // xPosition > 0 : direita
+        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+        // yPosition < 0 : cima,
+        // yPosition > 0 : baixo
+        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+        if (yPosition > Deadzone)
+        {
+            if(pos < 3)
+            {
+                pos++;
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos - 1]->setOutlineColor(CorAmarela);
+            }
+            Dormir(1000);
+        }
+
+        if (yPosition < -Deadzone)
+        {
+            if(pos > 0)
+            {
+                pos--;
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos + 1]->setOutlineColor(CorAmarela);
+            }
+            Dormir(1000);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -192,6 +194,7 @@ void Menu::draw_all()
 void Menu::run_menu(int &ptsParaVencer)
 {
     ptsEgg = ptsParaVencer;
+    Dormir(3000);
 
     // Play the sound
     sdmenu->play();
@@ -204,6 +207,7 @@ void Menu::run_menu(int &ptsParaVencer)
 
     sdmenu->stop();
     ptsParaVencer = ptsEgg;
+    Dormir(500);
 }
 
 void Menu::RealizarTarefa(int option)

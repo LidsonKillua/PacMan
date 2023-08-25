@@ -72,12 +72,12 @@ void Sobre::loop_events(int &ptsEgg)
     // yPosition > 0 : baixo
     float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
 
-    if (!apertouDir && xPosition > 0){
+    if (!apertouDir && xPosition > Deadzone){
         contJ++;
         apertouDir = true;
     }
 
-    if (!apertouEsq && xPosition < 0){
+    if (!apertouEsq && xPosition < -Deadzone){
         contJ++;
         apertouEsq = true;
     }

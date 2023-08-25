@@ -71,49 +71,52 @@ void EscDif::set_values()
 }
 
 void EscDif::loop_events(){
-    for(int i = 0; i<8; i++){
-        bool Jpressed = sf::Joystick::isButtonPressed(0, i);
-
-        if (Jpressed && !theselect)
-        {
-            RealizarTarefa(pos);
-            sair = true;
-        }
-    }
-
-    // xPosition < 0 : esquerda,
-    // xPosition > 0 : direita
-    float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-
-    // yPosition < 0 : cima,
-    // yPosition > 0 : baixo
-    float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-
-    if (yPosition > 0)
-    {
-        if(pos < 2)
-        {
-            pos++;
-            btns[pos]->setOutlineColor(CorSelecionado);
-            btns[pos - 1]->setOutlineColor(CorAmarela);
-        }
-        Dormir(1000);
-    }
-
-    if (yPosition < 0)
-    {
-        if(pos > 0)
-        {
-            pos--;
-            btns[pos]->setOutlineColor(CorSelecionado);
-            btns[pos + 1]->setOutlineColor(CorAmarela);
-        }
-        Dormir(1000);
-    }
-
     sf::Event event;
     while(window->pollEvent(event))
     {
+        for(int i = 0; i<8; i++){
+            bool Jpressed = sf::Joystick::isButtonPressed(0, i);
+
+            if (Jpressed && !theselect)
+            {
+                RealizarTarefa(pos);
+                sair = true;
+                break;
+            }
+        }
+
+        // xPosition < 0 : esquerda,
+        // xPosition > 0 : direita
+        float xPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+
+        // yPosition < 0 : cima,
+        // yPosition > 0 : baixo
+        float yPosition = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+
+        if (yPosition > Deadzone)
+        {
+            if(pos < 2)
+            {
+                pos++;
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos - 1]->setOutlineColor(CorAmarela);
+            }
+            Dormir(1000);
+        }
+
+        if (yPosition < -Deadzone)
+        {
+            if(pos > 0)
+            {
+                pos--;
+                btns[pos]->setOutlineColor(CorSelecionado);
+                btns[pos + 1]->setOutlineColor(CorAmarela);
+            }
+            Dormir(1000);
+        }
+
+        cout << xPosition << " " << yPosition << endl;
+
 
         if(event.type == sf::Event::Closed)
         {
